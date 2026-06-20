@@ -1,11 +1,14 @@
 """
 Phase 0 — Data loading for PhysioNet Motor Imagery via MOABB.
+Phase 1 — Subject-wise leakage-free split.
 """
 import numpy as np
 from moabb.datasets import PhysionetMI
 from moabb.paradigms import MotorImagery
+from sklearn.model_selection import GroupShuffleSplit
 
 LABRAM_PATCH_SIZE = 200  # LaBraM's internal patch size — n_times must be a multiple of this
+RANDOM_STATE = 42
 
 
 def load_physionet_mi(subjects: list[int] | None = None):
@@ -30,18 +33,6 @@ def load_physionet_mi(subjects: list[int] | None = None):
 
     return X, y, metadata
 
-
-if __name__ == "__main__":
-    X, y, metadata = load_physionet_mi(subjects=[1])
-    print("X shape:", X.shape)
-    print("y shape:", y.shape)
-    print("Unique labels:", set(y))
-
-
-
-from sklearn.model_selection import GroupShuffleSplit
-
-RANDOM_STATE = 42
 
 def subject_wise_split(X, y, subject_ids,
                         test_size_subjects=15,
@@ -75,3 +66,9 @@ def subject_wise_split(X, y, subject_ids,
           f"subjects (of {n_subjects})")
     return train_idx, val_idx, test_idx
 
+
+if __name__ == "__main__":
+    X, y, metadata = load_physionet_mi(subjects=[1])
+    print("X shape:", X.shape)
+    print("y shape:", y.shape)
+    print("Unique labels:", set(y))
