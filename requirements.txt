@@ -1,0 +1,5 @@
+braindecode
+moabb
+torch
+scikit-learn
+numpy
