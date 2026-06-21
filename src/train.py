@@ -21,6 +21,7 @@ from src.model import load_labram_model
 # Config
 # ---------------------------------------------------------------------------
 CACHE_PATHS = [
+    "physionet_mi_cache.npz",  # bundled in the repo itself — always present after git clone
     "/kaggle/input/physionet-mi-cache/physionet_mi_cache.npz",
     "/kaggle/working/physionet_mi_cache.npz",
 ]
@@ -45,11 +46,18 @@ def load_dataset():
             data = np.load(path)
             return data["X"], data["y"], data["subject_ids"]
 
-    print("No cache found — loading fresh via MOABB (slow).")
+    print("No cache found anywhere — downloading fresh via MOABB "
+          "(one-time, ~1.5h for all subjects).")
     from moabb.datasets import PhysionetMI
     all_subjects = [s for s in PhysionetMI().subject_list if s not in EXCLUDED_SUBJECTS]
     X, y, metadata = load_physionet_mi(subjects=all_subjects)
     subject_ids = metadata["subject"].values
+
+    save_path = CACHE_PATHS[0]  # repo-relative — commit this file to GitHub afterward
+    np.savez_compressed(save_path, X=X, y=y, subject_ids=subject_ids)
+    print(f"Saved fresh data to '{save_path}'. Download this file from the Kaggle "
+          f"file browser and commit it to GitHub so future sessions skip the download.")
+
     return X, y, subject_ids
 
 
@@ -69,8 +77,6 @@ class EEGDataset(Dataset):
 
 # ---------------------------------------------------------------------------
 # Head detection + freezing.
-# Finds the Linear layer whose out_features matches n_outputs instead of
-# assuming a hardcoded attribute name (robust to internal LaBraM naming).
 # ---------------------------------------------------------------------------
 def freeze_backbone_unfreeze_head(model, n_outputs):
     for p in model.parameters():
@@ -79,7 +85,7 @@ def freeze_backbone_unfreeze_head(model, n_outputs):
     head_name, head_module = None, None
     for name, module in model.named_modules():
         if isinstance(module, nn.Linear) and module.out_features == n_outputs:
-            head_name, head_module = name, module  # keep last match = final layer
+            head_name, head_module = name, module
 
     if head_module is None:
         raise RuntimeError(
