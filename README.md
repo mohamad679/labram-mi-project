@@ -20,7 +20,7 @@ This is a portfolio research-engineering project for PhD outreach and AI enginee
 | Phase 1 | Complete | Head-only baseline fine-tuning with subject-wise split         |
 | Phase 2 | Complete | MC Dropout uncertainty quantification                          |
 | Phase 3 | Complete | Attention rollout explainability                               |
-| Phase 4 | Next     | Gradio demo and HuggingFace Spaces deployment                  |
+| Phase 4 | Complete | Lightweight Gradio demo, backend inference, and Kaggle UI test |
 
 ## Dataset
 
@@ -254,6 +254,80 @@ sample_3_time_patches.png
 
 The binary `.npz` file and generated PNG plots are not committed to GitHub. The repository stores reproducible code and summarized Markdown reports instead.
 
+### Phase 4 — Lightweight Gradio demo
+
+Main report:
+
+```text
+results/phase4_gradio_demo.md
+```
+
+Main application file:
+
+```text
+app.py
+```
+
+The demo accepts one EEG epoch as a `.npy` file and returns:
+
+- predicted motor imagery class
+- class probabilities
+- input-shape validation details
+- checkpoint/device information
+
+Supported input shapes:
+
+```text
+(64, 400)
+(1, 64, 400)
+(400, 64)  # automatically transposed
+```
+
+Checkpoint search order:
+
+```text
+LABRAM_CHECKPOINT environment variable
+/kaggle/working/labram_head_finetuned.pt
+checkpoints/labram_head_finetuned.pt
+labram_head_finetuned.pt
+```
+
+The demo was tested from a fresh GitHub clone on Kaggle.
+
+Backend prediction test:
+
+```text
+sample index : 0
+sample shape : (64, 400)
+true label   : right_hand
+predicted    : feet
+device       : cuda
+checkpoint   : /kaggle/working/labram_head_finetuned.pt
+```
+
+Class probabilities from the backend/UI test:
+
+| Class | Probability |
+|---|---:|
+| feet | 0.2333 |
+| hands | 0.1807 |
+| left_hand | 0.2032 |
+| rest | 0.2274 |
+| right_hand | 0.1554 |
+
+The Gradio UI launched successfully on Kaggle and produced a temporary public Gradio URL. A `.npy` sample was uploaded through the UI, and the app returned the same probability distribution and predicted class as the backend test.
+
+Observed UI output:
+
+```text
+Predicted class: feet
+Original shape: (64, 400)
+Model input shape: (64, 400)
+Device: cuda
+```
+
+The demo is an interactive proof-of-functionality for model loading, input validation, inference, and probability display. It is not a production BCI interface and does not provide clinical guidance.
+
 ## Interpretation
 
 The Phase 1 baseline is intentionally modest. This is not presented as a production-ready BCI classifier.
@@ -267,6 +341,7 @@ PhysioNet MI
 → baseline fine-tuning
 → MC Dropout uncertainty
 → attention rollout explainability
+→ lightweight Gradio demo
 ```
 
 The model shows high predictive entropy across classes, which is consistent with the weak baseline accuracy and macro-F1.
@@ -275,9 +350,13 @@ The low ECE value in Phase 2 should be interpreted carefully. It does not mean t
 
 The Phase 3 attention-rollout results should also be interpreted carefully. Attention rollout provides a structured way to inspect how information flows through transformer attention layers, but it should not be treated as a clinically validated explanation of EEG physiology.
 
+The Phase 4 Gradio demo demonstrates software integration and interactive inference. It does not change the scientific limitations of the baseline model.
+
 ## Project Structure
 
 ```text
+app.py             # Phase 4 Gradio demo
+
 src/
   data.py          # MOABB / PhysioNet MI data loading
   model.py         # LaBraM model adaptation
@@ -290,6 +369,7 @@ results/
   phase1_baseline.md
   phase2_uncertainty.md
   phase3_attention_rollout.md
+  phase4_gradio_demo.md
 
 configs/
   baseline.yaml
@@ -348,6 +428,14 @@ Run Phase 3:
 !python -m src.explain
 ```
 
+Run Phase 4 Gradio demo:
+
+```python
+!python app.py
+```
+
+Then open the Gradio URL, upload a `.npy` EEG epoch, and click `Predict`.
+
 ## Scope Boundaries
 
 This project intentionally does not include:
@@ -361,7 +449,7 @@ React dashboard
 clinical deployment claims
 ```
 
-The next phase is packaging: a lightweight Gradio demo and HuggingFace Spaces deployment.
+The remaining optional packaging step is persistent HuggingFace Spaces deployment.
 
 ## License
 
