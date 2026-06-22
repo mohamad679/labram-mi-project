@@ -19,8 +19,8 @@ This is a portfolio research-engineering project for PhD outreach and AI enginee
 | Phase 0 | Complete | Data loading, LaBraM model adaptation, forward-pass validation |
 | Phase 1 | Complete | Head-only baseline fine-tuning with subject-wise split         |
 | Phase 2 | Complete | MC Dropout uncertainty quantification                          |
-| Phase 3 | Next     | Attention rollout explainability                               |
-| Phase 4 | Planned  | Gradio demo and HuggingFace Spaces deployment                  |
+| Phase 3 | Complete | Attention rollout explainability                               |
+| Phase 4 | Next     | Gradio demo and HuggingFace Spaces deployment                  |
 
 ## Dataset
 
@@ -168,6 +168,92 @@ labels
 
 The binary `.npz` result file is not committed to GitHub. The repository stores reproducible code and summarized result reports instead.
 
+### Phase 3 — Attention rollout explainability
+
+Main report:
+
+```text
+results/phase3_attention_rollout.md
+```
+
+Attention rollout was computed across all 12 LaBraM transformer blocks.
+
+For each transformer block:
+
+```text
+attention heads were averaged
+identity residual connection was added
+attention rows were normalized
+rollout matrices were multiplied across layers
+```
+
+The CLS-token rollout was summarized into:
+
+| Output | Shape |
+| ------ | ----: |
+| Full rollout matrix | 4 × 257 × 257 |
+| Patch-token importance | 4 × 256 |
+| Canonical channel importance | 4 × 128 |
+| Temporal patch importance | 4 × 2 |
+
+Four representative test samples were analyzed.
+
+The selected samples and model predictions were:
+
+| Sample | Dataset index | True label | Predicted label |
+| -----: | ------------: | ---------- | --------------- |
+| 0 | 0  | right_hand | feet |
+| 1 | 1  | rest       | feet |
+| 2 | 2  | left_hand  | rest |
+| 3 | 87 | feet       | rest |
+
+The top attention-rollout channels varied across samples. Examples include:
+
+```text
+Sample 0: A1, FP2, M1, TP9, AF8
+Sample 1: F9, PO2, POZ, FP1-F7, P2
+Sample 2: A2, M2, T8, O2, CFC8
+Sample 3: FP1-F7, M2, FP2-F8, FP2, A1
+```
+
+Temporal patch importance was also extracted for each sample:
+
+| Sample | Patch 0 | Patch 1 |
+| -----: | ------: | ------: |
+| 0 | 0.003973 | 0.003792 |
+| 1 | 0.004147 | 0.003623 |
+| 2 | 0.003945 | 0.003817 |
+| 3 | 0.003741 | 0.004024 |
+
+The model predictions remained weak, consistent with the Phase 1 baseline. However, the Phase 3 pipeline successfully produced token-level, channel-level, and temporal-patch-level explanations from the LaBraM transformer attention structure.
+
+The raw Kaggle output was saved as:
+
+```text
+/kaggle/working/attention_rollout_results.npz
+```
+
+The generated plots were saved in:
+
+```text
+/kaggle/working/attention_rollout_plots/
+```
+
+The generated plot files were:
+
+```text
+sample_0_top_channels.png
+sample_0_time_patches.png
+sample_1_top_channels.png
+sample_1_time_patches.png
+sample_2_top_channels.png
+sample_2_time_patches.png
+sample_3_top_channels.png
+sample_3_time_patches.png
+```
+
+The binary `.npz` file and generated PNG plots are not committed to GitHub. The repository stores reproducible code and summarized Markdown reports instead.
+
 ## Interpretation
 
 The Phase 1 baseline is intentionally modest. This is not presented as a production-ready BCI classifier.
@@ -175,12 +261,19 @@ The Phase 1 baseline is intentionally modest. This is not presented as a product
 The main technical contribution is the end-to-end, leakage-free, reproducible pipeline:
 
 ```text
-PhysioNet MI → LaBraM adaptation → subject-wise split → baseline fine-tuning → MC Dropout uncertainty
+PhysioNet MI
+→ LaBraM adaptation
+→ subject-wise split
+→ baseline fine-tuning
+→ MC Dropout uncertainty
+→ attention rollout explainability
 ```
 
 The model shows high predictive entropy across classes, which is consistent with the weak baseline accuracy and macro-F1.
 
 The low ECE value in Phase 2 should be interpreted carefully. It does not mean the classifier is accurate. It means the model's confidence is numerically aligned with its low-confidence predictions in this particular run.
+
+The Phase 3 attention-rollout results should also be interpreted carefully. Attention rollout provides a structured way to inspect how information flows through transformer attention layers, but it should not be treated as a clinically validated explanation of EEG physiology.
 
 ## Project Structure
 
@@ -196,6 +289,7 @@ src/
 results/
   phase1_baseline.md
   phase2_uncertainty.md
+  phase3_attention_rollout.md
 
 configs/
   baseline.yaml
@@ -248,6 +342,12 @@ Run Phase 2:
 !python -m src.uncertainty
 ```
 
+Run Phase 3:
+
+```python
+!python -m src.explain
+```
+
 ## Scope Boundaries
 
 This project intentionally does not include:
@@ -261,7 +361,7 @@ React dashboard
 clinical deployment claims
 ```
 
-The next phase is explainability using attention rollout only.
+The next phase is packaging: a lightweight Gradio demo and HuggingFace Spaces deployment.
 
 ## License
 
