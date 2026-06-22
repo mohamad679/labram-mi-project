@@ -3,13 +3,50 @@
 ## Method
 
 Attention rollout was computed across all 12 LaBraM transformer blocks.
-For each block, attention weights were averaged across heads, combined with an identity residual connection, row-normalized, and multiplied across layers.
+
+For each transformer block:
+
+- attention heads were averaged
+- an identity residual connection was added
+- attention rows were normalized
+- rollout matrices were multiplied across layers
 
 The CLS-token rollout was summarized into:
 
 - 256 patch-token importance scores
 - 128 canonical LaBraM channel importance scores
 - 2 temporal patch importance scores
+
+This phase is designed as a transformer-attention inspection module for the LaBraM-based Motor Imagery pipeline. It should be interpreted as an engineering explainability layer, not as a clinically validated EEG physiology explanation.
+
+## Output Artifacts
+
+The raw Kaggle output was saved as:
+
+```text
+/kaggle/working/attention_rollout_results.npz
+```
+
+The generated plot files were saved in Kaggle as:
+
+```text
+/kaggle/working/attention_rollout_plots/
+```
+
+The following visualization files are committed to GitHub:
+
+```text
+results/figures/phase3_attention_rollout/sample_0_top_channels.png
+results/figures/phase3_attention_rollout/sample_0_time_patches.png
+results/figures/phase3_attention_rollout/sample_1_top_channels.png
+results/figures/phase3_attention_rollout/sample_1_time_patches.png
+results/figures/phase3_attention_rollout/sample_2_top_channels.png
+results/figures/phase3_attention_rollout/sample_2_time_patches.png
+results/figures/phase3_attention_rollout/sample_3_top_channels.png
+results/figures/phase3_attention_rollout/sample_3_time_patches.png
+```
+
+The binary `.npz` file is not committed to GitHub. The repository stores reproducible code, summarized results, and selected visualization figures.
 
 ## Samples
 
@@ -46,6 +83,12 @@ Temporal patch importance:
 | 0 | 0.003973 |
 | 1 | 0.003792 |
 
+#### Sample 0 figures
+
+![Sample 0 top channels](figures/phase3_attention_rollout/sample_0_top_channels.png)
+
+![Sample 0 temporal patches](figures/phase3_attention_rollout/sample_0_time_patches.png)
+
 ### Sample 1 — dataset index 1
 
 - True label: `rest`
@@ -78,6 +121,12 @@ Temporal patch importance:
 |---:|---:|
 | 0 | 0.004147 |
 | 1 | 0.003623 |
+
+#### Sample 1 figures
+
+![Sample 1 top channels](figures/phase3_attention_rollout/sample_1_top_channels.png)
+
+![Sample 1 temporal patches](figures/phase3_attention_rollout/sample_1_time_patches.png)
 
 ### Sample 2 — dataset index 2
 
@@ -112,6 +161,12 @@ Temporal patch importance:
 | 0 | 0.003945 |
 | 1 | 0.003817 |
 
+#### Sample 2 figures
+
+![Sample 2 top channels](figures/phase3_attention_rollout/sample_2_top_channels.png)
+
+![Sample 2 temporal patches](figures/phase3_attention_rollout/sample_2_time_patches.png)
+
 ### Sample 3 — dataset index 87
 
 - True label: `feet`
@@ -145,18 +200,24 @@ Temporal patch importance:
 | 0 | 0.003741 |
 | 1 | 0.004024 |
 
-## Saved Plot Files
+#### Sample 3 figures
 
-- `/kaggle/working/attention_rollout_plots/sample_0_top_channels.png`
-- `/kaggle/working/attention_rollout_plots/sample_0_time_patches.png`
-- `/kaggle/working/attention_rollout_plots/sample_1_top_channels.png`
-- `/kaggle/working/attention_rollout_plots/sample_1_time_patches.png`
-- `/kaggle/working/attention_rollout_plots/sample_2_top_channels.png`
-- `/kaggle/working/attention_rollout_plots/sample_2_time_patches.png`
-- `/kaggle/working/attention_rollout_plots/sample_3_top_channels.png`
-- `/kaggle/working/attention_rollout_plots/sample_3_time_patches.png`
+![Sample 3 top channels](figures/phase3_attention_rollout/sample_3_top_channels.png)
+
+![Sample 3 temporal patches](figures/phase3_attention_rollout/sample_3_time_patches.png)
+
+## Interpretation
+
+The model predictions remain weak, consistent with the Phase 1 baseline. However, Phase 3 successfully demonstrates that attention rollout can be extracted from the adapted LaBraM transformer and summarized at multiple levels:
+
+- token-level importance
+- canonical channel-level importance
+- temporal-patch-level importance
+
+The visualized top-channel and temporal-patch plots make the explanation outputs easier to inspect in the GitHub report.
 
 ## Scope Note
 
 This phase uses attention rollout only. SHAP, LIME, and perturbation-based explainers are intentionally out of scope.
 
+Attention rollout should be treated as a model-inspection method, not as a clinically validated neurophysiological explanation.
