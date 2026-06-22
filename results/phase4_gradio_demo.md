@@ -97,7 +97,7 @@ The result is consistent with the weak Phase 1 baseline and should not be interp
 
 ## Gradio UI Test
 
-The Gradio interface launched successfully and produced a public temporary Gradio URL during the Kaggle session.
+The Gradio interface launched successfully on Kaggle and produced a temporary public Gradio URL during the session.
 
 A `.npy` sample was uploaded through the UI, and the app returned the same probability distribution and predicted class as the backend test.
 
@@ -119,6 +119,16 @@ left_hand  ~20%
 hands      ~18%
 right_hand ~16%
 ```
+
+## UI Screenshot
+
+The following screenshot is committed to GitHub:
+
+```text
+results/figures/phase4_gradio_demo/gradio_ui_prediction.png
+```
+
+![Phase 4 Gradio UI prediction](figures/phase4_gradio_demo/gradio_ui_prediction.png)
 
 ## Scope Note
 
