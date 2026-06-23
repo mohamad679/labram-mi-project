@@ -1,8 +1,40 @@
-# Phase 1 baseline config — fill in as Phase 1 progresses
-subjects: [1, 2, 3, 4, 5]   # start small, expand once pipeline is verified
-n_outputs: 2
-batch_size: 16
+Phase 1 baseline configuration
+
+Final project setting: PhysioNet Motor Imagery with 5 classes.
+
+The actual training script uses a subject-wise split and excludes
+
+subjects with incompatible sampling rate: 88, 89, 92, 100, 104.
+
+dataset: physionet_motor_imagery
+
+subjects: all
+excluded_subjects: [88, 89, 92, 100, 104]
+
+n_outputs: 5
+classes:
+
+* feet
+* hands
+* left_hand
+* rest
+* right_hand
+
+n_chans: 64
+n_times: 400
+sfreq: 160.0
+
+split: subject_wise
+train_subjects: 75
+val_subjects: 14
+test_subjects: 15
+usable_subjects_total: 104
+
+batch_size: 64
 learning_rate: 0.0001
-epochs: 20
+epochs: 200
 freeze_backbone: true
-checkpoint_every_n_steps: 50
+training_strategy: head_only_linear_probe
+
+checkpoint_path: /kaggle/working/labram_head_finetuned.pt
+selection_metric: best_validation_macro_f1
