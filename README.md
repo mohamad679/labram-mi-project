@@ -254,8 +254,7 @@ sample_3_time_patches.png
 
 The binary `.npz` file and generated PNG plots are not committed to GitHub. The repository stores reproducible code and summarized Markdown reports instead.
 
-### Phase 4 — Lightweight Gradio demo
-
+### Phase 4 — Recordable Gradio Dashboard
 ### Demo Video
 
 A short screen recording of the upgraded three-tab Gradio dashboard is available here:
