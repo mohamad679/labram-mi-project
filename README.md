@@ -256,6 +256,18 @@ The binary `.npz` file and generated PNG plots are not committed to GitHub. The 
 
 ### Phase 4 — Lightweight Gradio demo
 
+### Demo Video
+
+A short screen recording of the upgraded three-tab Gradio dashboard is available here:
+
+[Watch the Gradio dashboard demo](results/figures/phase4_gradio_demo/gradio_dashboard_demo.mp4)
+
+The dashboard demonstrates:
+
+- deterministic motor-imagery classification
+- MC Dropout uncertainty estimation with entropy and BALD
+- attention-rollout explainability with channel and temporal-patch visualizations
+
 Main report:
 
 ```text
@@ -327,6 +339,8 @@ Device: cuda
 ```
 
 The demo is an interactive proof-of-functionality for model loading, input validation, inference, and probability display. It is not a production BCI interface and does not provide clinical guidance.
+
+
 
 ## Interpretation
 
