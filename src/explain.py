@@ -1,4 +1,3 @@
-
 """
 Phase 3 — Explainability via attention rollout.
 
@@ -75,20 +74,49 @@ def prepare_tokens_for_rollout(model, x: torch.Tensor) -> tuple[torch.Tensor, in
 
 
 def attention_rollout(model, x: torch.Tensor) -> dict:
-    """Compute CLS-token attention rollout across all transformer blocks."""
+    """Compute CLS-token attention rollout across all transformer blocks.
+
+    Attention tensors are captured with forward hooks during the normal block
+    forward pass. This avoids calling each transformer block twice.
+    """
     model.eval()
     x = x.to(DEVICE)
+
+    captured_attentions = []
+    handles = []
+
+    def _capture_attention(_module, _inputs, output):
+        captured_attentions.append(output.detach())
 
     with torch.no_grad():
         tokens, n_input_chans, n_time_patches = prepare_tokens_for_rollout(model, x)
 
-        attentions = []
-        h = tokens
+        try:
+            for block in model.blocks:
+                if not hasattr(block, "attn") or not hasattr(block.attn, "attn_drop"):
+                    raise RuntimeError(
+                        "Expected each LaBraM block to expose block.attn.attn_drop "
+                        "for attention hook capture."
+                    )
 
-        for block in model.blocks:
-            attn = block(h, return_attention=True)
-            attentions.append(attn)
-            h = block(h)
+                handle = block.attn.attn_drop.register_forward_hook(_capture_attention)
+                handles.append(handle)
+
+            h = tokens
+            for block in model.blocks:
+                h = block(h)
+
+        finally:
+            for handle in handles:
+                handle.remove()
+
+        if len(captured_attentions) != len(model.blocks):
+            raise RuntimeError(
+                f"Captured {len(captured_attentions)} attention tensors, "
+                f"but expected {len(model.blocks)} transformer blocks."
+            )
+
+        attentions = captured_attentions
 
         batch_size = attentions[0].shape[0]
         n_tokens = attentions[0].shape[-1]
@@ -397,4 +425,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
