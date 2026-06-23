@@ -1,10 +1,7 @@
-Phase 1 baseline configuration
-
-Final project setting: PhysioNet Motor Imagery with 5 classes.
-
-The actual training script uses a subject-wise split and excludes
-
-subjects with incompatible sampling rate: 88, 89, 92, 100, 104.
+# Phase 1 baseline configuration
+# Final project setting: PhysioNet Motor Imagery with 5 classes.
+# The actual training script uses a subject-wise split and excludes
+# subjects with incompatible sampling rate: 88, 89, 92, 100, 104.
 
 dataset: physionet_motor_imagery
 
@@ -13,12 +10,11 @@ excluded_subjects: [88, 89, 92, 100, 104]
 
 n_outputs: 5
 classes:
-
-* feet
-* hands
-* left_hand
-* rest
-* right_hand
+  - feet
+  - hands
+  - left_hand
+  - rest
+  - right_hand
 
 n_chans: 64
 n_times: 400
