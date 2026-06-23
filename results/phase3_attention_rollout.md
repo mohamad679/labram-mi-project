@@ -216,6 +216,9 @@ The model predictions remain weak, consistent with the Phase 1 baseline. However
 
 The visualized top-channel and temporal-patch plots make the explanation outputs easier to inspect in the GitHub report.
 
+Across all four samples, top attention channels are predominantly frontal and temporal (AF9, FP1, AF8, FPZ, A1, M2, T8), with central channels (C3, Cz, C4) absent from the top-ranked positions. This is physiologically unexpected for motor imagery, where contralateral sensorimotor cortex activity (C3/C4) is the canonical signal. The absence of central-channel dominance is consistent with the weak Phase 1 baseline (macro-F1 ~0.22) and suggests the head-only fine-tuned model has not yet learned a motor-specific representation in the transformer's attention structure.
+
+
 ## Scope Note
 
 This phase uses attention rollout only. SHAP, LIME, and perturbation-based explainers are intentionally out of scope.
