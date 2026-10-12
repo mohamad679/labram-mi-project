@@ -271,7 +271,7 @@ def main():
     model = load_labram_model(
         n_outputs=n_outputs, n_times=n_times, n_chans=n_chans, sfreq=160.0,
     ).to(DEVICE)
-    model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=DEVICE))
+    model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=DEVICE, weights_only=True))
 
     inject_mc_dropout(model, dropout_p=MC_DROPOUT_P)
     enable_mc_dropout(model)
