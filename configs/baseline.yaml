@@ -1,36 +1,21 @@
-# Phase 1 baseline configuration
-# Final project setting: PhysioNet Motor Imagery with 5 classes.
-# The actual training script uses a subject-wise split and excludes
-# subjects with incompatible sampling rate: 88, 89, 92, 100, 104.
-
+# These values are consumed by src.train, not just documentation.
+# Archived benchmark results have not been reproduced against this file.
 dataset: physionet_motor_imagery
-
-subjects: all
+class_names: [feet, hands, left_hand, rest, right_hand]
 excluded_subjects: [88, 89, 92, 100, 104]
-
 n_outputs: 5
-classes:
-  - feet
-  - hands
-  - left_hand
-  - rest
-  - right_hand
-
 n_chans: 64
 n_times: 400
 sfreq: 160.0
-
-split: subject_wise
-train_subjects: 75
-val_subjects: 14
 test_subjects: 15
-usable_subjects_total: 104
-
-batch_size: 64
-learning_rate: 0.0001
-epochs: 200
-freeze_backbone: true
-training_strategy: head_only_linear_probe
-
-checkpoint_path: /kaggle/working/labram_head_finetuned.pt
-selection_metric: best_validation_macro_f1
+val_subjects: 14
+batch_size: 32
+learning_rate: 0.001
+weight_decay: 0.0001
+epochs: 30
+patience: 5
+seed: 42
+checkpoint_path: checkpoints/labram_head_finetuned.pt
+# A plain constructor does not load pretrained weights.
+model_init: scratch
+pretrained_repo_id: null
