@@ -55,6 +55,20 @@ This script:
 
 The downloader may also keep raw EDF files in a separate local folder (`~/mne_data` by default). **Only the completed HDF5 file needs to be uploaded to Kaggle.** You can delete the original EDF cache after verifying the HDF5 if you no longer need it for future preprocessing work.
 
+### Recovery from transient PhysioNet network timeouts
+
+PhysioNet downloads can stall with `ReadTimeoutError` / `requests.exceptions.ConnectionError` for an individual EDF, for example `S007R14.edf`. This does **not** mean the durable HDF5 cache is lost. The script prints `RESUMING: N/104 subjects`, preserves committed subjects, automatically retries the failed subject (eight retries by default) and waits 15, 30, 60, then at most 120 seconds between attempts.
+
+To select retry limits:
+
+```bash
+python -m scripts.prepare_portable_eeg \\
+  --output ~/Downloads/physionet_mi_104subjects.h5 \\
+  --max-retries 12 --retry-delay 20 --sha256
+```
+
+If all retries fail, running **the same command again** continues from completed subjects. The specific EDF interrupted mid-transfer may need a fresh transfer, while already cached complete EDF recordings are reused. Never delete the `~/mne_data` directory or the HDF5 file during recovery. An HTTPS `InsecureRequestWarning` is a separate TLS-security warning, not a download timeout; do not suppress certificate verification warnings as a timeout workaround.
+
 Verify the final file:
 
 ```bash
