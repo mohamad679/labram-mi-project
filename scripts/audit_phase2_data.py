@@ -70,6 +70,18 @@ def audit_subject(subject: int, *, root: Path, cache: Path) -> dict:
         verify_channel_order(raw.ch_names)
         observed = np.asarray(labels)[metadata["run"].astype(str).to_numpy() == key]
         audit = validate_raw_annotations(run, raw.annotations.description, observed)
+        # In the pinned MOABB/MNE pipeline the T0 onset at sample zero is
+        # omitted. Assert the exact observed pattern instead of permitting
+        # arbitrary silently dropped interior events on these audit subjects.
+        if (
+            audit["possible_missing_annotation_indices"] != [[0]]
+            or str(raw.annotations.description[0]) != "T0"
+            or not np.isclose(float(raw.annotations.onset[0]), 0.0, atol=1e-8)
+        ):
+            raise RuntimeError(
+                f"Unexpected missing-event pattern for subject {subject}, EDF run {run}."
+            )
+        audit["first_sample_t0_omitted"] = True
         audit["class_counts"] = counts_by_run[run]
         audit["possible_omitted_annotation_onsets_s"] = [
             [round(float(raw.annotations.onset[index]), 5) for index in indices]
