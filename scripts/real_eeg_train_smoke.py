@@ -17,7 +17,7 @@ from sklearn.preprocessing import LabelEncoder
 from src.data import load_physionet_mi
 from src.model import load_labram_model
 from src.provenance import validate_pretrained_reference
-from src.train import freeze_backbone_unfreeze_head
+from src.training_modes import configure_trainable_parameters
 
 
 def main():
@@ -54,7 +54,10 @@ def main():
         n_outputs=5, n_times=400, n_chans=64, sfreq=160.0,
         pretrained_repo_id=repo_id, pretrained_revision=args.revision,
     ).cpu()
-    head = freeze_backbone_unfreeze_head(model, 5)
+    audit = configure_trainable_parameters(model, strategy="linear_probe", n_outputs=5)
+    head = model.get_submodule("final_layer")
+    if audit["trainable_parameters"] != sum(p.numel() for p in head.parameters()):
+        raise RuntimeError("Unexpected probe trainability")
     model.eval()  # Frozen backbone: deterministic inference mode.
     head.train()
     before = [param.detach().clone() for param in head.parameters()]
