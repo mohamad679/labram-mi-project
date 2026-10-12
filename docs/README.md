@@ -4,6 +4,9 @@
 
 ## Start here
 
+**Kaggle freezing during download?** Use the [single-file resumable local EEG downloader](local-eeg-cache.md), then attach the finished HDF5 file as a private Kaggle Dataset. The [Kaggle notebook](../run_kaggle.ipynb) now requires this file instead of bulk-download in Kaggle.
+
+
 **Want to run the full dataset on Kaggle?** Start with [the GPU Notebook and setup instructions](kaggle-experiment.md), then [open the Notebook](../run_kaggle.ipynb). The original model checkpoint and test accuracy are not claimed as independently verified.
 
 
