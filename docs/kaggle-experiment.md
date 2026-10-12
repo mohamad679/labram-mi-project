@@ -4,6 +4,14 @@
 > This is a runnable study launcher, **not** a claim that the full GPU
 > experiment has already been reproduced or validated.
 
+## Kaggle Python 3.13 / Torchaudio compatibility
+
+Kaggle's Notebook kernel may run Python **3.13**, whereas the pinned `torchaudio==2.5.1` CUDA 12.1 wheel is not available for that Python version. The notebook automatically bootstraps **CPython 3.11** using [uv](https://docs.astral.sh/uv/) into `/kaggle/working/neurodecode_python311` and runs PyTorch, Braindecode, MOABB, MNE, training, benchmark plots and environment freezing with the isolated interpreter. It intentionally leaves the Kaggle notebook's Python 3.13 kernel untouched.
+
+Do **not** manually retry `pip install torch==2.5.1 torchaudio==2.5.1` in the notebook kernel; that is the incompatible environment. Instead, import the updated Notebook and run all cells from the beginning, with Internet enabled to download managed Python and the correct `cp311` CUDA wheels. A failed installation does not mean the model or EEG data were invalid.
+
+The isolated interpreter prints and verifies its Python version and GPU availability before any dataset download. Full end-to-end Kaggle training still needs a successful real GPU run for validation.
+
 ## Before starting
 
 1. In Kaggle Code, import `run_kaggle.ipynb`.
