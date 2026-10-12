@@ -56,7 +56,7 @@ Windows activation: `.venv\Scripts\activate`. Training can be resource-intensive
 
 **Crucial:** `configs/baseline.yaml` defaults to `model_init: scratch` to make initialization unambiguous. This configuration does **not** claim pretrained LaBraM results. To attempt *pretrained* fine-tuning, set `model_init: pretrained`, a verified `pretrained_repo_id` and an immutable 40-character `pretrained_revision`. See the [checkpoint audit](docs/reproducibility.md#auditing-pretrained-weights-network-required). Compatibility and checkpoint provenance still require a successfully run audit.
 
-After successful training, a checkpoint is written to `checkpoints/labram_head_finetuned.pt` (gitignored), with metadata in a sibling JSON file. Run:
+After successful training, a checkpoint is written to `checkpoints/labram_head_finetuned.pt` (gitignored), with metadata in a sibling JSON file. A separate `checkpoints/heldout_predictions.npz` artifact supports evidence-backed benchmark figures. Run:
 
 ```bash
 python -m src.uncertainty
@@ -104,7 +104,7 @@ CI runs the offline tests and Python compilation on proposed changes. These chec
 - **Limitations:** weak archived macro-F1 and a small sample of rollout visualizations. No production or clinical readiness.
 - **Licensing:** no license for this repository's original code has yet been selected. The upstream library license is not automatically a license for this project.
 
-[Full research audit](docs/research-audit.md) · [EEG data provenance](docs/eeg-data-provenance.md) · [Reproducibility](docs/reproducibility.md) · [Model card](docs/model-card.md) · [Contribution guide](CONTRIBUTING.md)
+[Benchmarking & figures](docs/benchmarking.md) · [Full research audit](docs/research-audit.md) · [EEG data provenance](docs/eeg-data-provenance.md) · [Reproducibility](docs/reproducibility.md) · [Model card](docs/model-card.md) · [Contribution guide](CONTRIBUTING.md)
 
 ## Credit
 
