@@ -58,3 +58,23 @@ def test_notebook_exports_real_metrics_without_embedding_fake_results():
     assert "results_only_" in source
     assert "source_commit" in source
     assert "metrics[\"accuracy\"]" in source
+
+
+def test_torchaudio_251_install_uses_isolated_python311():
+    """Guard against installing cp311-only torchaudio in Kaggle Python 3.13."""
+    notebook = _load()
+    install = _source(notebook["cells"][5])
+    assert 'VENV_DIR = WORK / "neurodecode_python311"' in install
+    assert '"venv", "--python", "3.11"' in install
+    assert '"torchaudio==2.5.1"' in install
+    assert '"pip", "install", "--python", PYTHON' in install
+    assert "sys.version_info.major" in install
+
+def test_all_scientific_subprocesses_use_compatible_interpreter():
+    notebook = _load()
+    for cell_id in (7, 9, 13, 15, 17):
+        code = _source(notebook["cells"][cell_id])
+        assert "PYTHON" in code, f"Cell {cell_id} omitted the isolated interpreter"
+        assert '[sys.executable, "-u", "-m", "src.train"' not in code
+        assert '[sys.executable, "-c", probe]' not in code
+    assert "torch.cuda.is_available()" in _source(notebook["cells"][7])
