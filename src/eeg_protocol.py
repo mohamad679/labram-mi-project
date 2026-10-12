@@ -7,6 +7,7 @@ PhysioNet T1/T2 semantics depend on the EDF run.
 from __future__ import annotations
 
 from collections import Counter
+from itertools import combinations
 
 import numpy as np
 
@@ -105,8 +106,9 @@ def validate_window(epochs, cropped_samples: int) -> dict:
 def validate_raw_annotations(run: int, descriptions, observed) -> dict:
     """Check MOABB labels form an ordered, nearly complete raw-EDF event sequence.
 
-    Only trailing source events may be rejected by the complete 3-s epoch
-    window. At most two dropped trailing annotations are allowed/reported.
+    MOABB may reject edge or other source events. Record all mathematically
+    possible omitted annotation indices, including ambiguous cases; never
+    silently claim the omitted event was the final annotation.
     """
     raw_codes = [str(code) for code in descriptions]
     if not raw_codes or set(raw_codes) - RAW_EVENT_CODES:
@@ -118,18 +120,26 @@ def validate_raw_annotations(run: int, descriptions, observed) -> dict:
     discarded = len(expected) - len(observed)
     if discarded < 0 or discarded > 2:
         raise ValueError(f"Too many dropped/extra events in run {run}: {discarded}")
-    # No internal missing cues: only annotations at the trailing boundary
-    # may disappear when MOABB requires a complete 3-second epoch.
-    if observed != expected[:len(observed)]:
+    # List all exact deletion alignments; repeated rest events may leave
+    # ambiguous candidates. Do not assume a deletion occurred at the end.
+    candidate_deletions = []
+    for omitted in combinations(range(len(expected)), discarded):
+        keep = [label for i, label in enumerate(expected) if i not in omitted]
+        if keep == observed:
+            candidate_deletions.append(list(omitted))
+    if not candidate_deletions:
         raise ValueError(f"MOABB label sequence contradicts original run {run} EDF annotations.")
     if not {"T0", "T1", "T2"}.issubset(raw_codes):
         raise ValueError(f"Original EDF run {run} lacks required event codes.")
+    trailing_indices = list(range(len(raw_codes) - discarded, len(raw_codes)))
     return {
         "edf_run": run,
         "source_annotation_count": len(raw_codes),
         "moabb_epoch_count": len(observed),
         "unmatched_source_events": discarded,
-        "trailing_source_events_dropped": discarded,
+        "possible_missing_annotation_indices": candidate_deletions,
+        "missing_event_alignment_unique": len(candidate_deletions) == 1,
+        "trailing_event_drop_possible": trailing_indices in candidate_deletions,
         "ordered_label_agreement": True,
     }
 
