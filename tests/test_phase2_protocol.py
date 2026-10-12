@@ -11,6 +11,7 @@ from src.eeg_protocol import (
     audit_metadata_labels,
     expected_label,
     run_id_from_moabb_key,
+    validate_paradigm_defaults,
     validate_raw_annotations,
     validate_window,
 )
@@ -110,3 +111,23 @@ def test_crop_window_checks_physical_seconds():
         validate_window(_epochs(np.arange(481) / 160 + 0.5), 400)
     with pytest.raises(ValueError, match="source epoch length"):
         validate_window(_epochs(np.arange(400) / 160), 400)
+
+
+def test_moabb_preprocessing_defaults_are_enforced():
+    defaults = SimpleNamespace(filters=[[8, 32]], tmin=0.0, tmax=None)
+    assert validate_paradigm_defaults(defaults)["bandpass_hz"] == [8, 32]
+    for invalid in (
+        SimpleNamespace(filters=[[7, 35]], tmin=0.0, tmax=None),
+        SimpleNamespace(filters=[[8, 32]], tmin=1.0, tmax=None),
+        SimpleNamespace(filters=[[8, 32]], tmin=0.0, tmax=3.0),
+    ):
+        with pytest.raises(ValueError):
+            validate_paradigm_defaults(invalid)
+
+
+def test_raw_annotation_internal_drop_is_rejected():
+    original = ["T0", "T1", "T2", "T0", "T1", "T2"]
+    with pytest.raises(ValueError, match="contradicts"):
+        validate_raw_annotations(
+            4, original, ["rest", "left_hand", "rest", "left_hand", "right_hand"],
+        )
