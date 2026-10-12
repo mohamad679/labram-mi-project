@@ -15,7 +15,7 @@ from braindecode.models import InterpolatedLaBraM
 
 
 from src.channels import PHYSIONET_64_CH_NAMES
-from src.provenance import validate_pretrained_reference
+from src.provenance import validate_pretrained_window
 
 def make_chs_info(n_chans: int, sfreq: float = 160.0):
     """
@@ -79,7 +79,7 @@ def load_labram_model(
     # A constructor alone does NOT establish pretrained-weight provenance.
     # Only an explicit from_pretrained call activates transfer learning.
     if pretrained_repo_id is not None:
-        validate_pretrained_reference(pretrained_repo_id, pretrained_revision)
+        validate_pretrained_window(pretrained_repo_id, pretrained_revision, n_times)
         return InterpolatedLaBraM.from_pretrained(
             pretrained_repo_id, chs_info=chs_info,
             n_outputs=n_outputs, n_times=n_times, n_chans=n_chans,
