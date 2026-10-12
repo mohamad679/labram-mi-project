@@ -54,7 +54,7 @@ def fetch_run(client, subject, run, root):
     try:
         client.download_file(BUCKET, key, str(part))
         if part.stat().st_size != expected:
-            raise IOError(f"Incomplete S3 download: {key}")
+            raise OSError(f"Incomplete S3 download: {key}")
         part.replace(target)
     finally:
         part.unlink(missing_ok=True)
@@ -72,6 +72,7 @@ def saved_subjects(path):
 
 def restore_cache(output, previous):
     import h5py
+
     from src.portable_eeg import initialize_cache, inspect_cache, verify_cache_metadata
 
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -102,6 +103,7 @@ def build(output, mne_root, previous="", max_new_subjects=104,
           retries=5, retry_delay=8):
     from botocore.exceptions import BotoCoreError, ClientError
     from tqdm import tqdm
+
     from src.data import load_physionet_mi
     from src.portable_eeg import EXPECTED_SUBJECTS, append_subject, inspect_cache
 
@@ -158,7 +160,7 @@ def build(output, mne_root, previous="", max_new_subjects=104,
             elapsed = time.monotonic() - started
             eta_min = elapsed / written * (104 - len(finished)) / 60
             progress.set_postfix_str(f"ETA~{eta_min:.0f}m; {output.stat().st_size / 2**30:.2f}GiB")
-    labels, ids, shape = inspect_cache(output, require_complete=False)
+    labels, _ids, shape = inspect_cache(output, require_complete=False)
     complete = len(finished) == len(EXPECTED_SUBJECTS)
     if complete:
         inspect_cache(output, require_complete=True)
