@@ -9,6 +9,9 @@ on:
       - "src/train.py"
       - "src/training_modes.py"
       - "tests/test_training_modes.py"
+      - "scripts/phase1_real_eeg_acceptance.py"
+      - "src/artifact_integrity.py"
+      - "tests/test_artifact_integrity.py"
   workflow_dispatch:
 
 permissions:
@@ -46,6 +49,19 @@ jobs:
           python -m scripts.real_eeg_train_smoke
           --revision 0563b6c626e7b40d9a36653b763715db94d945d7
           --output artifacts/real-eeg-smoke.json
+      - name: Phase 1 real scratch, memorization, and checkpoint gate
+        run: >-
+          python -m scripts.phase1_real_eeg_acceptance
+          --revision 0563b6c626e7b40d9a36653b763715db94d945d7
+          --output-dir artifacts/phase1-acceptance
+      - name: Save Phase 1 diagnostic and checkpoint evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase1-real-eeg-acceptance
+          path: artifacts/phase1-acceptance/
+          retention-days: 7
+          if-no-files-found: error
       - name: Save sanitized diagnostic only
         if: success()
         uses: actions/upload-artifact@v4
