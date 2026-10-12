@@ -13,7 +13,13 @@ from pathlib import Path
 import torch
 
 from src.model import load_labram_model
-from src.provenance import validate_pretrained_reference
+from src.provenance import (
+    OFFICIAL_N_TIMES,
+    OFFICIAL_REPO_ID,
+    OFFICIAL_REVISION,
+    OFFICIAL_WEIGHT_SHA256,
+    validate_pretrained_window,
+)
 
 
 def file_sha256(path: Path) -> str:
@@ -44,12 +50,12 @@ def compare_checkpoint_tensors(model, checkpoint: dict) -> tuple[int, int]:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo-id", default="braindecode/labram-pretrained")
-    parser.add_argument("--revision", required=True, help="Exact 40-character HF commit SHA")
-    parser.add_argument("--n-times", type=int, default=400)
+    parser.add_argument("--repo-id", default=OFFICIAL_REPO_ID)
+    parser.add_argument("--revision", default=OFFICIAL_REVISION, help="Exact 40-character HF commit SHA")
+    parser.add_argument("--n-times", type=int, default=OFFICIAL_N_TIMES)
     parser.add_argument("--output", default="artifacts/pretrained-audit.json")
     args = parser.parse_args()
-    validate_pretrained_reference(args.repo_id, args.revision)
+    validate_pretrained_window(args.repo_id, args.revision, args.n_times)
 
     import braindecode
     import huggingface_hub
@@ -71,13 +77,21 @@ def main():
     ))
     from safetensors.torch import load_file
 
+    observed_sha256 = file_sha256(weight_path)
+    if args.repo_id == OFFICIAL_REPO_ID and args.revision == OFFICIAL_REVISION:
+        if observed_sha256 != OFFICIAL_WEIGHT_SHA256:
+            raise RuntimeError(
+                "Pinned checkpoint SHA256 mismatch: "
+                f"expected {OFFICIAL_WEIGHT_SHA256}, got {observed_sha256}"
+            )
+
     checkpoint = load_file(str(weight_path), device="cpu")
     model = load_labram_model(
         n_outputs=5, n_times=args.n_times, n_chans=64, sfreq=160.0,
         pretrained_repo_id=args.repo_id, pretrained_revision=args.revision,
     )
     matched, eligible = compare_checkpoint_tensors(model, checkpoint)
-    if eligible < 10 or matched < 10:
+    if eligible < 20 or matched != eligible:
         raise RuntimeError(
             f"Pretraining verification FAILED: {matched}/{eligible} compatible "
             "backbone tensors exactly matched the pinned Hub weights."
@@ -87,7 +101,7 @@ def main():
         "verified_hub_commit": info.sha,
         "repo_id": args.repo_id,
         "weight_file": filename,
-        "weight_sha256": file_sha256(weight_path),
+        "weight_sha256": observed_sha256,
         "n_times": args.n_times,
         "n_chans": 64,
         "matching_backbone_tensors": matched,
@@ -96,6 +110,7 @@ def main():
         "huggingface_hub_version": huggingface_hub.__version__,
         "torch_version": torch.__version__,
         "scope": "weights loading only; no EEG data, downstream training or accuracy tested",
+        "check": "All eligible non-classifier backbone tensors matched pinned Safetensors",
     }
     result_path = Path(args.output)
     result_path.parent.mkdir(parents=True, exist_ok=True)
