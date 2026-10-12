@@ -1,10 +1,5 @@
 name: EEG preprocessing equivalence (public subject)
 on:
-  pull_request:
-    paths:
-      - "src/data.py"
-      - "scripts/audit_moabb_equivalence.py"
-      - ".github/workflows/eeg-equivalence.yml"
   workflow_dispatch:
 
 permissions:
