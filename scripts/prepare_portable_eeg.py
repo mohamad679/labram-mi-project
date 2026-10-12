@@ -46,11 +46,10 @@ def main():
         print(f"VERIFIED COMPLETE: {len(set(subjects))} subjects, {len(y)} epochs, X={shape}")
     else:
         initialize_cache(args.output)
+        import h5py
         from tqdm import tqdm
 
         from src.data import load_physionet_mi
-
-        import h5py
 
         with h5py.File(args.output, "r") as handle:
             finished = set(json.loads(handle.attrs["completed_subjects"]))
