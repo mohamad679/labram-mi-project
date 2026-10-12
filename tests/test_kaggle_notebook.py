@@ -78,3 +78,15 @@ def test_all_scientific_subprocesses_use_compatible_interpreter():
         assert '[sys.executable, "-u", "-m", "src.train"' not in code
         assert '[sys.executable, "-c", probe]' not in code
     assert "torch.cuda.is_available()" in _source(notebook["cells"][7])
+
+def test_headless_matplotlib_backend_isolation_in_kaggle():
+    """Jupyter's inline backend must not leak into standalone Python 3.11 processes."""
+    nb = _load()
+    setup = _source(nb["cells"][3])
+    probe = _source(nb["cells"][7])
+    dataset = _source(nb["cells"][9])
+    assert 'os.environ["MPLBACKEND"] = "Agg"' in setup
+    assert 'os.environ["MPLBACKEND"] = "Agg"' in probe
+    assert '"MPLBACKEND": "Agg"' in dataset
+    assert "env=training_env" in _source(nb["cells"][13])
+    assert "env=training_env" in _source(nb["cells"][15])
