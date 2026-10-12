@@ -71,6 +71,11 @@ def audit_subject(subject: int, *, root: Path, cache: Path) -> dict:
         observed = np.asarray(labels)[metadata["run"].astype(str).to_numpy() == key]
         audit = validate_raw_annotations(run, raw.annotations.description, observed)
         audit["class_counts"] = counts_by_run[run]
+        audit["possible_omitted_annotation_onsets_s"] = [
+            [round(float(raw.annotations.onset[index]), 5) for index in indices]
+            for indices in audit["possible_missing_annotation_indices"]
+        ]
+        audit["recording_duration_s"] = round(float(raw.times[-1]), 5)
         raw_checks.append(audit)
         raw.close()
     if {item["edf_run"] for item in raw_checks} != set(MOABB_RUN_ORDER):
