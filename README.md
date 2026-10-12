@@ -2,6 +2,8 @@
 
 **EEG motor-imagery decoding, model uncertainty and attention-based inspection — with explicit scientific limitations.**
 
+**Explore:** [Documentation](docs/README.md) · [Architecture](docs/architecture.md) · [Verified-figure gallery](docs/visualization-gallery.md) · [Release readiness](docs/release-readiness.md)
+
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-research-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Status](https://img.shields.io/badge/status-research%20prototype-697586)](#at-a-glance)
