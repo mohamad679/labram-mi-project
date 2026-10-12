@@ -1,5 +1,5 @@
 """Explicit training strategies; initialization and optimization are distinct."""
-import torch.nn as nn
+from torch import nn
 
 
 def configure_trainable_parameters(model: nn.Module, *, strategy: str, n_outputs: int) -> dict:
