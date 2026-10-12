@@ -66,12 +66,22 @@ the fresh MOABB preprocessing pipeline.
 
 **Follow-up diagnostic:** A deliberately stronger assumption that any
 missing raw annotations must occur **only at the end** of each run
-failed on real subject 1/run 4. The code therefore does not assume
-this behavior. The audited alignment instead enumerates all source
-annotation indices that could have been omitted while preserving
-the MOABB label sequence, and includes candidate onset times and
-recording duration. This is an explicit investigation item, not proof
-of a mislabeled epoch.
+was falsified. The follow-up
+[run 38314316708](https://github.com/mohamad679/labram-mi-project/actions/runs/38314316708)
+found the **unique missing source event is index 0, onset 0.0 seconds,
+T0 (rest)** in *all 12 runs* across the two audit participants.
+The complete 29-epoch sequence in each run matches the remaining
+29 raw annotations in source order.
+
+This is consistent with the documented default
+[`mne.find_events(initial_event=False)`](https://mne.tools/stable/generated/mne.find_events.html),
+which does not emit a nonzero initial-stimulus event at sample zero.
+The [MNE EDF issue #4760](https://github.com/mne-tools/mne-python/issues/4760)
+specifically discusses the first t=0 annotation in `S001R04.edf`.
+The contract now **fails closed** if the expected first-T0 omission
+changes on either sampled subject. This validates an observed
+preprocessing convention; it does not advocate restoring the missing
+first rest epoch without a new dataset-versioned protocol.
 
 ## Exclusion provenance from external research
 
