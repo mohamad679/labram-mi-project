@@ -1,6 +1,6 @@
 # Phase 2 — EEG data and preprocessing contract audit
 
-**Status: OPEN — do not proceed to Phase 3 until scientific gate approval.**
+**Status: Phase 2 PASS for the predeclared 104-subject imagery-only data contract, with explicit and material limitation for the excluded subject 89. Phase 3 requires separate user authorization.**
 
 ## Audit scope and immutable scientific definitions
 
@@ -104,18 +104,88 @@ independently re-audited for each participant:
 
 The split/cohort definition remains unchanged during Phase 2.
 
-## Required scientific acceptance gates
+## Full-cohort Kaggle validation — 2026-10-13
 
-- [ ] CI and offline negative-control tests pass on final PR head.
-- [x] Real public EDF annotations agree in ordered class sequence for subjects 1 and 2;
-      exact reasons for omitted source annotations still under investigation.
-- [ ] EEG event onset/timing and 481-to-400 cropping verified in seconds.
-- [ ] 64 channels, 160 Hz, unit conversion, and MOABB metadata order verified.
-- [ ] Temporary HDF5 cache is numerically equivalent to direct preprocessing.
-- [x] External literature supporting the historical exclusions documented;
-      **independent per-subject source-data validation remains pending**.
-- [ ] Full 104-subject production HDF5 provenance verified OR explicitly
-      restricted as unverified until the real production dataset is inspected.
+The project owner ran the pinned [Phase 2 Kaggle validation notebook](../results/validation/phase2_full_cohort_kaggle_20261013.json).
+Its results-only archive was reviewed for internal consistency across the
+individual JSON reports, notebook code, full logs, cohort summaries and
+the fixed original builder SHA. The archive checksum was
+`c57f7923c8037987584dd54c586ca9fddc1c5541bdb70bcbe62c25ba7a92866c`.
+The 1.85-GB HDF5 itself was **not uploaded to GitHub**, so this is
+an independent review **of the executed Kaggle evidence**, rather than a
+second local raw-data rerun.
+
+**Numerical input audit: PASS in the executed Kaggle report.**
+
+- Full schema-3 cache: **104 subjects, 18,096 epochs, 64 channels, 400 samples**
+  per epoch; complete 160-Hz microvolt dataset.
+- Reported full-cache SHA-256:
+  `f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a`,
+  matching the earlier Kaggle cache builder report.
+- Exactly **18,096 epoch-level reconstructions** from the official PhysioNet
+  public S3 EDF source; **463,257,600 float32 signal values** compared with the
+  final HDF5 and found equal by the executed audit.
+- Aggregate class counts: feet 2,338; hands 2,342; left_hand 2,360;
+  rest **8,736 (48.28%)**; right_hand 2,320.
+- Repeated **seed-42 75/14/15 train/validation/test subject split** was
+  identical and exhaustive: 13,050 / 2,436 / 2,610 epochs, respectively.
+  No participant or epoch overlap; no held-out test evaluation was performed.
+- 22 targeted offline regression tests passed in the Kaggle environment.
+
+**Direct source EDF exclusion review: 30/30 runs inspected.**
+
+| Participant | Observed EDF sampling rate | Scientific selection rationale |
+| --- | ---: | --- |
+| 88 | 128 Hz | Incompatible with fixed 160-Hz protocol |
+| 92 | 128 Hz | Incompatible with fixed 160-Hz protocol |
+| 100 | 128 Hz | Incompatible with fixed 160-Hz protocol; nonstandard annotation structure |
+| 104 | 160 Hz | **Run 8 has only 26 annotations (106 seconds)**, whereas its other imagery runs have 30; objective completeness anomaly |
+| 89 | 160 Hz | All six EDF files structurally passed the checks. A [peer-reviewed study](https://pmc.ncbi.nlm.nih.gov/articles/PMC11674661/) reports erroneous labels, which the original EDF cannot independently confirm |
+
+A separate [published EEGMMIDB analysis](https://pmc.ncbi.nlm.nih.gov/articles/PMC9414220/)
+also reports incomplete annotations for subject 104 among several excluded
+participants. Other researchers choose different exclusion sets; this
+**predeclared** 104-subject cohort must not be portrayed as universally optimal.
+The automated notebook's `objective_flag_found=false` for 104 overlooks
+the **26-versus-30 annotations**; the independent report review explicitly
+corrects that interpretation without altering the original result archive.
+
+**Supervisor acceptance policy:** Freeze and retain the five historical
+exclusions *before* further model tuning; the existing, numerically verified
+104-subject cache and deterministic held-out partitions remain unchanged.
+Excluding subject 89 is a conservative, **literature-supported but
+not independently proven semantic** decision. We do not claim otherwise.
+If this assumption is tested in future, it is a **separate cohort-sensitivity
+study on validation**, not a reason to modify the frozen test protocol.
+
+**Gate: PASS with declared limitations** for the fixed scientific input
+contract. This conclusion does not verify pretrained transfer effectiveness,
+EEG decoding accuracy, cross-subject generalization, or the suitability of
+this exclusion policy for every other study. Do not begin Phase 3 without
+the user's separate approval.
+
+## Required scientific acceptance gates — final disposition
+
+- [x] CI and offline negative-control tests passed on PR #21.
+- [x] Real EDF annotations and MOABB event mapping agreed for two subjects
+      in GitHub CI and the full retained 104-subject cohort in Kaggle.
+- [x] EEG original epoch (481 samples), model crop (400 samples), input
+      channel order, 160-Hz target, 8–32 Hz filter and microvolt scaling verified.
+- [x] All 104 participants and every retained EEG epoch are present in the
+      complete reported production HDF5 and equal the separately reconstructed
+      source EDF preprocessing output.
+- [x] Actual full-cache deterministic 75/14/15 subject split proven disjoint
+      and reproducible.
+- [x] All 30 EDFs across five excluded participants independently inspected;
+      the frozen exclusion policy documented with objective source anomalies
+      for 88/92/100/104 and explicit peer-reviewed, **unverified semantic**
+      rationale for subject 89.
+- [x] The exclusion of participant 89 is explicitly classified as **a
+      documented limitation**, not as independently verified EDF ground truth.
+
+**Scientific decision:** PASS on the established, versioned 104-subject
+cohort; retain the original cohort selection, record the unresolved semantic
+uncertainty, and keep held-out Test locked.
 
 ## Limitations and reproducibility
 
