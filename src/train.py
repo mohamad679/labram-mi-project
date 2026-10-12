@@ -11,6 +11,7 @@ import json
 import hashlib
 import subprocess
 import random
+import time
 from dataclasses import asdict
 from pathlib import Path
 import numpy as np
@@ -25,12 +26,14 @@ from src.config import load_training_config
 from src.channels import verify_channel_order, verify_sampling_rate
 from src.data import load_physionet_mi, subject_wise_split
 from src.model import load_labram_model
+from src.portable_eeg import H5SignalSource, inspect_cache
 
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
 CACHE_PATHS = [
     "physionet_mi_cache.npz",  # local cache only; never commit raw EEG data
+    "physionet_mi_104subjects.h5",  # optional portable lazy-reading cache
     "/kaggle/input/physionet-mi-cache/physionet_mi_cache.npz",
     "/kaggle/working/physionet_mi_cache.npz",
 ]
@@ -55,6 +58,14 @@ def load_dataset(config=None):
     for path in candidates:
         if os.path.exists(path):
             print(f"Loading cached data from {path}")
+            if Path(path).suffix.lower() in {".h5", ".hdf5"}:
+                y, subject_ids, shape = inspect_cache(path, require_complete=True)
+                if shape[1:] != (config.n_chans, config.n_times):
+                    raise ValueError(f"Portable cache shape {shape} does not match configuration.")
+                if set(map(int, np.unique(subject_ids))) & set(config.excluded_subjects):
+                    raise ValueError("Portable cache unexpectedly includes excluded subjects.")
+                print(f"Using lazy HDF5 EEG data ({shape[0]} epochs; no full RAM copy).")
+                return H5SignalSource(path, shape), y, subject_ids
             with np.load(path, allow_pickle=False) as data:
                 X, y, subject_ids = data["X"], data["y"], data["subject_ids"]
                 required = {"channel_names", "sfreq", "input_unit", "cache_schema_version", "scaling_factor_from_volts"}
@@ -107,14 +118,19 @@ def load_dataset(config=None):
 
 class EEGDataset(Dataset):
     def __init__(self, X, y, indices):
-        self.X = X[indices]
-        self.y = y[indices]
+        # Preserve lazy HDF5 reads; X[indices] would materialize entire
+        # subject partitions and crash memory-limited Kaggle sessions.
+        self._lazy = isinstance(X, H5SignalSource)
+        self.indices = np.asarray(indices, dtype=np.int64) if self._lazy else None
+        self.X = X if self._lazy else X[indices]
+        self.y = np.asarray(y[indices], dtype=np.int64)
 
     def __len__(self):
         return len(self.y)
 
     def __getitem__(self, idx):
-        x = torch.tensor(self.X[idx], dtype=torch.float32)
+        row = int(self.indices[idx]) if self._lazy else idx
+        x = torch.as_tensor(np.asarray(self.X[row], dtype=np.float32))
         y = torch.tensor(self.y[idx], dtype=torch.long)
         return x, y
 
@@ -148,15 +164,22 @@ def freeze_backbone_unfreeze_head(model, n_outputs):
 # ---------------------------------------------------------------------------
 # Train / eval
 # ---------------------------------------------------------------------------
-def run_epoch(model, loader, criterion, optimizer=None):
+def run_epoch(model, loader, criterion, optimizer=None, phase=None, epoch=None, total_epochs=None):
     is_train = optimizer is not None
     model.train() if is_train else model.eval()
 
     total_loss = 0.0
     all_preds, all_targets = [], []
+    n_batches = len(loader)
+    started = time.monotonic()
+    # Use newline-delimited updates so Kaggle's subprocess output streaming
+    # can display real progress instead of buffering terminal carriage returns.
+    every = max(1, n_batches // 20)
+    kind = phase or ("train" if is_train else "eval")
+    ep = f"Epoch {epoch}/{total_epochs} " if epoch is not None else ""
 
     with torch.set_grad_enabled(is_train):
-        for xb, yb in loader:
+        for batch_number, (xb, yb) in enumerate(loader, 1):
             xb, yb = xb.to(DEVICE), yb.to(DEVICE)
             out = model(xb)
             loss = criterion(out, yb)
@@ -169,6 +192,17 @@ def run_epoch(model, loader, criterion, optimizer=None):
             total_loss += loss.item() * xb.size(0)
             all_preds.append(out.argmax(dim=1).cpu().numpy())
             all_targets.append(yb.cpu().numpy())
+            if batch_number == 1 or batch_number % every == 0 or batch_number == n_batches:
+                elapsed = time.monotonic() - started
+                remaining = elapsed / batch_number * (n_batches - batch_number)
+                filled = round(20 * batch_number / n_batches)
+                bar = "#" * filled + "-" * (20 - filled)
+                print(
+                    f"PROGRESS {ep}{kind:>5} |{bar}| "
+                    f"{batch_number}/{n_batches} ({100 * batch_number / n_batches:.0f}%) "
+                    f"elapsed={elapsed:.0f}s ETA={remaining:.0f}s",
+                    flush=True,
+                )
 
     all_preds = np.concatenate(all_preds)
     all_targets = np.concatenate(all_targets)
@@ -196,7 +230,7 @@ def main(config_path='configs/baseline.yaml'):
     print(f"Classes ({n_outputs}): {list(le.classes_)}")
 
     train_idx, val_idx, test_idx = subject_wise_split(
-        X, y, subject_ids,
+        np.arange(len(y)), y, subject_ids,
         test_size_subjects=config.test_subjects,
         val_size_subjects=config.val_subjects,
         random_state=config.split_seed,
@@ -234,8 +268,14 @@ def main(config_path='configs/baseline.yaml'):
     checkpoint_path = Path(config.checkpoint_path)
     checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
     for epoch in range(1, config.epochs + 1):
-        train_loss, train_acc, train_f1 = run_epoch(model, train_loader, criterion, optimizer)
-        val_loss, val_acc, val_f1 = run_epoch(model, val_loader, criterion, optimizer=None)
+        train_loss, train_acc, train_f1 = run_epoch(
+            model, train_loader, criterion, optimizer, phase="train", epoch=epoch,
+            total_epochs=config.epochs,
+        )
+        val_loss, val_acc, val_f1 = run_epoch(
+            model, val_loader, criterion, phase="valid", epoch=epoch,
+            total_epochs=config.epochs,
+        )
 
         print(f"Epoch {epoch:02d} | "
               f"train_loss={train_loss:.4f} acc={train_acc:.3f} f1={train_f1:.3f} | "
@@ -254,7 +294,9 @@ def main(config_path='configs/baseline.yaml'):
 
     print("\nLoading best checkpoint for final test evaluation...")
     model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE, weights_only=True))
-    test_loss, test_acc, test_f1 = run_epoch(model, test_loader, criterion, optimizer=None)
+    test_loss, test_acc, test_f1 = run_epoch(
+        model, test_loader, criterion, phase="test",
+    )
     print(f"\nTEST  | loss={test_loss:.4f}  acc={test_acc:.3f}  macro_f1={test_f1:.3f}")
 
     # Save the held-out predictions so every reported figure is reproducible.
