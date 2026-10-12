@@ -1,0 +1,17 @@
+# Python caches and local tools
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+.env
+.DS_Store
+# EEG datasets and model artifacts must NOT go into Git
+physionet_mi_cache.npz
+*.npz
+checkpoints/
+artifacts/
+*.pt
+*.pth
+*.ckpt
