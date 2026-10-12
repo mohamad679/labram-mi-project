@@ -57,9 +57,11 @@ def audit_metadata_labels(labels, metadata, subject: int) -> dict:
         raise ValueError("Unknown motor-imagery class in MOABB epochs.")
 
     output = {}
-    for key, group in metadata.groupby("run", sort=False):
+    indexed = metadata.copy()
+    indexed["_audit_position"] = np.arange(len(indexed))
+    for key, group in indexed.groupby("run", sort=False):
         run = run_id_from_moabb_key(key)
-        actual = Counter(map(str, np.asarray(labels)[group.index.to_numpy()]))
+        actual = Counter(map(str, np.asarray(labels)[group["_audit_position"].to_numpy()]))
         allowed = (
             {"rest", "left_hand", "right_hand"} if run in HAND_RUNS
             else {"rest", "hands", "feet"}
