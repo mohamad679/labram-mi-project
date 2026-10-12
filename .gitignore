@@ -15,3 +15,9 @@ artifacts/
 *.pt
 *.pth
 *.ckpt
+
+# Portable EEG caches (large subject-level recordings)
+*.h5
+*.hdf5
+*.edf
+*.fif
