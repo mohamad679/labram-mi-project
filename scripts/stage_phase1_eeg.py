@@ -10,7 +10,12 @@ import json
 from pathlib import Path
 
 from scripts.prepare_physionet_s3 import (
-    BUCKET, PREFIX, RUNS, edf_path, fetch_run, unsigned_s3,
+    BUCKET,
+    PREFIX,
+    RUNS,
+    edf_path,
+    fetch_run,
+    unsigned_s3,
 )
 
 
