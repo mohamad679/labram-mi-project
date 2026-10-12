@@ -18,6 +18,6 @@ jobs:
       - name: Compile Python modules
         run: python -m compileall -q src scripts app.py tests
       - name: Lint configuration and data utilities
-        run: ruff check src/portable_eeg.py scripts/prepare_portable_eeg.py scripts/prepare_physionet_s3.py src/config.py src/data.py src/channels.py src/provenance.py src/subject_statistics.py scripts/subject_confidence.py scripts/run_multiseed.py scripts/real_eeg_train_smoke.py tests
+        run: ruff check src/portable_eeg.py scripts/prepare_portable_eeg.py scripts/prepare_physionet_s3.py src/artifact_integrity.py src/training_modes.py scripts/phase1_real_eeg_acceptance.py scripts/stage_phase1_eeg.py src/config.py src/data.py src/channels.py src/provenance.py src/subject_statistics.py scripts/subject_confidence.py scripts/run_multiseed.py scripts/real_eeg_train_smoke.py tests
       - name: Run offline unit tests
         run: python -m pytest -q

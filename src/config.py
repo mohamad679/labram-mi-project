@@ -27,6 +27,7 @@ class TrainingConfig:
     split_seed: int = 42
     checkpoint_path: str = "checkpoints/labram_head_finetuned.pt"
     model_init: str = "scratch"
+    training_strategy: str = "full_finetune"
     pretrained_repo_id: str | None = None
     pretrained_revision: str | None = None
 
@@ -57,6 +58,10 @@ def load_training_config(path: str | Path = "configs/baseline.yaml") -> Training
         raise ValueError("Invalid optimizer hyperparameters.")
     if config.seed < 0 or config.split_seed < 0:
         raise ValueError("Seeds must be nonnegative integers.")
+    if config.training_strategy not in {"linear_probe", "full_finetune"}:
+        raise ValueError("Unsupported training_strategy.")
+    if config.model_init == "scratch" and config.training_strategy != "full_finetune":
+        raise ValueError("Scratch requires full_finetune; frozen random features are not scratch training.")
     if config.model_init not in {"scratch", "pretrained"}:
         raise ValueError("model_init must be 'scratch' or 'pretrained'.")
     if config.model_init == "pretrained":

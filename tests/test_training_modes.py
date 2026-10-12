@@ -1,0 +1,89 @@
+"""Regression tests for scientifically distinct initialization/training modes."""
+from pathlib import Path
+
+import pytest
+
+from src.config import load_training_config
+
+nn = pytest.importorskip("torch").nn
+
+from src.training_modes import configure_trainable_parameters
+
+
+class ToyBackbone(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.backbone = nn.Sequential(nn.Linear(8, 8), nn.ReLU())
+        self.final_layer = nn.Linear(8, 5)
+
+
+def test_scratch_full_finetune_updates_every_parameter():
+    model = ToyBackbone()
+    audit = configure_trainable_parameters(model, strategy="full_finetune", n_outputs=5)
+    assert all(p.requires_grad for p in model.parameters())
+    assert audit["trainable_parameters"] == audit["total_parameters"]
+    assert audit["frozen_parameters"] == 0
+
+
+def test_pretrained_linear_probe_freezes_only_backbone():
+    model = ToyBackbone()
+    audit = configure_trainable_parameters(model, strategy="linear_probe", n_outputs=5)
+    assert all(not p.requires_grad for p in model.backbone.parameters())
+    assert all(p.requires_grad for p in model.final_layer.parameters())
+    assert audit["frozen_parameters"] > 0
+
+
+def test_missing_explicit_head_rejected():
+    model = nn.Sequential(nn.Linear(8, 5))
+    with pytest.raises(RuntimeError, match="final_layer"):
+        configure_trainable_parameters(model, strategy="linear_probe", n_outputs=5)
+
+
+def test_wrong_head_output_rejected():
+    model = ToyBackbone()
+    with pytest.raises(RuntimeError, match="n_outputs"):
+        configure_trainable_parameters(model, strategy="linear_probe", n_outputs=4)
+
+
+def test_frozen_scratch_configuration_rejected(tmp_path):
+    path = Path(__file__).resolve().parents[1] / "configs" / "baseline.yaml"
+    modified = tmp_path / "invalid.yaml"
+    modified.write_text(
+        path.read_text().replace("training_strategy: full_finetune",
+                                 "training_strategy: linear_probe"), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="Scratch requires"):
+        load_training_config(modified)
+
+
+def test_scratch_optimizer_updates_backbone_weights():
+    import torch
+
+    torch.manual_seed(42)
+    model = ToyBackbone()
+    configure_trainable_parameters(model, strategy="full_finetune", n_outputs=5)
+    before = model.backbone[0].weight.detach().clone()
+    optimizer = torch.optim.SGD((p for p in model.parameters() if p.requires_grad), lr=0.1)
+    loss = nn.functional.cross_entropy(model.final_layer(model.backbone(torch.randn(12, 8))), torch.arange(12) % 5)
+    loss.backward()
+    assert model.backbone[0].weight.grad is not None
+    assert torch.isfinite(model.backbone[0].weight.grad).all()
+    optimizer.step()
+    assert not torch.equal(before, model.backbone[0].weight.detach())
+
+
+def test_linear_probe_optimizer_does_not_modify_backbone():
+    import torch
+
+    torch.manual_seed(42)
+    model = ToyBackbone()
+    configure_trainable_parameters(model, strategy="linear_probe", n_outputs=5)
+    before_backbone = model.backbone[0].weight.detach().clone()
+    before_head = model.final_layer.weight.detach().clone()
+    optimizer = torch.optim.SGD((p for p in model.parameters() if p.requires_grad), lr=0.1)
+    loss = nn.functional.cross_entropy(model.final_layer(model.backbone(torch.randn(12, 8))), torch.arange(12) % 5)
+    loss.backward()
+    assert model.backbone[0].weight.grad is None
+    optimizer.step()
+    assert torch.equal(before_backbone, model.backbone[0].weight.detach())
+    assert not torch.equal(before_head, model.final_layer.weight.detach())

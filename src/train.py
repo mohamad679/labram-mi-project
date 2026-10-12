@@ -1,9 +1,8 @@
 """
-Phase 1 — Fine-tune LaBraM's classification head on PhysioNet Motor Imagery.
+Phase 1 — Train LaBraM with explicit scratch/full or pretrained/probing strategies.
 
 Loads cached (or freshly fetched) data, applies the subject-wise split,
-freezes the LaBraM backbone, and trains only the classification head
-(linear-probe baseline). Reports accuracy + macro-F1 on val/test.
+selects a validated trainability strategy and reports held-out metrics.
 """
 import os
 import argparse
@@ -16,7 +15,7 @@ from dataclasses import asdict
 from pathlib import Path
 import numpy as np
 import torch
-import torch.nn as nn
+from torch import nn
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils.class_weight import compute_class_weight
@@ -27,6 +26,8 @@ from src.channels import verify_channel_order, verify_sampling_rate
 from src.data import load_physionet_mi, subject_wise_split
 from src.model import load_labram_model
 from src.portable_eeg import H5SignalSource, inspect_cache
+from src.training_modes import configure_trainable_parameters
+from src.artifact_integrity import write_experiment_manifest
 
 # ---------------------------------------------------------------------------
 # Config
@@ -138,27 +139,6 @@ class EEGDataset(Dataset):
 # ---------------------------------------------------------------------------
 # Head detection + freezing.
 # ---------------------------------------------------------------------------
-def freeze_backbone_unfreeze_head(model, n_outputs):
-    for p in model.parameters():
-        p.requires_grad = False
-
-    head_name, head_module = None, None
-    for name, module in model.named_modules():
-        if isinstance(module, nn.Linear) and module.out_features == n_outputs:
-            head_name, head_module = name, module
-
-    if head_module is None:
-        raise RuntimeError(
-            f"Could not auto-detect classification head "
-            f"(no nn.Linear with out_features={n_outputs} found)."
-        )
-
-    for p in head_module.parameters():
-        p.requires_grad = True
-
-    n_head_params = sum(p.numel() for p in head_module.parameters())
-    print(f"Fine-tuning head: '{head_name}' ({n_head_params} trainable params)")
-    return head_module
 
 
 # ---------------------------------------------------------------------------
@@ -255,8 +235,10 @@ def main(config_path='configs/baseline.yaml'):
         pretrained_repo_id=(config.pretrained_repo_id if config.model_init == "pretrained" else None),
         pretrained_revision=config.pretrained_revision,
     ).to(DEVICE)
-    freeze_backbone_unfreeze_head(model, n_outputs)
-    print(f"Initialization mode: {config.model_init}")
+    parameter_audit = configure_trainable_parameters(
+        model, strategy=config.training_strategy, n_outputs=n_outputs
+    )
+    print(f"Initialization mode: {config.model_init}; parameter audit: {parameter_audit}")
 
     criterion = nn.CrossEntropyLoss(weight=class_weights)
     trainable_params = [p for p in model.parameters() if p.requires_grad]
@@ -267,6 +249,8 @@ def main(config_path='configs/baseline.yaml'):
 
     checkpoint_path = Path(config.checkpoint_path)
     checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+    if checkpoint_path.exists() or checkpoint_path.with_suffix(".json").exists():
+        raise FileExistsError("Experiment output already exists; choose a new checkpoint_path.")
     for epoch in range(1, config.epochs + 1):
         train_loss, train_acc, train_f1 = run_epoch(
             model, train_loader, criterion, optimizer, phase="train", epoch=epoch,
@@ -311,7 +295,9 @@ def main(config_path='configs/baseline.yaml'):
             all_probs.append(torch.softmax(logits, dim=1).cpu().numpy())
             all_labels.append(y[row_ids])
             all_subjects.append(subject_ids[row_ids])
-    predictions_path = checkpoint_path.with_name("heldout_predictions.npz")
+    predictions_path = checkpoint_path.with_name(f"{checkpoint_path.stem}_heldout_predictions.npz")
+    if predictions_path.exists():
+        raise FileExistsError("Refusing to overwrite existing held-out predictions.")
     np.savez_compressed(
         predictions_path,
         y_true=np.concatenate(all_labels),
@@ -334,6 +320,7 @@ def main(config_path='configs/baseline.yaml'):
         "git_commit": git_commit,
         "checkpoint_sha256": checkpoint_sha256,
         "configuration": asdict(config), "torch_version": torch.__version__,
+        "parameter_audit": parameter_audit,
         "train_subjects": sorted(map(int, set(subject_ids[train_idx]))),
         "validation_subjects": sorted(map(int, set(subject_ids[val_idx]))),
         "test_subjects": sorted(map(int, set(subject_ids[test_idx]))),
@@ -342,9 +329,8 @@ def main(config_path='configs/baseline.yaml'):
         "historical_results_reproduced": False,
         "heldout_predictions_path": str(predictions_path),
     }
-    checkpoint_path.with_suffix(".json").write_text(
-        json.dumps(metadata, indent=2), encoding="utf-8"
-    )
+    manifest_path = write_experiment_manifest(checkpoint_path, metadata, predictions_path)
+    print(f"Verified experiment manifest: {manifest_path}")
     model.eval()
     all_preds, all_targets = [], []
     with torch.no_grad():
