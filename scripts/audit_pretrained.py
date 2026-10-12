@@ -83,7 +83,20 @@ def main():
             "backbone tensors exactly matched the pinned Hub weights."
         )
 
+    # Exercise the actual public model forward path without using patient EEG.
+    # This verifies shape compatibility, not classifier quality.
+    model.eval()
+    with torch.inference_mode():
+        synthetic = torch.zeros((1, 64, args.n_times), dtype=torch.float32)
+        logits = model(synthetic)
+    if logits.shape != (1, 5) or not torch.isfinite(logits).all():
+        raise RuntimeError(
+            f"Incompatible LaBraM forward pass: shape={tuple(logits.shape)}"
+        )
+
     report = {
+        "synthetic_forward_shape": list(logits.shape),
+        "synthetic_forward_finite": True,
         "verified_hub_commit": info.sha,
         "repo_id": args.repo_id,
         "weight_file": filename,
