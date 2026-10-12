@@ -8,6 +8,8 @@ freezes the LaBraM backbone, and trains only the classification head
 import os
 import argparse
 import json
+import hashlib
+import subprocess
 import random
 from dataclasses import asdict
 from pathlib import Path
@@ -55,7 +57,7 @@ def load_dataset(config=None):
             print(f"Loading cached data from {path}")
             with np.load(path, allow_pickle=False) as data:
                 X, y, subject_ids = data["X"], data["y"], data["subject_ids"]
-                required = {"channel_names", "sfreq", "input_unit"}
+                required = {"channel_names", "sfreq", "input_unit", "cache_schema_version", "scaling_factor_from_volts"}
                 missing = required - set(data.files)
                 if missing:
                     if os.environ.get("ALLOW_UNVERIFIED_EEG_CACHE") != "1":
@@ -69,8 +71,12 @@ def load_dataset(config=None):
                 else:
                     verify_channel_order(data["channel_names"].tolist())
                     verify_sampling_rate(float(data["sfreq"]))
-                    if str(data["input_unit"]) != "V":
-                        raise ValueError("Cache unit must be V (MNE EEG volts).")
+                    if int(data["cache_schema_version"]) != 2:
+                        raise ValueError("Expected validated EEG cache schema 2.")
+                    if str(data["input_unit"]) != "uV":
+                        raise ValueError("Expected MOABB EEG signal in microvolts.")
+                    if not np.isclose(float(data["scaling_factor_from_volts"]), 1e6):
+                        raise ValueError("Invalid volts-to-microvolts scaling factor.")
             keep = ~np.isin(subject_ids, config.excluded_subjects)
             X, y, subject_ids = X[keep], y[keep], subject_ids[keep]
             if X.shape[1:] != (config.n_chans, config.n_times):
@@ -91,6 +97,8 @@ def load_dataset(config=None):
         channel_names=np.array(metadata.attrs["channel_names"]),
         sfreq=np.float64(metadata.attrs["sfreq"]),
         input_unit=np.array(metadata.attrs["input_unit"]),
+        cache_schema_version=np.int64(metadata.attrs["cache_schema_version"]),
+        scaling_factor_from_volts=np.float64(metadata.attrs["scaling_factor_from_volts"]),
     )
     print(f"Saved local EEG cache: {save_path}; do NOT commit subject data to Git.")
 
@@ -271,7 +279,18 @@ def main(config_path='configs/baseline.yaml'):
     )
     print(f"Saved held-out prediction artifact: {predictions_path}")
 
+    try:
+        git_commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        git_commit = "unavailable"
+    with checkpoint_path.open("rb") as weights:
+        checkpoint_sha256 = hashlib.file_digest(weights, "sha256").hexdigest()
     metadata = {
+        "status": "finished",
+        "git_commit": git_commit,
+        "checkpoint_sha256": checkpoint_sha256,
         "configuration": asdict(config), "torch_version": torch.__version__,
         "train_subjects": sorted(map(int, set(subject_ids[train_idx]))),
         "validation_subjects": sorted(map(int, set(subject_ids[val_idx]))),
