@@ -18,11 +18,11 @@ The official `braindecode/labram-pretrained` model is pinned to Hugging Face com
 `0563b6c626e7b40d9a36653b763715db94d945d7`.
 This revision has a `model.safetensors` file. The official model was configured for 128 canonical channels and 3000 time samples, rather than the project's 64 x 400 input.
 
-A dedicated GitHub Actions workflow now attempts a real network-backed pretrained checkpoint audit on CPU using Braindecode 1.5.1. **A successful report must show matching backbone parameters and a preserved full checkpoint SHA256.** This is not a validation of accuracy, preprocessing, or transferred performance. If loading fails, treat compatibility as an open finding rather than inventing a successful fine-tuning run.
+**Verified CPU run:** [GitHub Actions run 38234001055](https://github.com/mohamad679/labram-mi-project/actions/runs/38234001055) used Braindecode 1.5.1, torch 2.5.1+cpu, and the immutable checkpoint above. At 3000 samples, 221/221 compatible backbone tensors matched exactly. A direct 400-sample from_pretrained initially failed due to temporal_embedding shape [1,16,200] vs [1,3,200]. The adapter now loads 3000-sample pretrained weights and transfers 220/220 compatible 400-sample backbone tensors and an exact first-three-position temporal prefix. A synthetic (1,64,400) forward pass produced finite (1,5) logits. **This validates weight transfer and numerical execution, not EEG classification accuracy or historical results.**
 
 ### Gate C — Real evaluation plots
 
-The training script saves `checkpoints/labram_head_finetuned_test_predictions.npz` (not committed) alongside the checkpoint and metadata JSON. It contains `y_true`, `y_prob`, class labels and test subject IDs.
+The training script saves `checkpoints/heldout_predictions.npz` (not committed) alongside the checkpoint and metadata JSON. It contains `y_true`, `y_prob`, class labels and test subject IDs.
 
 After a successful real-data training run:
 
@@ -33,7 +33,7 @@ python -m scripts.render_evaluation \
   --output artifacts/evaluation
 ```
 
-The renderer validates probability shape, ranges and row sums, then generates `metrics.json`, `confusion_matrix.png` and `reliability_diagram.png`. It does not fabricate data when predictions are missing. **Epoch-level accuracy is not a confidence interval over independent subjects.**
+The existing benchmark renderer from PR #5 validates probability shape and row sums, then generates `metrics.json`, `metrics.csv`, `confusion_matrix.png` and `reliability_diagram.png`. It does not fabricate data when predictions are missing. **Epoch-level accuracy is not a confidence interval over independent subjects.**
 
 ### Gate D — Final scientific benchmark (not done)
 
