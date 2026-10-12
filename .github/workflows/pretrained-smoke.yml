@@ -20,9 +20,11 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install PyTorch CPU-only
-        run: python -m pip install --index-url https://download.pytorch.org/whl/cpu "torch==2.5.1"
+        run: python -m pip install --index-url https://download.pytorch.org/whl/cpu "torch==2.5.1" "torchaudio==2.5.1"
       - name: Install pretrained model stack
         run: python -m pip install "braindecode[hub]==1.5.1" "safetensors>=0.4,<1"
+      - name: Verify CPU wheels are matched
+        run: python -c "import torch, torchaudio; print(torch.__version__, torchaudio.__version__, torch.cuda.is_available()); assert not torch.cuda.is_available()"
       - name: Audit immutable pretrained checkpoint at official configuration
         env:
           HF_HUB_DISABLE_TELEMETRY: "1"
