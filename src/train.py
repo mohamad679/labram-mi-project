@@ -20,6 +20,7 @@ from sklearn.utils.class_weight import compute_class_weight
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 
 from src.config import load_training_config
+from src.channels import verify_channel_order, verify_sampling_rate
 from src.data import load_physionet_mi, subject_wise_split
 from src.model import load_labram_model
 
@@ -54,6 +55,22 @@ def load_dataset(config=None):
             print(f"Loading cached data from {path}")
             with np.load(path, allow_pickle=False) as data:
                 X, y, subject_ids = data["X"], data["y"], data["subject_ids"]
+                required = {"channel_names", "sfreq", "input_unit"}
+                missing = required - set(data.files)
+                if missing:
+                    if os.environ.get("ALLOW_UNVERIFIED_EEG_CACHE") != "1":
+                        raise ValueError(
+                            "Unverified legacy EEG cache is missing provenance "
+                            f"{sorted(missing)} at {path}. Rebuild from MOABB or "
+                            "explicitly set ALLOW_UNVERIFIED_EEG_CACHE=1 for "
+                            "non-publishable exploratory use."
+                        )
+                    print("WARNING: using legacy EEG cache without verified channel order.")
+                else:
+                    verify_channel_order(data["channel_names"].tolist())
+                    verify_sampling_rate(float(data["sfreq"]))
+                    if str(data["input_unit"]) != "V":
+                        raise ValueError("Cache unit must be V (MNE EEG volts).")
             keep = ~np.isin(subject_ids, config.excluded_subjects)
             X, y, subject_ids = X[keep], y[keep], subject_ids[keep]
             if X.shape[1:] != (config.n_chans, config.n_times):
@@ -69,7 +86,12 @@ def load_dataset(config=None):
 
     save_path = os.environ.get("PHYSIONET_CACHE_PATH", CACHE_PATHS[0])
     Path(save_path).parent.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(save_path, X=X, y=y, subject_ids=subject_ids)
+    np.savez_compressed(
+        save_path, X=X, y=y, subject_ids=subject_ids,
+        channel_names=np.array(metadata.attrs["channel_names"]),
+        sfreq=np.float64(metadata.attrs["sfreq"]),
+        input_unit=np.array(metadata.attrs["input_unit"]),
+    )
     print(f"Saved local EEG cache: {save_path}; do NOT commit subject data to Git.")
 
     return X, y, subject_ids
@@ -177,8 +199,8 @@ def main(config_path='configs/baseline.yaml'):
     test_ds = EEGDataset(X, y, test_idx)
 
     train_loader = DataLoader(train_ds, batch_size=config.batch_size, shuffle=True)
-    val_loader = DataLoader(val_ds, batch_size=BATCH_SIZE, shuffle=False)
-    test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=False)
+    val_loader = DataLoader(val_ds, batch_size=config.batch_size, shuffle=False)
+    test_loader = DataLoader(test_ds, batch_size=config.batch_size, shuffle=False)
 
     class_weights = compute_class_weight(
         "balanced", classes=np.arange(n_outputs), y=y[train_idx]
