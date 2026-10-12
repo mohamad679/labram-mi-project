@@ -105,10 +105,10 @@ def append_subject(path: str | Path, subject: int, X, y) -> bool:
     with h5py.File(path, "r+") as file:
         verify_cache_metadata(file)
         done = json.loads(_decode(file.attrs["completed_subjects"]))
+        if file.attrs["complete"]:
+            raise ValueError("Complete cache cannot be modified.")
         if subject in done:
             return False
-        if file.attrs["complete"]:
-            raise ValueError("Complete cache cannot be extended.")
         start = int(file.attrs["committed_rows"])
         if any(file[name].shape[0] != start for name in ("X", "y", "subject_ids")):
             raise ValueError("Incomplete append: first resume with initialize_cache().")
