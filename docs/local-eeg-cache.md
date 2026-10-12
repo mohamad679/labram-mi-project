@@ -4,7 +4,7 @@ Kaggle can run out of RAM during bulk EEG preparation. The repository supports *
 
 ## 1. Create the HDF5 cache locally
 
-Install **Python 3.11**, Git, and sufficient free disk space on your computer. From a terminal:
+Install **Python 3.11**, Git, and sufficient free disk space on your computer. The local downloader does **not** need PyTorch, CUDA, a GPU or the full training requirements. From a terminal:
 
 ```bash
 git clone https://github.com/mohamad679/labram-mi-project.git
@@ -15,7 +15,7 @@ python -m venv .venv
 Activate on macOS/Linux with `source .venv/bin/activate` or on Windows PowerShell with `.venv\Scripts\Activate.ps1`. Install:
 
 ```bash
-python -m pip install -r requirements.txt h5py
+python -m pip install "numpy>=1.26,<3" "scikit-learn>=1.3,<2" "moabb==1.7.2" "mne==1.13.2" "h5py>=3.10,<4"
 ```
 
 Now run:
