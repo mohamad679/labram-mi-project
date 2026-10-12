@@ -2,7 +2,7 @@
 from pathlib import Path
 
 import pytest
-import torch.nn as nn
+nn = pytest.importorskip("torch").nn
 
 from src.config import load_training_config
 from src.training_modes import configure_trainable_parameters
