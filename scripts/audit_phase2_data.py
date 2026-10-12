@@ -23,6 +23,7 @@ from src.eeg_protocol import (
     MOABB_RUN_ORDER,
     audit_metadata_labels,
     run_id_from_moabb_key,
+    validate_paradigm_defaults,
     validate_raw_annotations,
     validate_window,
 )
@@ -37,6 +38,7 @@ from src.portable_eeg import (
 def audit_subject(subject: int, *, root: Path, cache: Path) -> dict:
     dataset = PhysionetMI(imagined=True, executed=False)
     paradigm = MotorImagery()
+    actual_preprocessing = validate_paradigm_defaults(paradigm)
     epochs, labels_epoch, metadata_epoch = paradigm.get_data(
         dataset=dataset, subjects=[subject], return_epochs=True,
     )
@@ -81,6 +83,7 @@ def audit_subject(subject: int, *, root: Path, cache: Path) -> dict:
         "epoch_count": len(labels),
         "class_counts": label_counts,
         "window": window,
+        "actual_moabb_preprocessing": actual_preprocessing,
         "raw_annotation_consistency": raw_checks,
         "all_signal_values_finite": True,
         "channel_order_verified": True,
