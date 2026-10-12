@@ -1,0 +1,106 @@
+{
+  "evidence_type": "phase2_kaggle_full_cohort_scientific_review",
+  "review_date": "2026-10-13",
+  "source": "User-executed Kaggle Phase 2 validation notebook; summarized from supplied results-only ZIP",
+  "results_zip_sha256": "c57f7923c8037987584dd54c586ca9fddc1c5541bdb70bcbe62c25ba7a92866c",
+  "raw_hdf5_not_attached_to_github": true,
+  "independent_review_scope": "Cross-validated internal consistency of all five JSON reports, user notebook audit code, logs, and prior GitHub CI; not a second independent raw HDF5 run",
+  "frozen_protocol": {
+    "original_builder_revision": "74e511fb9c1ac4f0543b249b571e28e811ec92c3",
+    "phase2_audit_revision": "2b504475580bb4cc4bfc9e8c0b1682956f03058c",
+    "moabb": "1.7.2",
+    "mne": "1.13.2",
+    "input_unit": "uV",
+    "channel_count": 64,
+    "sampling_rate_hz": 160,
+    "epoch_samples": 400,
+    "imagery_only": true,
+    "default_bandpass_hz": [
+      8,
+      32
+    ]
+  },
+  "full_hdf5": {
+    "validation_result": "PASS per executable Kaggle report",
+    "sha256_reported": "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a",
+    "sha_matches_original_builder_report": true,
+    "subjects": 104,
+    "epochs": 18096,
+    "shape": [
+      18096,
+      64,
+      400
+    ],
+    "size_bytes": 1853905224,
+    "finite_values": true,
+    "float32_values_compared_with_independently_read_edfs": 463257600,
+    "subject_source_parity": 104,
+    "label_parity": true,
+    "class_counts": {
+      "feet": 2338,
+      "hands": 2342,
+      "left_hand": 2360,
+      "rest": 8736,
+      "right_hand": 2320
+    },
+    "rest_fraction": 0.4827586206896552
+  },
+  "frozen_subject_split": {
+    "seed": 42,
+    "train_subjects": 75,
+    "validation_subjects": 14,
+    "test_subjects": 15,
+    "train_epochs": 13050,
+    "validation_epochs": 2436,
+    "test_epochs": 2610,
+    "all_subjects_unique": true,
+    "all_epochs_exhaustive": true,
+    "split_reproducible": true,
+    "test_not_used_for_model_selection": true
+  },
+  "excluded_source_edf_quality": [
+    {
+      "id": 88,
+      "imagery_edfs_checked": 6,
+      "observed_sfreq_hz": 128,
+      "rationale": "Objective mismatch with fixed 160 Hz protocol"
+    },
+    {
+      "id": 89,
+      "imagery_edfs_checked": 6,
+      "observed_sfreq_hz": 160,
+      "rationale": "Source structural audit found no abnormality; published study reports erroneous labels, not independently demonstrable from EDF alone",
+      "semantic_label_accuracy_independently_proven": false
+    },
+    {
+      "id": 92,
+      "imagery_edfs_checked": 6,
+      "observed_sfreq_hz": 128,
+      "rationale": "Objective mismatch with fixed 160 Hz protocol"
+    },
+    {
+      "id": 100,
+      "imagery_edfs_checked": 6,
+      "observed_sfreq_hz": 128,
+      "rationale": "Objective mismatch with fixed 160 Hz protocol; source recording structure differs"
+    },
+    {
+      "id": 104,
+      "imagery_edfs_checked": 6,
+      "observed_sfreq_hz": 160,
+      "rationale": "Objective incomplete imagery annotations: EDF run 8 has 26 annotations versus 30 for other imagery runs; shorter run (106 seconds)"
+    }
+  ],
+  "published_exclusion_precedents": [
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC11674661/",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC9414220/"
+  ],
+  "supervisor_scientific_policy": "Freeze the pre-established 104-participant cohort; do not add/drop participants based on test-set performance. The structural/source mismatches and documented historical label concern justify a conservative fixed selection; independent semantic verification of S089 remains not established and must be disclosed. Subsequent optional cohort-sensitivity analyses require validation-only decisions and an independently defined evaluation protocol.",
+  "gate": {
+    "phase2_input_integrity": "PASS",
+    "phase2_exclusion_policy": "ACCEPTED_WITH_DECLARED_UNVERIFIABLE_SEMANTIC_LIMITATION",
+    "overall_phase2": "PASS_WITH_EXPLICIT_LIMITATIONS",
+    "does_not_validate_benchmark_performance": true,
+    "phase3_requires_explicit_user_approval": true
+  }
+}
