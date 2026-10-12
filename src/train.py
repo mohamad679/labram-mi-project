@@ -249,6 +249,28 @@ def main(config_path='configs/baseline.yaml'):
     test_loss, test_acc, test_f1 = run_epoch(model, test_loader, criterion, optimizer=None)
     print(f"\nTEST  | loss={test_loss:.4f}  acc={test_acc:.3f}  macro_f1={test_f1:.3f}")
 
+    # Save the held-out predictions so every reported figure is reproducible.
+    # Store labels/probabilities, not raw EEG waveforms.
+    model.eval()
+    all_probs, all_labels, all_subjects = [], [], []
+    with torch.no_grad():
+        for batch_indices in range(0, len(test_idx), config.batch_size):
+            row_ids = test_idx[batch_indices:batch_indices + config.batch_size]
+            xb = torch.as_tensor(X[row_ids], dtype=torch.float32, device=DEVICE)
+            logits = model(xb)
+            all_probs.append(torch.softmax(logits, dim=1).cpu().numpy())
+            all_labels.append(y[row_ids])
+            all_subjects.append(subject_ids[row_ids])
+    predictions_path = checkpoint_path.with_name("heldout_predictions.npz")
+    np.savez_compressed(
+        predictions_path,
+        y_true=np.concatenate(all_labels),
+        y_prob=np.concatenate(all_probs),
+        subject_ids=np.concatenate(all_subjects),
+        class_names=np.asarray(config.class_names),
+    )
+    print(f"Saved held-out prediction artifact: {predictions_path}")
+
     metadata = {
         "configuration": asdict(config), "torch_version": torch.__version__,
         "train_subjects": sorted(map(int, set(subject_ids[train_idx]))),
@@ -257,6 +279,7 @@ def main(config_path='configs/baseline.yaml'):
         "best_validation_macro_f1": float(best_val_f1),
         "test_accuracy": float(test_acc), "test_macro_f1": float(test_f1),
         "historical_results_reproduced": False,
+        "heldout_predictions_path": str(predictions_path),
     }
     checkpoint_path.with_suffix(".json").write_text(
         json.dumps(metadata, indent=2), encoding="utf-8"
