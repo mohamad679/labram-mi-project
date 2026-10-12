@@ -9,7 +9,6 @@ import json
 import re
 from pathlib import Path
 
-
 NOTEBOOK = Path(__file__).resolve().parents[1] / "run_kaggle.ipynb"
 
 
