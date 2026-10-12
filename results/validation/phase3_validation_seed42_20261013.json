@@ -1,0 +1,96 @@
+{
+  "phase": "3",
+  "scope": "validation_only_exploratory_no_test_evaluations",
+  "status": "PARTIAL_PASS_MODEL_COMPARISON_ONLY",
+  "source": "2026-10-13 user executed Kaggle 4-model result archive",
+  "zip_sha256": "882e0b944fd937986b5715dd3cbe88b9bb55691388d08d0eeaa009f17c889767",
+  "executed_runner_sha256": "e55f0d3c0a141c7162685654bc44923633518bfcd35796152bc3fb7a65251b09",
+  "source_commit": "b3af6247d027cd1a3dd33915368bad03f9bf220c",
+  "dataset_sha256": "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a",
+  "model_seed": 42,
+  "split_seed": 42,
+  "train_subjects": 75,
+  "validation_subjects": 14,
+  "test_subjects_locked": 15,
+  "train_epochs": 13050,
+  "validation_epochs": 2436,
+  "test_epochs_locked": 2610,
+  "models": {
+    "dummy": {
+      "accuracy": 0.4827586206896552,
+      "macro_f1": 0.13023255813953488,
+      "balanced_accuracy": 0.2,
+      "val_macro_f1_subject_bootstrap95": [
+        0.13023255813953488,
+        0.13023255813953488
+      ]
+    },
+    "riemann": {
+      "accuracy": 0.28981937602627256,
+      "macro_f1": 0.2675024490253835,
+      "balanced_accuracy": 0.29439113508642417,
+      "val_macro_f1_subject_bootstrap95": [
+        0.22350891448425492,
+        0.30319540309496706
+      ],
+      "solver_warning": "ConvergenceWarning: L-BFGS STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT (max_iter=400)"
+    },
+    "eegnet": {
+      "accuracy": 0.47701149425287354,
+      "macro_f1": 0.40627359354367554,
+      "balanced_accuracy": 0.4276310719087763,
+      "val_macro_f1_subject_bootstrap95": [
+        0.34217618741104955,
+        0.4593384213440219
+      ],
+      "best_epoch": 12,
+      "best_checkpoint_saved": false
+    },
+    "labram_probe": {
+      "accuracy": 0.3817733990147783,
+      "macro_f1": 0.1860972124038156,
+      "balanced_accuracy": 0.20156268792938564,
+      "val_macro_f1_subject_bootstrap95": [
+        0.16759305192108645,
+        0.19972055168210842
+      ],
+      "best_epoch": 1,
+      "best_checkpoint_saved": false,
+      "pretrained_revision": "0563b6c626e7b40d9a36653b763715db94d945d7"
+    }
+  },
+  "independent_archive_review": {
+    "method": "Recompute reported metrics/confusion matrices from all four validation NPZ archives; compare frozen split, subject IDs, class order, train-only declarations, protocol hashes and source runner byte SHA256",
+    "all_recomputed_metrics_match": true,
+    "all_confusion_matrices_match": true,
+    "all_prediction_subject_sets_match_validation_only": true,
+    "all_validation_probabilities_finite_and_normalized": true,
+    "test_evaluation_in_output": false
+  },
+  "exploratory_paired_validation_macro_f1_subject_bootstrap": {
+    "subjects": 14,
+    "replicates": 1500,
+    "eegnet_minus_labram_probe": {
+      "point": 0.22017638113985993,
+      "ci95": [
+        0.1698591798040343,
+        0.26730500495118964
+      ]
+    },
+    "eegnet_minus_riemann": {
+      "point": 0.13877114451829203,
+      "ci95": [
+        0.08727120894919684,
+        0.2024652201292982
+      ]
+    }
+  },
+  "important_limits": [
+    "Single training seed, same validation cohort used for early stopping; confidence intervals are exploratory and cannot establish confirmatory superiority",
+    "Riemannian logistic-regression optimizer hit max_iter=400 and emitted a ConvergenceWarning; require converged rerun",
+    "Best EEGNet and LaBraM selected weight checkpoints were not persisted, so models cannot be reloaded to verify selected predictions",
+    "Executed notebook runner source is not yet committed in GitHub PR; exact runner hash independently checked from notebook artifact but code review integration still needed",
+    "Historical holdout/test metrics are not contemporaneously comparable; no new test inference permitted"
+  ],
+  "supervisor_gate": "BLOCKED_PENDING_CONVERGED_RIEMANNIAN_RERUN_AND_REPRODUCIBLE_DEEP_CHECKPOINTS"
+}
