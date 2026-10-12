@@ -16,7 +16,6 @@ from dataclasses import asdict
 from pathlib import Path
 import numpy as np
 import torch
-import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils.class_weight import compute_class_weight
@@ -27,6 +26,7 @@ from src.channels import verify_channel_order, verify_sampling_rate
 from src.data import load_physionet_mi, subject_wise_split
 from src.model import load_labram_model
 from src.portable_eeg import H5SignalSource, inspect_cache
+from src.training_modes import configure_trainable_parameters
 
 # ---------------------------------------------------------------------------
 # Config
@@ -138,27 +138,6 @@ class EEGDataset(Dataset):
 # ---------------------------------------------------------------------------
 # Head detection + freezing.
 # ---------------------------------------------------------------------------
-def freeze_backbone_unfreeze_head(model, n_outputs):
-    for p in model.parameters():
-        p.requires_grad = False
-
-    head_name, head_module = None, None
-    for name, module in model.named_modules():
-        if isinstance(module, nn.Linear) and module.out_features == n_outputs:
-            head_name, head_module = name, module
-
-    if head_module is None:
-        raise RuntimeError(
-            f"Could not auto-detect classification head "
-            f"(no nn.Linear with out_features={n_outputs} found)."
-        )
-
-    for p in head_module.parameters():
-        p.requires_grad = True
-
-    n_head_params = sum(p.numel() for p in head_module.parameters())
-    print(f"Fine-tuning head: '{head_name}' ({n_head_params} trainable params)")
-    return head_module
 
 
 # ---------------------------------------------------------------------------
@@ -255,8 +234,10 @@ def main(config_path='configs/baseline.yaml'):
         pretrained_repo_id=(config.pretrained_repo_id if config.model_init == "pretrained" else None),
         pretrained_revision=config.pretrained_revision,
     ).to(DEVICE)
-    freeze_backbone_unfreeze_head(model, n_outputs)
-    print(f"Initialization mode: {config.model_init}")
+    parameter_audit = configure_trainable_parameters(
+        model, strategy=config.training_strategy, n_outputs=n_outputs
+    )
+    print(f"Initialization mode: {config.model_init}; parameter audit: {parameter_audit}")
 
     criterion = nn.CrossEntropyLoss(weight=class_weights)
     trainable_params = [p for p in model.parameters() if p.requires_grad]
@@ -334,6 +315,7 @@ def main(config_path='configs/baseline.yaml'):
         "git_commit": git_commit,
         "checkpoint_sha256": checkpoint_sha256,
         "configuration": asdict(config), "torch_version": torch.__version__,
+        "parameter_audit": parameter_audit,
         "train_subjects": sorted(map(int, set(subject_ids[train_idx]))),
         "validation_subjects": sorted(map(int, set(subject_ids[val_idx]))),
         "test_subjects": sorted(map(int, set(subject_ids[test_idx]))),
