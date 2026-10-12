@@ -20,7 +20,7 @@
 | Uncertainty | MC Dropout, entropy and BALD | Exploratory; post-hoc dropout needs validation |
 | Explainability | Transformer attention rollout | Model inspection, **not** clinical explanation |
 | Interactive demo | Gradio: classify, uncertainty, explain | Requires a compatible local checkpoint |
-| Reproducibility | YAML-configured training, saved split metadata | Full GPU rerun **not yet verified** |
+| Reproducibility | YAML-configured training; pinned model audit; verified EEG scale for one subject | Full GPU rerun **not yet verified** |
 
 ## Visual overview
 
@@ -83,6 +83,8 @@ results/                  Archived reports and representative figures
 docs/                     Methodology, research caveats and setup
 run_kaggle.ipynb          Kaggle execution launcher
 ```
+
+**Independent research checks:** [Pretrained 400-sample transfer and forward pass](https://github.com/mohamad679/labram-mi-project/actions/runs/38234001055) passed on CPU. [Real EEG preprocessing equivalence](https://github.com/mohamad679/labram-mi-project/actions/runs/38234916355) passed on PhysioNet subject 1 with zero numerical difference after unit conversion. These are **not** model-accuracy benchmarks.
 
 ## Quality checks
 
