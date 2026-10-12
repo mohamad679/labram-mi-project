@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from src.provenance import validate_pretrained_reference
+from src.provenance import validate_pretrained_window
 
 
 @dataclass(frozen=True)
@@ -57,7 +57,9 @@ def load_training_config(path: str | Path = "configs/baseline.yaml") -> Training
     if config.model_init not in {"scratch", "pretrained"}:
         raise ValueError("model_init must be 'scratch' or 'pretrained'.")
     if config.model_init == "pretrained":
-        validate_pretrained_reference(config.pretrained_repo_id, config.pretrained_revision)
+        validate_pretrained_window(
+            config.pretrained_repo_id, config.pretrained_revision, config.n_times
+        )
     if config.model_init == "scratch" and (
         config.pretrained_repo_id is not None or config.pretrained_revision is not None
     ):
