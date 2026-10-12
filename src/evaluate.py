@@ -49,7 +49,8 @@ def calibration_curve_metrics(
     bin_counts = np.zeros(n_bins, dtype=int)
 
     for i in range(n_bins):
-        mask = (conf >= edges[i]) & (conf < edges[i + 1])
+        upper = conf <= edges[i + 1] if i == n_bins - 1 else conf < edges[i + 1]
+        mask = (conf >= edges[i]) & upper
         n_in = mask.sum()
         if n_in == 0:
             continue
