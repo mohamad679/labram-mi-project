@@ -31,7 +31,7 @@ def load_training_config(path: str | Path = "configs/baseline.yaml") -> Training
     with Path(path).open(encoding="utf-8") as handle:
         values = yaml.safe_load(handle)
     if not isinstance(values, dict):
-        raise ValueError("Configuration must be a YAML mapping.")
+        raise TypeError("Configuration must be a YAML mapping.")
     unknown = set(values) - {field.name for field in fields(TrainingConfig)}
     if unknown:
         raise ValueError(f"Unknown training configuration keys: {sorted(unknown)}")
