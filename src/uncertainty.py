@@ -178,30 +178,11 @@ def run_mc_on_loader(
 # ---------------------------------------------------------------------------
 # Calibration
 # ---------------------------------------------------------------------------
-def compute_ece(
-    mean_probs: np.ndarray,
-    labels: np.ndarray,
-    n_bins: int = 10,
-) -> float:
-    """
-    Expected Calibration Error (ECE).
-    Bins by max confidence; measures |accuracy - confidence| per bin.
-    Lower is better; 0.0 = perfect calibration.
-    """
-    conf    = mean_probs.max(axis=-1)
-    preds   = mean_probs.argmax(axis=-1)
-    correct = (preds == labels).astype(float)
-    edges   = np.linspace(0.0, 1.0, n_bins + 1)
-    ece     = 0.0
-    n       = len(labels)
+def compute_ece(mean_probs: np.ndarray, labels: np.ndarray, n_bins: int = 10) -> float:
+    """Expected Calibration Error using the shared, boundary-tested implementation."""
+    from src.evaluate import calibration_curve_metrics
 
-    for i in range(n_bins):
-        mask = (conf >= edges[i]) & (conf < edges[i + 1])
-        if not mask.any():
-            continue
-        ece += (mask.sum() / n) * abs(correct[mask].mean() - conf[mask].mean())
-
-    return float(ece)
+    return calibration_curve_metrics(labels, mean_probs, n_bins=n_bins)["ece"]
 
 
 # ---------------------------------------------------------------------------
