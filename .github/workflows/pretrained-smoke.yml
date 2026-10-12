@@ -35,9 +35,19 @@ jobs:
           --revision 0563b6c626e7b40d9a36653b763715db94d945d7
           --n-times 3000
           --output artifacts/pretrained-audit.json
+      - name: Audit pretrained model at actual 400-sample project input
+        env:
+          HF_HUB_DISABLE_TELEMETRY: "1"
+          OMP_NUM_THREADS: "2"
+        run: >-
+          python -m scripts.audit_pretrained
+          --repo-id braindecode/labram-pretrained
+          --revision 0563b6c626e7b40d9a36653b763715db94d945d7
+          --n-times 400
+          --output artifacts/pretrained-400-audit.json
       - name: Preserve verified report only
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: pretrained-audit
-          path: artifacts/pretrained-audit.json
+          path: artifacts/pretrained-*-audit.json
