@@ -1,6 +1,7 @@
 """Offline tests for held-out subject splitting (no EEG download)."""
 import numpy as np
 import pytest
+
 from src.data import subject_wise_split
 
 def _example():
