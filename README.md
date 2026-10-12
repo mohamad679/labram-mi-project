@@ -41,6 +41,12 @@
 
 These are **different evaluations**, not evidence that dropout improves performance. A five-class chance-level reference is 20% accuracy under uniform guessing; imbalance and subject heterogeneity limit that comparison. [Original full report](docs/legacy-project-report.md) · [Phase 1](results/phase1_baseline.md) · [Phase 2](results/phase2_uncertainty.md) · [Phase 3](results/phase3_attention_rollout.md).
 
+## Kaggle full-data experiments
+
+**[Open the full Kaggle GPU experiment notebook](run_kaggle.ipynb)** · [Step-by-step Kaggle guide](docs/kaggle-experiment.md)
+
+The notebook runs one full-cohort experiment per session: pinned Pretrained or Scratch with a fixed subject split, saved model/seed metadata, real held-out classification metrics and participant-level confidence intervals. The Notebook code has offline syntax checks; **a complete Kaggle GPU training run has not yet been independently validated.**
+
 ## Quick start
 
 Requires Python 3.10+, an appropriate environment for PyTorch/Braindecode, and permitted access to PhysioNet data.
