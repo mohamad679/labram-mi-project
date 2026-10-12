@@ -4,6 +4,9 @@
 
 ## Start here
 
+**Want to run the full dataset on Kaggle?** Start with [the GPU Notebook and setup instructions](kaggle-experiment.md), then [open the Notebook](../run_kaggle.ipynb). The original model checkpoint and test accuracy are not claimed as independently verified.
+
+
 | Goal | Document |
 | --- | --- |
 | Understand the architecture and boundaries | [System architecture](architecture.md) |
