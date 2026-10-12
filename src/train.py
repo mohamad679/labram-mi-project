@@ -27,6 +27,7 @@ from src.data import load_physionet_mi, subject_wise_split
 from src.model import load_labram_model
 from src.portable_eeg import H5SignalSource, inspect_cache
 from src.training_modes import configure_trainable_parameters
+from src.artifact_integrity import write_experiment_manifest
 
 # ---------------------------------------------------------------------------
 # Config
@@ -248,6 +249,8 @@ def main(config_path='configs/baseline.yaml'):
 
     checkpoint_path = Path(config.checkpoint_path)
     checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+    if checkpoint_path.exists() or checkpoint_path.with_suffix(".json").exists():
+        raise FileExistsError("Experiment output already exists; choose a new checkpoint_path.")
     for epoch in range(1, config.epochs + 1):
         train_loss, train_acc, train_f1 = run_epoch(
             model, train_loader, criterion, optimizer, phase="train", epoch=epoch,
@@ -292,7 +295,9 @@ def main(config_path='configs/baseline.yaml'):
             all_probs.append(torch.softmax(logits, dim=1).cpu().numpy())
             all_labels.append(y[row_ids])
             all_subjects.append(subject_ids[row_ids])
-    predictions_path = checkpoint_path.with_name("heldout_predictions.npz")
+    predictions_path = checkpoint_path.with_name(f"{checkpoint_path.stem}_heldout_predictions.npz")
+    if predictions_path.exists():
+        raise FileExistsError("Refusing to overwrite existing held-out predictions.")
     np.savez_compressed(
         predictions_path,
         y_true=np.concatenate(all_labels),
@@ -324,9 +329,8 @@ def main(config_path='configs/baseline.yaml'):
         "historical_results_reproduced": False,
         "heldout_predictions_path": str(predictions_path),
     }
-    checkpoint_path.with_suffix(".json").write_text(
-        json.dumps(metadata, indent=2), encoding="utf-8"
-    )
+    manifest_path = write_experiment_manifest(checkpoint_path, metadata, predictions_path)
+    print(f"Verified experiment manifest: {manifest_path}")
     model.eval()
     all_preds, all_targets = [], []
     with torch.no_grad():
