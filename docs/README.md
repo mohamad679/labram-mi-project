@@ -4,7 +4,7 @@
 
 ## Start here
 
-**Want to run the full dataset on Kaggle?** Start with [the GPU Notebook and setup instructions](kaggle-experiment.md), then [open the Notebook](../run_kaggle.ipynb). The original model checkpoint and test accuracy are not claimed as independently verified.
+**Want to run the full dataset on Kaggle?** First [download a resumable single HDF5 EEG cache on your computer](local-cache-and-kaggle.md), then [follow the Kaggle GPU instructions](kaggle-experiment.md) and [open the Notebook](../run_kaggle.ipynb). The original model checkpoint and test accuracy are not claimed as independently verified.
 
 
 | Goal | Document |
