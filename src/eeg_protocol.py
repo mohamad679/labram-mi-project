@@ -105,8 +105,8 @@ def validate_window(epochs, cropped_samples: int) -> dict:
 def validate_raw_annotations(run: int, descriptions, observed) -> dict:
     """Check MOABB labels form an ordered, nearly complete raw-EDF event sequence.
 
-    Some edge events may be rejected due to window boundaries or annotations.
-    At most two missing source events per run are permitted and reported.
+    Only trailing source events may be rejected by the complete 3-s epoch
+    window. At most two dropped trailing annotations are allowed/reported.
     """
     raw_codes = [str(code) for code in descriptions]
     if not raw_codes or set(raw_codes) - RAW_EVENT_CODES:
@@ -115,16 +115,13 @@ def validate_raw_annotations(run: int, descriptions, observed) -> dict:
     observed = list(map(str, observed))
     if not observed:
         raise ValueError("No MOABB epochs for raw EDF run.")
-    next_pos = 0
-    for label in observed:
-        while next_pos < len(expected) and expected[next_pos] != label:
-            next_pos += 1
-        if next_pos >= len(expected):
-            raise ValueError(f"MOABB label sequence contradicts original run {run} EDF annotations.")
-        next_pos += 1
     discarded = len(expected) - len(observed)
     if discarded < 0 or discarded > 2:
         raise ValueError(f"Too many dropped/extra events in run {run}: {discarded}")
+    # No internal missing cues: only annotations at the trailing boundary
+    # may disappear when MOABB requires a complete 3-second epoch.
+    if observed != expected[:len(observed)]:
+        raise ValueError(f"MOABB label sequence contradicts original run {run} EDF annotations.")
     if not {"T0", "T1", "T2"}.issubset(raw_codes):
         raise ValueError(f"Original EDF run {run} lacks required event codes.")
     return {
@@ -132,5 +129,21 @@ def validate_raw_annotations(run: int, descriptions, observed) -> dict:
         "source_annotation_count": len(raw_codes),
         "moabb_epoch_count": len(observed),
         "unmatched_source_events": discarded,
+        "trailing_source_events_dropped": discarded,
         "ordered_label_agreement": True,
     }
+
+
+def validate_paradigm_defaults(paradigm) -> dict:
+    """Verify actual MOABB 1.7.2 preprocessing parameters, not only docs."""
+    filters = np.asarray(paradigm.filters, dtype=float)
+    if filters.shape != (1, 2) or not np.allclose(
+        filters[0], FREQ_BAND_HZ, rtol=0, atol=1e-10
+    ):
+        raise ValueError(f"Unexpected MOABB bandpass filters: {paradigm.filters}")
+    if not np.isclose(float(paradigm.tmin), 0.0):
+        raise ValueError("Unexpected MOABB epoch start offset.")
+    if paradigm.tmax is not None:
+        raise ValueError("Expected dataset-defined interval end (3 seconds).")
+    return {"bandpass_hz": list(map(float, filters[0])),
+            "tmin_s": float(paradigm.tmin), "tmax": "dataset_interval"}
