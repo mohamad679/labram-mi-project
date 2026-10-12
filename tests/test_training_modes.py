@@ -54,3 +54,36 @@ def test_frozen_scratch_configuration_rejected(tmp_path):
     )
     with pytest.raises(ValueError, match="Scratch requires"):
         load_training_config(modified)
+
+
+def test_scratch_optimizer_updates_backbone_weights():
+    import torch
+
+    torch.manual_seed(42)
+    model = ToyBackbone()
+    configure_trainable_parameters(model, strategy="full_finetune", n_outputs=5)
+    before = model.backbone[0].weight.detach().clone()
+    optimizer = torch.optim.SGD((p for p in model.parameters() if p.requires_grad), lr=0.1)
+    loss = nn.functional.cross_entropy(model.final_layer(model.backbone(torch.randn(12, 8))), torch.arange(12) % 5)
+    loss.backward()
+    assert model.backbone[0].weight.grad is not None
+    assert torch.isfinite(model.backbone[0].weight.grad).all()
+    optimizer.step()
+    assert not torch.equal(before, model.backbone[0].weight.detach())
+
+
+def test_linear_probe_optimizer_does_not_modify_backbone():
+    import torch
+
+    torch.manual_seed(42)
+    model = ToyBackbone()
+    configure_trainable_parameters(model, strategy="linear_probe", n_outputs=5)
+    before_backbone = model.backbone[0].weight.detach().clone()
+    before_head = model.final_layer.weight.detach().clone()
+    optimizer = torch.optim.SGD((p for p in model.parameters() if p.requires_grad), lr=0.1)
+    loss = nn.functional.cross_entropy(model.final_layer(model.backbone(torch.randn(12, 8))), torch.arange(12) % 5)
+    loss.backward()
+    assert model.backbone[0].weight.grad is None
+    optimizer.step()
+    assert torch.equal(before_backbone, model.backbone[0].weight.detach())
+    assert not torch.equal(before_head, model.final_layer.weight.detach())
