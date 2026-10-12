@@ -16,7 +16,7 @@ def make_run_configs(source: Path, run_root: Path, seeds: list[int]) -> list[Pat
     with source.open(encoding="utf-8") as stream:
         baseline = yaml.safe_load(stream)
     if not isinstance(baseline, dict):
-        raise ValueError("Expected YAML mapping.")
+        raise TypeError("Expected YAML mapping.")
     if "split_seed" not in baseline:
         raise ValueError("Baseline configuration must specify split_seed.")
     run_paths = []
