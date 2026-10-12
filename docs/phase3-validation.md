@@ -26,18 +26,17 @@ The training script saves `checkpoints/heldout_predictions.npz` (not committed) 
 
 After a successful real-data training run:
 
-```bash
-python -m scripts.render_evaluation \
-  --predictions checkpoints/labram_head_finetuned_test_predictions.npz \
-  --run-metadata checkpoints/labram_head_finetuned.json \
-  --output artifacts/evaluation
-```
+\`\`\`bash
+python -m scripts.build_benchmark \
+  --predictions checkpoints/heldout_predictions.npz \
+  --output-dir artifacts/evaluation
+\`\`\`
 
 The existing benchmark renderer from PR #5 validates probability shape and row sums, then generates `metrics.json`, `metrics.csv`, `confusion_matrix.png` and `reliability_diagram.png`. It does not fabricate data when predictions are missing. **Epoch-level accuracy is not a confidence interval over independent subjects.**
 
 ### Gate D — Final scientific benchmark (not done)
 
-- Confirm n_times=400 pretrained model compatibility and appropriate task-head replacement.
+- Test real-data fine-tuning and held-out performance for the verified 400-sample backbone and newly initialized task head.
 - Verify EDF preprocessing against MOABB output for representative subjects.
 - Repeat split-locked training across multiple seeds, compare against meaningful conventional EEG baselines, and report subject-level uncertainty intervals.
 - Publish only a scientific figure with a linked provenance manifest and a checksum of its prediction artifact.
