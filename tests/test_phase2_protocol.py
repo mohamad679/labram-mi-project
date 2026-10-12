@@ -50,7 +50,7 @@ def test_raw_annotations_agree_only_if_run_specific_mapping_is_correct():
     )
     assert result["unmatched_source_events"] == 0
     with pytest.raises(ValueError, match="contradicts"):
-        validate_raw_annotations(4, source, ["rest", "hands", "right_hand"])
+        validate_raw_annotations(4, source, ["rest", "hands", "right_hand", "rest", "left_hand", "right_hand"])
     with pytest.raises(ValueError, match="dropped"):
         validate_raw_annotations(4, source, ["rest"])
     with pytest.raises(ValueError, match="annotations"):
