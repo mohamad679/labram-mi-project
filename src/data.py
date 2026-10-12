@@ -5,6 +5,8 @@ Phase 1 — Subject-wise leakage-free split.
 import numpy as np
 from sklearn.model_selection import GroupShuffleSplit
 
+from src.channels import verify_channel_order, verify_sampling_rate
+
 LABRAM_PATCH_SIZE = 200  # LaBraM's internal patch size — n_times must be a multiple of this
 RANDOM_STATE = 42
 
@@ -20,7 +22,20 @@ def load_physionet_mi(subjects: list[int] | None = None):
     dataset = PhysionetMI()
     paradigm = MotorImagery()
 
-    X, y, metadata = paradigm.get_data(dataset=dataset, subjects=subjects)
+    # Read MNE Epochs to verify the EEG sensor axis before converting it.
+    epochs, y, metadata = paradigm.get_data(
+        dataset=dataset, subjects=subjects, return_epochs=True
+    )
+    verify_channel_order(epochs.ch_names)
+    verify_sampling_rate(epochs.info["sfreq"])
+    X = epochs.get_data()
+    if X.shape[1] != len(epochs.ch_names):
+        raise ValueError("EEG tensor/channel metadata mismatch.")
+    if len(X) != len(y) or len(y) != len(metadata):
+        raise ValueError("EEG epochs, labels and metadata are not aligned.")
+    metadata.attrs["channel_names"] = list(epochs.ch_names)
+    metadata.attrs["sfreq"] = float(epochs.info["sfreq"])
+    metadata.attrs["input_unit"] = "V"  # EEG amplitudes in MNE Epochs are volts
 
     n_times = X.shape[-1]
     usable_n_times = (n_times // LABRAM_PATCH_SIZE) * LABRAM_PATCH_SIZE

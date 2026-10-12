@@ -20,5 +20,5 @@ def test_unknown_key_is_rejected(tmp_path):
 def test_pretrained_requires_source(tmp_path):
     p = tmp_path / "bad.yaml"
     p.write_text(BASE.read_text().replace("model_init: scratch", "model_init: pretrained"))
-    with pytest.raises(ValueError, match="pretrained_repo_id"):
+    with pytest.raises(ValueError, match="repo_id"):
         load_training_config(p)

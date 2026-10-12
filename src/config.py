@@ -4,6 +4,8 @@ from pathlib import Path
 
 import yaml
 
+from src.provenance import validate_pretrained_reference
+
 
 @dataclass(frozen=True)
 class TrainingConfig:
@@ -25,6 +27,7 @@ class TrainingConfig:
     checkpoint_path: str = "checkpoints/labram_head_finetuned.pt"
     model_init: str = "scratch"
     pretrained_repo_id: str | None = None
+    pretrained_revision: str | None = None
 
 
 def load_training_config(path: str | Path = "configs/baseline.yaml") -> TrainingConfig:
@@ -53,8 +56,10 @@ def load_training_config(path: str | Path = "configs/baseline.yaml") -> Training
         raise ValueError("Invalid optimizer hyperparameters.")
     if config.model_init not in {"scratch", "pretrained"}:
         raise ValueError("model_init must be 'scratch' or 'pretrained'.")
-    if config.model_init == "pretrained" and not config.pretrained_repo_id:
-        raise ValueError("pretrained_repo_id is required for pretrained mode.")
-    if config.model_init == "scratch" and config.pretrained_repo_id:
-        raise ValueError("pretrained_repo_id requires model_init=pretrained.")
+    if config.model_init == "pretrained":
+        validate_pretrained_reference(config.pretrained_repo_id, config.pretrained_revision)
+    if config.model_init == "scratch" and (
+        config.pretrained_repo_id is not None or config.pretrained_revision is not None
+    ):
+        raise ValueError("Pretrained source/revision requires model_init=pretrained.")
     return config
