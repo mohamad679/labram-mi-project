@@ -11,9 +11,9 @@
 
 `src.data.load_physionet_mi` requests MNE Epochs and checks **ordered EEG channel names** against `src.channels.PHYSIONET_64_CH_NAMES`, then checks **160-Hz sampling** and the alignment of epochs, labels and metadata.
 
-The loader explicitly multiplies `epochs.get_data()` in volts by MOABB's `dataset.unit_factor` (expected `1e6`) to reproduce the standard NumPy-array **microvolt** convention, then crops the sample count down to a multiple of the LaBraM patch size (200). The new cache stores `input_unit=uV`, `cache_schema_version=2` and `scaling_factor_from_volts`. A real-data equivalence run remains necessary.
+The loader explicitly multiplies `epochs.get_data()` in volts by MOABB's `dataset.unit_factor` (expected `1e6`) to reproduce the standard NumPy-array **microvolt** convention, then crops the sample count down to a multiple of the LaBraM patch size (200). The new cache stores `input_unit=uV`, `cache_schema_version=2` and `scaling_factor_from_volts`. One verified real-data equivalence run for subject 1 now reports exact array agreement (174 epochs, 0.0 µV difference). [See evidence](../results/validation/moabb_subject01_equivalence.json).
 
-**Scientific migration warning:** The original version requested MOABB's default NumPy array output, whereas the new loader requests MNE Epochs to preserve montage metadata. Depending on MOABB preprocessing and output pipelines, array unit scaling and other transformations may differ. **A paired numerical comparison of the old and new outputs on the same subject must be performed before using this change to reproduce historical benchmarks.** Do not compare old scores to new ones without this control.
+**Scientific migration warning:** The original version requested MOABB's default NumPy array output, whereas the new loader requests MNE Epochs to preserve montage metadata. Depending on MOABB preprocessing and output pipelines, array unit scaling and other transformations may differ. **A real-data paired comparison passed for subject 1** ([GitHub run](https://github.com/mohamad679/labram-mi-project/actions/runs/38234916355)), but other subjects and the full historical training run have not been revalidated. Do not compare archived scores to new scores without complete-run provenance.
 
 ## Cache policy
 

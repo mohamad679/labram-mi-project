@@ -10,7 +10,7 @@ MOABB default array output applies `dataset.unit_factor` (normally `1e6`) to MNE
 
 `tests/test_moabb_equivalence.py` exercises unit scaling and crop consistency with a synthetic MNE-style mock. It does **not** validate the actual MOABB download, epochs processing or EDF channel ordering on a real recording.
 
-**Pending experiment:** Compare `MotorImagery().get_data(..., return_epochs=False)` versus `return_epochs=True` for the **same PhysioNet subject**. Verify label/subject/run alignment, channel ordering, number of epochs and numerical equality after the unit-factor correction. Archive package versions and only aggregate numerical results, not raw EEG.
+**Verified real-data equivalence (subject 1):** [GitHub Actions run 38234916355](https://github.com/mohamad679/labram-mi-project/actions/runs/38234916355) processed **174 epochs**, **64 channels**, cropped **481 to 400 samples**, validated identical labels and subject/session/run metadata ordering, and measured **0.0 µV maximum and mean absolute difference** between the standard NumPy path and MNE Epochs × `1e6` (MOABB 1.7.2, MNE 1.13.2). The source output and versioned aggregate verification are archived in [the validation manifest](../results/validation/moabb_subject01_equivalence.json). **Limited to the first public subject, not the entire dataset.**
 
 ### Gate B — Pinned pretrained checkpoint
 
