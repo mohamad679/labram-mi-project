@@ -66,6 +66,16 @@ python app.py
 
 The latter commands require the trained checkpoint and data cache. The Gradio demo accepts a single `.npy` EEG epoch with shape `(64,400)`, `(1,64,400)`, or `(400,64)`. Model output **must not** be used for patient care, accessibility decisions or clinical advice.
 
+### Reproducible multi-seed campaigns
+
+The [Phase 5 execution guide](docs/phase5-experiment-execution.md) provides a separately pinned pretrained configuration, a real-data CPU training smoke test, a fixed `split_seed`, and a three-seed full-data experiment launcher. **The launcher does not claim that a full training experiment has been run.**
+
+```bash
+python -m scripts.run_multiseed --config configs/pretrained_labram.yaml --seeds 42 123 2025
+```
+
+This command only prepares experiment plans. Full training requires a configured GPU/data environment and an explicit `--execute` flag. Subject-cluster confidence intervals are generated from real held-out predictions with `python -m scripts.subject_confidence --predictions <path/to/heldout_predictions.npz>`.
+
 ## Project layout
 
 ```text
@@ -106,7 +116,7 @@ CI runs the offline tests and Python compilation on proposed changes. These chec
 - **Limitations:** weak archived macro-F1 and a small sample of rollout visualizations. No production or clinical readiness.
 - **Licensing:** no license for this repository's original code has yet been selected. The upstream library license is not automatically a license for this project.
 
-[Benchmarking & figures](docs/benchmarking.md) · [Full research audit](docs/research-audit.md) · [Phase 3 validation](docs/phase3-validation.md) · [EEG data provenance](docs/eeg-data-provenance.md) · [Reproducibility](docs/reproducibility.md) · [Model card](docs/model-card.md) · [Contribution guide](CONTRIBUTING.md)
+[Phase 5 — Real-data training and multi-seed protocol](docs/phase5-experiment-execution.md) · [Benchmarking & figures](docs/benchmarking.md) · [Full research audit](docs/research-audit.md) · [Phase 3 validation](docs/phase3-validation.md) · [EEG data provenance](docs/eeg-data-provenance.md) · [Reproducibility](docs/reproducibility.md) · [Model card](docs/model-card.md) · [Contribution guide](CONTRIBUTING.md)
 
 ## Credit
 
