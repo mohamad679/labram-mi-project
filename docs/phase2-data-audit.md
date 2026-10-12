@@ -43,6 +43,52 @@ aggregate counts, no raw EEG or individual EEG samples.
 swapped hand/feet meanings, bad run keys, missing task classes, bad windows,
 and metadata mixing participants.
 
+## First real-data evidence (PR #21)
+
+[Successful two-subject public EEG audit run](https://github.com/mohamad679/labram-mi-project/actions/runs/38313722098)
+recorded 12/12 run-specific label checks, with original EDF annotations
+30/run and retained 29 MOABB epochs/run for **each of subjects 1 and 2**.
+Both subjects yielded **174 usable epochs**, distributed as:
+
+| Subject | Rest | Left hand | Right hand | Both hands | Feet |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | 84 | 23 | 22 | 21 | 24 |
+| 2 | 84 | 23 | 22 | 24 | 21 |
+
+Rest forms **84/174 ≈ 48.3%** of examples for both sampled
+subjects; raw overall accuracy can reward a majority-rest classifier,
+so subsequent model comparisons must emphasize balanced accuracy and
+macro-F1. These are empirical class counts, **not model metrics**.
+
+All **348 epochs** in the temporary partial HDF5 cache reproduced
+the exact float32 tensor values, labels and subject identities from
+the fresh MOABB preprocessing pipeline. The first pass permitted
+up to two ordered dropped annotations per run; the subsequently
+tightened gate requires that any missing annotations occur only
+at the **trailing** recording/epoch boundary. Until that tightened
+workflow succeeds, that stronger temporal property is unverified.
+
+## Exclusion provenance from external research
+
+The project excludes 88, 89, 92, 100 and 104. These exclusions
+have **published precedents**, but the current dataset was not
+independently re-audited for each participant:
+
+- [MOABB v1.7.2 source](https://github.com/NeuroTechX/moabb/blob/v1.7.2/moabb/datasets/physionet_mi.py)
+  explicitly warns of **128-Hz subject 88**.
+- [The Effect of Processing Techniques on the Classification Accuracy of
+  Brain-Computer Interface Systems (2024)](https://pmc.ncbi.nlm.nih.gov/articles/PMC11674661/)
+  reports exclusions 88, 92 and 100 for sampling/data-structure
+  mismatches and 89 for reportedly incorrect labels.
+- [Motor Imagery Analysis from Extensive EEG Data Representations
+  Using Convolutional Neural Networks (2022)](https://pmc.ncbi.nlm.nih.gov/articles/PMC9414220/)
+  documents incomplete annotations for 88, 92, 100 and 104.
+- Other studies use different exclusion sets. These findings justify
+  investigating the selected participants, **not assuming every
+  participant excluded by another paper must be excluded here**.
+
+The split/cohort definition remains unchanged during Phase 2.
+
 ## Required scientific acceptance gates
 
 - [ ] CI and offline negative-control tests pass on final PR head.
@@ -50,7 +96,8 @@ and metadata mixing participants.
 - [ ] EEG event onset/timing and 481-to-400 cropping verified in seconds.
 - [ ] 64 channels, 160 Hz, unit conversion, and MOABB metadata order verified.
 - [ ] Temporary HDF5 cache is numerically equivalent to direct preprocessing.
-- [ ] A justified, recorded policy exists for exclusions beyond participant 88.
+- [x] External literature supporting the historical exclusions documented;
+      **independent per-subject source-data validation remains pending**.
 - [ ] Full 104-subject production HDF5 provenance verified OR explicitly
       restricted as unverified until the real production dataset is inspected.
 
@@ -60,7 +107,8 @@ The documented original MOABB dataset notes that subject 88 differs in
 sampling frequency. **Other historical exclusions (89, 92, 100, 104) remain
 hypotheses**, not independently documented exclusions. An audit of subjects
 1 and 2 does not establish results for all subjects or validation of the
-production cache. No held-out test labels are used for model selection in
+production cache. Peer-reviewed exclusion reports vary in selection and
+therefore cannot substitute for direct source-data checks. No held-out test labels are used for model selection in
 this audit.
 
 Do not claim Phase 2 **PASS** or start model benchmarking solely because
