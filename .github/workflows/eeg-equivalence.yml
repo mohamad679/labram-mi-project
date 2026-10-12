@@ -25,6 +25,8 @@ jobs:
           python-version: "3.11"
       - name: Install MOABB and MNE pipeline
         run: python -m pip install "moabb>=1.1,<2" "numpy>=1.24,<3"
+      - name: Create MNE download directory
+        run: mkdir -p "$MNE_DATA"
       - name: Compare both processing routes for one public subject
         run: python -m scripts.audit_moabb_equivalence --subject 1 --output artifacts/moabb-equivalence.json
       - name: Save aggregate audit only
