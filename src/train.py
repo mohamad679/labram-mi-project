@@ -55,7 +55,7 @@ def load_dataset(config=None):
             print(f"Loading cached data from {path}")
             with np.load(path, allow_pickle=False) as data:
                 X, y, subject_ids = data["X"], data["y"], data["subject_ids"]
-                required = {"channel_names", "sfreq", "input_unit"}
+                required = {"channel_names", "sfreq", "input_unit", "cache_schema_version", "scaling_factor_from_volts"}
                 missing = required - set(data.files)
                 if missing:
                     if os.environ.get("ALLOW_UNVERIFIED_EEG_CACHE") != "1":
@@ -69,8 +69,12 @@ def load_dataset(config=None):
                 else:
                     verify_channel_order(data["channel_names"].tolist())
                     verify_sampling_rate(float(data["sfreq"]))
-                    if str(data["input_unit"]) != "V":
-                        raise ValueError("Cache unit must be V (MNE EEG volts).")
+                    if int(data["cache_schema_version"]) != 2:
+                        raise ValueError("Cache schema must be version 2 (verified uV).")
+                    if str(data["input_unit"]) != "uV":
+                        raise ValueError("Cache unit must be uV (MOABB scaled output).")
+                    if not np.isclose(float(data["scaling_factor_from_volts"]), 1e6):
+                        raise ValueError("Unexpected EEG amplitude conversion factor.")
             keep = ~np.isin(subject_ids, config.excluded_subjects)
             X, y, subject_ids = X[keep], y[keep], subject_ids[keep]
             if X.shape[1:] != (config.n_chans, config.n_times):
@@ -91,6 +95,8 @@ def load_dataset(config=None):
         channel_names=np.array(metadata.attrs["channel_names"]),
         sfreq=np.float64(metadata.attrs["sfreq"]),
         input_unit=np.array(metadata.attrs["input_unit"]),
+        cache_schema_version=np.int64(metadata.attrs["cache_schema_version"]),
+        scaling_factor_from_volts=np.float64(metadata.attrs["scaling_factor_from_volts"]),
     )
     print(f"Saved local EEG cache: {save_path}; do NOT commit subject data to Git.")
 
