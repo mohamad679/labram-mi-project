@@ -1,0 +1,49 @@
+name: Real EEG pretrained head-training smoke (CPU)
+on:
+  pull_request:
+    paths:
+      - "scripts/real_eeg_train_smoke.py"
+      - ".github/workflows/real-eeg-training-smoke.yml"
+      - "src/model.py"
+      - "src/data.py"
+      - "src/train.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-real-eeg-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      MNE_DATA: /tmp/mne_data
+      MNE_DATASETS_EEGBCI_PATH: /tmp/mne_data
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install aligned CPU PyTorch and torchaudio
+        run: python -m pip install --index-url https://download.pytorch.org/whl/cpu "torch==2.5.1" "torchaudio==2.5.1"
+      - name: Install verified research stack
+        run: python -m pip install "braindecode[hub]==1.5.1" "moabb==1.7.2" "mne==1.13.2" "safetensors>=0.4,<1" "PyYAML>=6,<7"
+      - name: Confirm CPU-only framework
+        run: python -c "import torch, torchaudio; assert not torch.cuda.is_available(); print(torch.__version__, torchaudio.__version__)"
+      - name: Prepare public PhysioNet data cache directory
+        run: mkdir -p "$MNE_DATA"
+      - name: One real subject training step and held-out forward
+        run: >-
+          python -m scripts.real_eeg_train_smoke
+          --revision 0563b6c626e7b40d9a36653b763715db94d945d7
+          --output artifacts/real-eeg-smoke.json
+      - name: Save sanitized diagnostic only
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-eeg-head-step-audit
+          path: artifacts/real-eeg-smoke.json
+          retention-days: 30

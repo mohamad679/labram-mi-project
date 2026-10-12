@@ -15,6 +15,7 @@ weight_decay: 0.0001
 epochs: 30
 patience: 5
 seed: 42
+split_seed: 42  # Keep subject partitions unchanged across multi-seed runs
 checkpoint_path: checkpoints/labram_head_finetuned.pt
 # A plain constructor does not load pretrained weights.
 model_init: scratch

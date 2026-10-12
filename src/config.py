@@ -24,6 +24,7 @@ class TrainingConfig:
     epochs: int = 30
     patience: int = 5
     seed: int = 42
+    split_seed: int = 42
     checkpoint_path: str = "checkpoints/labram_head_finetuned.pt"
     model_init: str = "scratch"
     pretrained_repo_id: str | None = None
@@ -54,6 +55,8 @@ def load_training_config(path: str | Path = "configs/baseline.yaml") -> Training
         raise ValueError("Training, batch and split sizes must be positive.")
     if config.learning_rate <= 0 or config.weight_decay < 0:
         raise ValueError("Invalid optimizer hyperparameters.")
+    if config.seed < 0 or config.split_seed < 0:
+        raise ValueError("Seeds must be nonnegative integers.")
     if config.model_init not in {"scratch", "pretrained"}:
         raise ValueError("model_init must be 'scratch' or 'pretrained'.")
     if config.model_init == "pretrained":

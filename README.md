@@ -22,7 +22,7 @@
 | Uncertainty | MC Dropout, entropy and BALD | Exploratory; post-hoc dropout needs validation |
 | Explainability | Transformer attention rollout | Model inspection, **not** clinical explanation |
 | Interactive demo | Gradio: classify, uncertainty, explain | Requires a compatible local checkpoint |
-| Reproducibility | YAML-configured training; pinned model audit; verified EEG scale for one subject | Full GPU rerun **not yet verified** |
+| Reproducibility | YAML training, pinned checkpoint verification and held-out subject metadata | Full multi-seed GPU rerun **not yet verified** |
 
 ## Visual overview
 
@@ -67,6 +67,16 @@ python app.py
 ```
 
 The latter commands require the trained checkpoint and data cache. The Gradio demo accepts a single `.npy` EEG epoch with shape `(64,400)`, `(1,64,400)`, or `(400,64)`. Model output **must not** be used for patient care, accessibility decisions or clinical advice.
+
+### Reproducible multi-seed campaigns
+
+The [Phase 5 execution guide](docs/phase5-experiment-execution.md) provides a separately pinned pretrained configuration, a real-data CPU training smoke test, a fixed `split_seed`, and a three-seed full-data experiment launcher. **The launcher does not claim that a full training experiment has been run.**
+
+```bash
+python -m scripts.run_multiseed --config configs/pretrained_labram.yaml --seeds 42 123 2025
+```
+
+This command only prepares experiment plans. Full training requires a configured GPU/data environment and an explicit `--execute` flag. Subject-cluster confidence intervals are generated from real held-out predictions with `python -m scripts.subject_confidence --predictions <path/to/heldout_predictions.npz>`.
 
 ## Project layout
 

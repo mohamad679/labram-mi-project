@@ -1,0 +1,25 @@
+# EXPERIMENTAL: 400-sample pretrained weight adapter has passed CPU weight audit,
+# but full EEG fine-tuning and performance have NOT yet been validated.
+# These values are consumed by src.train, not just documentation.
+# Archived benchmark results have not been reproduced against this file.
+dataset: physionet_motor_imagery
+class_names: [feet, hands, left_hand, rest, right_hand]
+excluded_subjects: [88, 89, 92, 100, 104]
+n_outputs: 5
+n_chans: 64
+n_times: 400
+sfreq: 160.0
+test_subjects: 15
+val_subjects: 14
+batch_size: 32
+learning_rate: 0.001
+weight_decay: 0.0001
+epochs: 30
+patience: 5
+seed: 42
+split_seed: 42  # Keep subject partitions unchanged across multi-seed runs
+checkpoint_path: checkpoints/pretrained_labram_head.pt
+# A plain constructor does not load pretrained weights.
+model_init: pretrained
+pretrained_repo_id: braindecode/labram-pretrained
+pretrained_revision: 0563b6c626e7b40d9a36653b763715db94d945d7

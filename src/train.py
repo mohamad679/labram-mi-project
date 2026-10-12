@@ -199,7 +199,7 @@ def main(config_path='configs/baseline.yaml'):
         X, y, subject_ids,
         test_size_subjects=config.test_subjects,
         val_size_subjects=config.val_subjects,
-        random_state=config.seed,
+        random_state=config.split_seed,
     )
 
     train_ds = EEGDataset(X, y, train_idx)
