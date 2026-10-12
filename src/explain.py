@@ -350,7 +350,7 @@ def main() -> None:
         sfreq=160.0,
     ).to(DEVICE)
 
-    model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=DEVICE))
+    model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=DEVICE, weights_only=True))
     model.eval()
 
     sample_indices = select_representative_test_samples(
