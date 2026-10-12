@@ -210,7 +210,8 @@ def main(config_path='configs/baseline.yaml'):
 
     model = load_labram_model(
         n_outputs=n_outputs, n_times=n_times, n_chans=n_chans, sfreq=config.sfreq,
-        pretrained_repo_id=(config.pretrained_repo_id if config.model_init == "pretrained" else None)
+        pretrained_repo_id=(config.pretrained_repo_id if config.model_init == "pretrained" else None),
+        pretrained_revision=config.pretrained_revision,
     ).to(DEVICE)
     freeze_backbone_unfreeze_head(model, n_outputs)
     print(f"Initialization mode: {config.model_init}")
