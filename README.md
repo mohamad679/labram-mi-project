@@ -41,6 +41,10 @@
 
 These are **different evaluations**, not evidence that dropout improves performance. A five-class chance-level reference is 20% accuracy under uniform guessing; imbalance and subject heterogeneity limit that comparison. [Original full report](docs/legacy-project-report.md) · [Phase 1](results/phase1_baseline.md) · [Phase 2](results/phase2_uncertainty.md) · [Phase 3](results/phase3_attention_rollout.md).
 
+## Kaggle S3-only data preparation
+
+When PhysioNet direct downloading is slow, the [CPU-only Amazon S3 cache builder](docs/kaggle-s3-cache.md) prepares a resumable 104-participant HDF5 cache on Kaggle. Its separate helper CLI is [scripts/prepare_physionet_s3.py](scripts/prepare_physionet_s3.py). The real 104-subject S3 run is **not yet validated**; Kaggle outputs must be saved explicitly and remain private as appropriate.
+
 ## Kaggle full-data experiments
 
 **[Open the full Kaggle GPU experiment notebook](run_kaggle.ipynb)** · [Step-by-step Kaggle guide](docs/kaggle-experiment.md)

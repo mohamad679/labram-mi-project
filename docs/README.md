@@ -12,6 +12,7 @@
 | Understand the architecture and boundaries | [System architecture](architecture.md) |
 | Inspect existing visual outputs without overstating claims | [Visualization gallery](visualization-gallery.md) |
 | Install and reproduce the pipeline | [Reproducibility guide](reproducibility.md) |
+| Build a Kaggle-only S3 EEG cache | [S3 resumable cache builder](kaggle-s3-cache.md) |
 | Understand EEG channel order and voltage conversion | [EEG data provenance](eeg-data-provenance.md) |
 | Check pretrained adaptation evidence | [Phase 3 experimental gates](phase3-validation.md) |
 | Generate metrics and plots from real predictions | [Benchmarking](benchmarking.md) |
