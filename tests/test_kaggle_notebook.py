@@ -97,3 +97,19 @@ def test_kaggle_uses_upstream_physionet_download_not_missing_nemar_sourcedata():
     dataset = _source(notebook["cells"][9])
     assert '"MOABB_DOWNLOAD_PROVIDER": "upstream"' in dataset
     assert "env=training_env" in dataset
+
+
+def test_kaggle_never_downloads_full_cohort_and_pins_hdf5_training():
+    nb = _load()
+    first = _source(nb["cells"][1])
+    data = _source(nb["cells"][9])
+    assert 'SOURCE_COMMIT = "74e511fb9c1ac4f0543b249b571e28e811ec92c3"' in first
+    assert 'EXPECTED_CACHE_SHA256 = ""' in first
+    assert "physionet_mi_104subjects.h5" in data
+    assert "inspect_cache" in data
+    assert "PHYSIONET_CACHE_PATH" in data
+    assert "load_physionet_mi" not in data
+    assert "No cache found anywhere" not in data
+    install = _source(nb["cells"][5])
+    assert '"h5py>=3.10,<5"' in install
+    assert '"tqdm>=4.66,<5"' in install
