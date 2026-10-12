@@ -19,3 +19,4 @@ checkpoint_path: checkpoints/labram_head_finetuned.pt
 # A plain constructor does not load pretrained weights.
 model_init: scratch
 pretrained_repo_id: null
+pretrained_revision: null  # 40-hex commit SHA required when model_init is pretrained
