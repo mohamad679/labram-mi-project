@@ -2,6 +2,8 @@
 
 **EEG motor-imagery decoding, model uncertainty and attention-based inspection — with explicit scientific limitations.**
 
+**Explore:** [Documentation](docs/README.md) · [Architecture](docs/architecture.md) · [Verified-figure gallery](docs/visualization-gallery.md) · [Release readiness](docs/release-readiness.md)
+
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-research-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Status](https://img.shields.io/badge/status-research%20prototype-697586)](#at-a-glance)
@@ -20,7 +22,7 @@
 | Uncertainty | MC Dropout, entropy and BALD | Exploratory; post-hoc dropout needs validation |
 | Explainability | Transformer attention rollout | Model inspection, **not** clinical explanation |
 | Interactive demo | Gradio: classify, uncertainty, explain | Requires a compatible local checkpoint |
-| Reproducibility | YAML-configured training; pinned model audit; verified EEG scale for one subject | Full GPU rerun **not yet verified** |
+| Reproducibility | YAML training, pinned checkpoint verification and held-out subject metadata | Full multi-seed GPU rerun **not yet verified** |
 
 ## Visual overview
 
@@ -116,7 +118,7 @@ CI runs the offline tests and Python compilation on proposed changes. These chec
 - **Limitations:** weak archived macro-F1 and a small sample of rollout visualizations. No production or clinical readiness.
 - **Licensing:** no license for this repository's original code has yet been selected. The upstream library license is not automatically a license for this project.
 
-[Phase 5 — Real-data training and multi-seed protocol](docs/phase5-experiment-execution.md) · [Benchmarking & figures](docs/benchmarking.md) · [Full research audit](docs/research-audit.md) · [Phase 3 validation](docs/phase3-validation.md) · [EEG data provenance](docs/eeg-data-provenance.md) · [Reproducibility](docs/reproducibility.md) · [Model card](docs/model-card.md) · [Contribution guide](CONTRIBUTING.md)
+[Benchmarking & figures](docs/benchmarking.md) · [Full research audit](docs/research-audit.md) · [Phase 3 validation](docs/phase3-validation.md) · [EEG data provenance](docs/eeg-data-provenance.md) · [Reproducibility](docs/reproducibility.md) · [Model card](docs/model-card.md) · [Contribution guide](CONTRIBUTING.md)
 
 ## Credit
 
