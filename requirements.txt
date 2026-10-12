@@ -1,7 +1,10 @@
-braindecode
-moabb
-torch
-scikit-learn
-numpy
-matplotlib
-gradio
+# Bounded compatible releases, NOT an exact environment lockfile.
+braindecode>=1.1,<2
+moabb>=1.1,<2
+torch>=2.2,<3
+scikit-learn>=1.3,<2
+numpy>=1.24,<3
+matplotlib>=3.8,<4
+gradio>=4,<6
+PyYAML>=6,<7
+mne>=1.6,<2

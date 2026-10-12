@@ -3,8 +3,6 @@ Phase 0 — Data loading for PhysioNet Motor Imagery via MOABB.
 Phase 1 — Subject-wise leakage-free split.
 """
 import numpy as np
-from moabb.datasets import PhysionetMI
-from moabb.paradigms import MotorImagery
 from sklearn.model_selection import GroupShuffleSplit
 
 LABRAM_PATCH_SIZE = 200  # LaBraM's internal patch size — n_times must be a multiple of this
@@ -16,6 +14,9 @@ def load_physionet_mi(subjects: list[int] | None = None):
     Load PhysioNet Motor Imagery data via MOABB, cropped to a length
     compatible with LaBraM's patch size (200 samples/patch).
     """
+    from moabb.datasets import PhysionetMI
+    from moabb.paradigms import MotorImagery
+
     dataset = PhysionetMI()
     paradigm = MotorImagery()
 

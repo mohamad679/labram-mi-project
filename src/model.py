@@ -62,6 +62,7 @@ def load_labram_model(
     n_times: int,
     n_chans: int,
     sfreq: float = 160.0,
+    pretrained_repo_id: str | None = None,
     **kwargs,
 ):
     """
@@ -88,6 +89,15 @@ def load_labram_model(
         )
 
     chs_info = make_chs_info(n_chans=n_chans, sfreq=sfreq)
+
+    # A constructor alone does NOT establish pretrained-weight provenance.
+    # Only an explicit from_pretrained call activates transfer learning.
+    if pretrained_repo_id is not None:
+        return InterpolatedLaBraM.from_pretrained(
+            pretrained_repo_id, chs_info=chs_info,
+            n_outputs=n_outputs, n_times=n_times, n_chans=n_chans,
+            sfreq=sfreq, strict=False, **kwargs,
+        )
 
     model = InterpolatedLaBraM(
         chs_info=chs_info,

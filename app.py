@@ -87,7 +87,7 @@ def find_checkpoint() -> str:
 
 def load_state_dict_robust(checkpoint_path: str) -> dict[str, torch.Tensor]:
     """Load checkpoints saved either as a raw state_dict or a wrapper dict."""
-    checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
+    checkpoint = torch.load(checkpoint_path, map_location=DEVICE, weights_only=True)
     if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
         checkpoint = checkpoint["model_state_dict"]
     if not isinstance(checkpoint, dict):
@@ -193,6 +193,8 @@ def load_eeg_from_file(file_path: Any) -> tuple[np.ndarray, str]:
     if not str(path).lower().endswith(".npy"):
         raise ValueError("Only .npy files are supported.")
 
+    if Path(path).stat().st_size > 10 * 1024 * 1024:
+        raise ValueError('EEG upload exceeds the 10 MiB file limit.')
     raw = np.load(path, allow_pickle=False)
     return validate_eeg_array(raw)
 
