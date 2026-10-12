@@ -24,7 +24,6 @@ from src.portable_eeg import (
 )
 
 
-
 def _load_with_retry(subject, load_subject, *, max_retries: int, retry_delay: float):
     """Retry only temporary network failures, never bad EEG metadata/shape/labels.
 
