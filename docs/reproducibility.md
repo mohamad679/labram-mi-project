@@ -59,9 +59,9 @@ python -c "from huggingface_hub import HfApi; print(HfApi().model_info('braindec
 Audit that exact commit, with no patient data:
 
 ```bash
-python -m scripts.audit_pretrained --revision <FULL_40_CHARACTER_COMMIT_SHA> --n-times 400
+python -m scripts.audit_pretrained --revision 0563b6c626e7b40d9a36653b763715db94d945d7 --n-times 3000
 ```
 
 This audit downloads a pinned Safetensors file, computes its SHA256, loads the matching pretrained wrapper, and compares compatible backbone tensors exactly. If the experiment fails, **do not describe the model as successfully pretrained or publish its metrics**. If it succeeds, preserve the generated `artifacts/pretrained-audit.json` alongside exact package versions; then run a separate forward pass and complete held-out experiment. Do not claim that a weight-loading audit validates downstream model accuracy.
 
-This audit has **not been run** as part of this change.
+**Important:** the official pinned checkpoint has 3000 temporal samples; the current motor-imagery experiment has 400. A 3000-sample weight-loading audit is NOT an endorsement of using that checkpoint for the 400-sample task. The code now rejects that configuration *before downloading data or weights*. An independently tested temporal-adaptation strategy and new training results are required. This audit has **not yet been run** as part of this change.
