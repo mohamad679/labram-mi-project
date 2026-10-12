@@ -41,6 +41,10 @@
 
 These are **different evaluations**, not evidence that dropout improves performance. A five-class chance-level reference is 20% accuracy under uniform guessing; imbalance and subject heterogeneity limit that comparison. [Original full report](docs/legacy-project-report.md) · [Phase 1](results/phase1_baseline.md) · [Phase 2](results/phase2_uncertainty.md) · [Phase 3](results/phase3_attention_rollout.md).
 
+## Download EEG once, run Kaggle without repeat downloads
+
+Build a **resumable, one-file HDF5 cache on your own computer**, upload it as a private Kaggle Dataset, and train using lazy HDF5 batches instead of loading all 104 subjects into RAM. See the [local EEG cache guide](docs/local-eeg-cache.md) and [Kaggle notebook](run_kaggle.ipynb). Real train/validation/test batch progress bars and approximate ETAs are printed during training.
+
 ## Kaggle full-data experiments
 
 **[Open the full Kaggle GPU experiment notebook](run_kaggle.ipynb)** · [Step-by-step Kaggle guide](docs/kaggle-experiment.md)
