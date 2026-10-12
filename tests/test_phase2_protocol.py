@@ -125,9 +125,14 @@ def test_moabb_preprocessing_defaults_are_enforced():
             validate_paradigm_defaults(invalid)
 
 
-def test_raw_annotation_internal_drop_is_rejected():
+def test_internal_annotation_omission_is_recorded_not_mislabelled_as_trailing():
     original = ["T0", "T1", "T2", "T0", "T1", "T2"]
+    report = validate_raw_annotations(
+        4, original, ["rest", "left_hand", "rest", "left_hand", "right_hand"],
+    )
+    assert report["possible_missing_annotation_indices"] == [[2]]
+    assert report["trailing_event_drop_possible"] is False
     with pytest.raises(ValueError, match="contradicts"):
         validate_raw_annotations(
-            4, original, ["rest", "left_hand", "rest", "left_hand", "right_hand"],
+            4, original, ["right_hand", "rest", "left_hand", "rest", "left_hand"],
         )
