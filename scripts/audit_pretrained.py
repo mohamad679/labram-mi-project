@@ -77,13 +77,38 @@ def main():
         pretrained_repo_id=args.repo_id, pretrained_revision=args.revision,
     )
     matched, eligible = compare_checkpoint_tensors(model, checkpoint)
+    if "temporal_embedding" not in checkpoint:
+        raise RuntimeError("No learned temporal_embedding found in the source checkpoint.")
+    learned_time = model.state_dict()["temporal_embedding"]
+    original_time = checkpoint["temporal_embedding"]
+    if learned_time.shape[1] > original_time.shape[1]:
+        raise RuntimeError("Model has more time patches than pretrained source.")
+    temporal_prefix_exact = bool(torch.equal(
+        learned_time.cpu(),
+        original_time[:, :learned_time.shape[1], :].cpu(),
+    ))
+    if not temporal_prefix_exact:
+        raise RuntimeError("Temporal prefix transfer does not match pinned source weights.")
     if eligible < 10 or matched < 10:
         raise RuntimeError(
             f"Pretraining verification FAILED: {matched}/{eligible} compatible "
             "backbone tensors exactly matched the pinned Hub weights."
         )
 
+    # Exercise the actual public model forward path without using patient EEG.
+    # This verifies shape compatibility, not classifier quality.
+    model.eval()
+    with torch.inference_mode():
+        synthetic = torch.zeros((1, 64, args.n_times), dtype=torch.float32)
+        logits = model(synthetic)
+    if logits.shape != (1, 5) or not torch.isfinite(logits).all():
+        raise RuntimeError(
+            f"Incompatible LaBraM forward pass: shape={tuple(logits.shape)}"
+        )
+
     report = {
+        "synthetic_forward_shape": list(logits.shape),
+        "synthetic_forward_finite": True,
         "verified_hub_commit": info.sha,
         "repo_id": args.repo_id,
         "weight_file": filename,
@@ -91,6 +116,9 @@ def main():
         "n_times": args.n_times,
         "n_chans": 64,
         "matching_backbone_tensors": matched,
+        "temporal_prefix_exact": temporal_prefix_exact,
+        "temporal_source_shape": list(original_time.shape),
+        "temporal_target_shape": list(learned_time.shape),
         "eligible_backbone_tensors": eligible,
         "braindecode_version": braindecode.__version__,
         "huggingface_hub_version": huggingface_hub.__version__,

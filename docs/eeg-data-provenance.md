@@ -11,13 +11,13 @@
 
 `src.data.load_physionet_mi` requests MNE Epochs and checks **ordered EEG channel names** against `src.channels.PHYSIONET_64_CH_NAMES`, then checks **160-Hz sampling** and the alignment of epochs, labels and metadata.
 
-The loader converts epochs with `epochs.get_data()` and crops the sample count down to a multiple of the LaBraM patch size (200). It saves the channel names, sampling rate and MNE EEG amplitude unit (`V`) in new local caches.
+The loader explicitly multiplies `epochs.get_data()` in volts by MOABB's `dataset.unit_factor` (expected `1e6`) to reproduce the standard NumPy-array **microvolt** convention, then crops the sample count down to a multiple of the LaBraM patch size (200). The new cache stores `input_unit=uV`, `cache_schema_version=2` and `scaling_factor_from_volts`. A real-data equivalence run remains necessary.
 
 **Scientific migration warning:** The original version requested MOABB's default NumPy array output, whereas the new loader requests MNE Epochs to preserve montage metadata. Depending on MOABB preprocessing and output pipelines, array unit scaling and other transformations may differ. **A paired numerical comparison of the old and new outputs on the same subject must be performed before using this change to reproduce historical benchmarks.** Do not compare old scores to new ones without this control.
 
 ## Cache policy
 
-New caches have `X`, `y`, `subject_ids`, `channel_names`, `sfreq`, and `input_unit`. Arrays without these provenance fields are rejected rather than assumed trustworthy.
+New version-2 caches have `X`, `y`, `subject_ids`, `channel_names`, `sfreq`, `input_unit=uV`, `cache_schema_version=2`, and `scaling_factor_from_volts=1e6`. Arrays without these provenance fields are rejected rather than assumed trustworthy.
 
 An existing legacy cache may be used **only for non-publishable exploratory experiments**, by setting `ALLOW_UNVERIFIED_EEG_CACHE=1`. This bypass does **not** verify channel order or units; no scientific conclusions should rely on it.
 
@@ -29,3 +29,5 @@ Datasets, local EEG caches and checkpoints are gitignored. Never commit private 
 - Exact MOABB/MNE preprocessing settings, bandpass and amplitude scaling must be frozen after a clean run.
 - Exclusion of participants 88, 89, 92, 100, and 104 is inherited from the historical project and needs an independent data-quality re-audit.
 - Spatial interpolation from 64 sensors to the LaBraM canonical 128 channels depends on sensor geometry and model/library revision. It is not evidence of medically meaningful channel importance.
+
+[Phase 3 empirical validation criteria](phase3-validation.md)
