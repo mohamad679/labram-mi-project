@@ -4,6 +4,7 @@ import pytest
 
 from src.data import subject_wise_split
 
+
 def _example():
     groups = np.repeat(np.arange(12), 3)
     return np.zeros((len(groups), 64, 400), dtype=np.float32), groups % 5, groups
