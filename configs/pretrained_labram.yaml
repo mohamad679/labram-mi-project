@@ -21,5 +21,6 @@ split_seed: 42  # Keep subject partitions unchanged across multi-seed runs
 checkpoint_path: checkpoints/pretrained_labram_head.pt
 # A plain constructor does not load pretrained weights.
 model_init: pretrained
+training_strategy: linear_probe
 pretrained_repo_id: braindecode/labram-pretrained
 pretrained_revision: 0563b6c626e7b40d9a36653b763715db94d945d7
