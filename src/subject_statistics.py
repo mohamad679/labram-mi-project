@@ -63,8 +63,8 @@ def subject_cluster_bootstrap(
     lower, upper = np.quantile(scores, [alpha, 1 - alpha], axis=0)
     return {
         "method": "subject_cluster_percentile_bootstrap",
-        "n_heldout_subjects": int(len(unique_subjects)),
-        "n_heldout_epochs": int(len(labels)),
+        "n_heldout_subjects": len(unique_subjects),
+        "n_heldout_epochs": len(labels),
         "n_bootstraps": int(n_bootstraps),
         "seed": int(seed),
         "confidence_level": float(confidence_level),
