@@ -1,9 +1,8 @@
 """
-Phase 1 — Fine-tune LaBraM's classification head on PhysioNet Motor Imagery.
+Phase 1 — Train LaBraM with explicit scratch/full or pretrained/probing strategies.
 
 Loads cached (or freshly fetched) data, applies the subject-wise split,
-freezes the LaBraM backbone, and trains only the classification head
-(linear-probe baseline). Reports accuracy + macro-F1 on val/test.
+selects a validated trainability strategy and reports held-out metrics.
 """
 import os
 import argparse
@@ -16,6 +15,7 @@ from dataclasses import asdict
 from pathlib import Path
 import numpy as np
 import torch
+from torch import nn
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils.class_weight import compute_class_weight
