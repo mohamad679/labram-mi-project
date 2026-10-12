@@ -90,3 +90,10 @@ def test_headless_matplotlib_backend_isolation_in_kaggle():
     assert '"MPLBACKEND": "Agg"' in dataset
     assert "env=training_env" in _source(nb["cells"][13])
     assert "env=training_env" in _source(nb["cells"][15])
+
+def test_kaggle_uses_upstream_physionet_download_not_missing_nemar_sourcedata():
+    """NEMAR on004362 lacks a sourcedata manifest; avoid 104 fallback attempts."""
+    notebook = _load()
+    dataset = _source(notebook["cells"][9])
+    assert '"MOABB_DOWNLOAD_PROVIDER": "upstream"' in dataset
+    assert "env=training_env" in dataset
