@@ -8,6 +8,8 @@ freezes the LaBraM backbone, and trains only the classification head
 import os
 import argparse
 import json
+import hashlib
+import subprocess
 import random
 from dataclasses import asdict
 from pathlib import Path
@@ -255,7 +257,18 @@ def main(config_path='configs/baseline.yaml'):
     test_loss, test_acc, test_f1 = run_epoch(model, test_loader, criterion, optimizer=None)
     print(f"\nTEST  | loss={test_loss:.4f}  acc={test_acc:.3f}  macro_f1={test_f1:.3f}")
 
+    try:
+        git_commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        git_commit = "unavailable"
+    with checkpoint_path.open("rb") as saved_weights:
+        sha256 = hashlib.file_digest(saved_weights, "sha256").hexdigest()
     metadata = {
+        "status": "finished",
+        "git_commit": git_commit,
+        "checkpoint_sha256": sha256,
         "configuration": asdict(config), "torch_version": torch.__version__,
         "train_subjects": sorted(map(int, set(subject_ids[train_idx]))),
         "validation_subjects": sorted(map(int, set(subject_ids[val_idx]))),
@@ -268,16 +281,31 @@ def main(config_path='configs/baseline.yaml'):
         json.dumps(metadata, indent=2), encoding="utf-8"
     )
     model.eval()
-    all_preds, all_targets = [], []
+    all_preds, all_targets, all_probs = [], [], []
     with torch.no_grad():
         for xb, yb in test_loader:
             out = model(xb.to(DEVICE))
-            all_preds.append(out.argmax(dim=1).cpu().numpy())
+            probs = torch.softmax(out, dim=1)
+            all_probs.append(probs.cpu().numpy())
+            all_preds.append(probs.argmax(dim=1).cpu().numpy())
             all_targets.append(yb.numpy())
+    all_probs = np.concatenate(all_probs)
     all_preds = np.concatenate(all_preds)
     all_targets = np.concatenate(all_targets)
+    predictions_path = checkpoint_path.with_name(
+        checkpoint_path.stem + "_test_predictions.npz"
+    )
+    np.savez_compressed(
+        predictions_path,
+        y_true=all_targets, y_prob=all_probs,
+        class_names=np.array(le.classes_),
+        subject_ids=np.asarray(subject_ids)[test_idx],
+    )
+    print(f"Held-out prediction artifact: {predictions_path}")
     print("\nPer-class report (test set):")
-    print(classification_report(all_targets, all_preds, target_names=le.classes_))
+    print(classification_report(
+        all_targets, all_preds, target_names=le.classes_, zero_division=0
+    ))
 
 
 if __name__ == "__main__":
