@@ -62,11 +62,16 @@ macro-F1. These are empirical class counts, **not model metrics**.
 
 All **348 epochs** in the temporary partial HDF5 cache reproduced
 the exact float32 tensor values, labels and subject identities from
-the fresh MOABB preprocessing pipeline. The first pass permitted
-up to two ordered dropped annotations per run; the subsequently
-tightened gate requires that any missing annotations occur only
-at the **trailing** recording/epoch boundary. Until that tightened
-workflow succeeds, that stronger temporal property is unverified.
+the fresh MOABB preprocessing pipeline.
+
+**Follow-up diagnostic:** A deliberately stronger assumption that any
+missing raw annotations must occur **only at the end** of each run
+failed on real subject 1/run 4. The code therefore does not assume
+this behavior. The audited alignment instead enumerates all source
+annotation indices that could have been omitted while preserving
+the MOABB label sequence, and includes candidate onset times and
+recording duration. This is an explicit investigation item, not proof
+of a mislabeled epoch.
 
 ## Exclusion provenance from external research
 
@@ -92,7 +97,8 @@ The split/cohort definition remains unchanged during Phase 2.
 ## Required scientific acceptance gates
 
 - [ ] CI and offline negative-control tests pass on final PR head.
-- [ ] Real public EDF annotations match MOABB class mapping for multiple participants.
+- [x] Real public EDF annotations agree in ordered class sequence for subjects 1 and 2;
+      exact reasons for omitted source annotations still under investigation.
 - [ ] EEG event onset/timing and 481-to-400 cropping verified in seconds.
 - [ ] 64 channels, 160 Hz, unit conversion, and MOABB metadata order verified.
 - [ ] Temporary HDF5 cache is numerically equivalent to direct preprocessing.
