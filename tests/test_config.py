@@ -1,5 +1,7 @@
 from pathlib import Path
+
 import pytest
+
 from src.config import load_training_config
 
 BASE = Path(__file__).resolve().parents[1] / "configs" / "baseline.yaml"
