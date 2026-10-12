@@ -8,7 +8,7 @@ This repository currently uses bounded dependency ranges, **not** an exact teste
 
 Data source: PhysioNet EEG Motor Movement/Imagery dataset via MOABB. The loader excludes subject IDs 88, 89, 92, 100 and 104, historically reported as having incompatible sampling rates. The project expects arrays of shape `(epochs,64,400)` and labels in five motor imagery classes.
 
-Data are cached locally in `physionet_mi_cache.npz` or at `PHYSIONET_CACHE_PATH`. New caches include ordered channel names, source sampling rate and EEG units; **unverified legacy caches fail closed** unless `ALLOW_UNVERIFIED_EEG_CACHE=1` is set for exploratory/non-publishable use. Data loading now uses MOABB `return_epochs=True`; it may differ numerically from legacy NumPy output. [See migration audit](eeg-data-provenance.md). The cache **must not be committed to GitHub**. Preserve the original subject-level dataset identifiers and original file hashes for rigorous reproduction. Check source data licenses and permissions separately.
+Data are cached locally in `physionet_mi_cache.npz` or at `PHYSIONET_CACHE_PATH`. New schema-2 caches include ordered channel names, source sampling rate and **microvolt** EEG units (1e6 scaling from MNE volts); **unverified legacy caches fail closed** unless `ALLOW_UNVERIFIED_EEG_CACHE=1` is set for exploratory/non-publishable use. Data loading now uses MOABB `return_epochs=True`; it may differ numerically from legacy NumPy output. [See migration audit](eeg-data-provenance.md). The cache **must not be committed to GitHub**. Preserve the original subject-level dataset identifiers and original file hashes for rigorous reproduction. Check source data licenses and permissions separately.
 
 ## Run
 
@@ -18,7 +18,7 @@ python -m pytest -q
 python -m src.train --config configs/baseline.yaml
 ```
 
-With the default configuration the model is initialized **from scratch**. Do not call this a pretrained experiment. A separate explicit pretrained mode requires `model_init: pretrained`, `pretrained_repo_id`, **and `pretrained_revision` with an immutable 40-character Hub commit SHA**. Obtain the revision from [the official pretrained LaBraM Hub repository](https://huggingface.co/braindecode/labram-pretrained). Model loading and task-specific compatibility are **not** yet independently validated.
+With the default configuration the model is initialized **from scratch**. Do not call this a pretrained experiment. The CPU checkpoint loader and the explicit 400-sample temporal-prefix adaptation were verified in [GitHub Actions](https://github.com/mohamad679/labram-mi-project/actions/runs/38234001055), but no real EEG fine-tuning was performed. A separate explicit pretrained mode requires `model_init: pretrained`, `pretrained_repo_id`, **and `pretrained_revision` with an immutable 40-character Hub commit SHA**. Obtain the revision from [the official pretrained LaBraM Hub repository](https://huggingface.co/braindecode/labram-pretrained). The pinned checkpoint and forward compatibility were validated on CPU at 400 samples; training performance and real-data preprocessing remain unverified.
 
 The training script records its configuration and subject IDs for the train, validation and test sets in the JSON file beside the checkpoint. It also records test accuracy, test macro-F1 and best validation macro-F1. This does not yet capture package hashes or all dataset provenance.
 

@@ -77,14 +77,55 @@ def load_labram_model(
     chs_info = make_chs_info(n_chans=n_chans, sfreq=sfreq)
 
     # A constructor alone does NOT establish pretrained-weight provenance.
-    # Only an explicit from_pretrained call activates transfer learning.
+    # The official checkpoint is configured for 3,000 samples (15 patches).
+    # Shorter windows need explicit time-position transfer; strict=False
+    # alone does NOT resolve temporal_embedding size mismatches.
     if pretrained_repo_id is not None:
         validate_pretrained_reference(pretrained_repo_id, pretrained_revision)
-        return InterpolatedLaBraM.from_pretrained(
+        if pretrained_repo_id != "braindecode/labram-pretrained":
+            raise ValueError("The audited temporal-prefix adapter supports only "
+                             "braindecode/labram-pretrained.")
+        if n_times > 3000 or n_times <= 0 or n_times % 200:
+            raise ValueError("Pretrained LaBraM windows must be 200..3000 "
+                             "samples and divisible by the patch size 200.")
+        pretrained = InterpolatedLaBraM.from_pretrained(
             pretrained_repo_id, chs_info=chs_info,
-            n_outputs=n_outputs, n_times=n_times, n_chans=n_chans,
+            n_outputs=n_outputs, n_times=3000, n_chans=n_chans,
             sfreq=sfreq, revision=pretrained_revision, strict=False, **kwargs,
         )
+        if n_times == 3000:
+            return pretrained
+
+        # Rebuild the architecture for the actual patch count. Transfer
+        # every compatible backbone tensor, but never an old task head.
+        target = InterpolatedLaBraM(
+            chs_info=chs_info, n_outputs=n_outputs, n_times=n_times,
+            n_chans=n_chans, sfreq=sfreq, **kwargs,
+        )
+        source_weights = pretrained.state_dict()
+        target_weights = target.state_dict()
+        weights_to_transfer = {}
+        for name, expected in target_weights.items():
+            if name.startswith("final_layer."):
+                continue
+            if name not in source_weights:
+                raise RuntimeError(f"Pretrained checkpoint missing backbone tensor: {name}")
+            source = source_weights[name]
+            if name == "temporal_embedding":
+                source = source[:, : expected.shape[1], :].clone()
+            if source.shape != expected.shape:
+                raise RuntimeError(
+                    f"Unadapted pretrained weight mismatch for {name}: "
+                    f"source={tuple(source.shape)}, target={tuple(expected.shape)}"
+                )
+            weights_to_transfer[name] = source
+        missing, unexpected = target.load_state_dict(
+            weights_to_transfer, strict=False
+        )
+        if unexpected or any(not name.startswith("final_layer.") for name in missing):
+            raise RuntimeError(f"Unexpected transfer keys: missing={missing}, "
+                               f"unexpected={unexpected}")
+        return target
 
     if pretrained_revision is not None:
         raise ValueError('pretrained_revision requires pretrained_repo_id.')
