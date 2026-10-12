@@ -26,11 +26,11 @@ The training script saves `checkpoints/heldout_predictions.npz` (not committed) 
 
 After a successful real-data training run:
 
-\`\`\`bash
+```bash
 python -m scripts.build_benchmark \
   --predictions checkpoints/heldout_predictions.npz \
   --output-dir artifacts/evaluation
-\`\`\`
+```
 
 The existing benchmark renderer from PR #5 validates probability shape and row sums, then generates `metrics.json`, `metrics.csv`, `confusion_matrix.png` and `reliability_diagram.png`. It does not fabricate data when predictions are missing. **Epoch-level accuracy is not a confidence interval over independent subjects.**
 
