@@ -1,3 +1,5 @@
+> **ARCHIVED/UNVERIFIED LEGACY SCORES:** These earlier Test figures predate the 2026 independently audited source-pinned studies, and should not be treated as established pretrained or as part of the development-Validation comparison. The final 15-person Test was **not opened during the audited Phase 1–5.5b study**. Read [the final research snapshot](../docs/final-research-snapshot.md) for verified results.
+
 # Phase 1 — Baseline Results
 
 LaBraM (InterpolatedLaBraM), fine-tuned on PhysioNet Motor Imagery,
