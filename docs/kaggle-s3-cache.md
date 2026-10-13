@@ -1,5 +1,7 @@
 # Kaggle-only PhysioNet cache builder via public Amazon S3
 
+> **Historical data-generation reference, not a request for new experiments.** The accepted 104-subject HDF5 was subsequently generated and audited; its exact SHA-256 is `f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a`. See [the final research snapshot](final-research-snapshot.md). The repo's unused old `run_kaggle.ipynb` study launcher is retired; phase-specific Kaggle notebooks remain as versioned evidence.
+
 The full PhysioNet EEG Motor Movement/Imagery recordings can be downloaded from the official public mirror, `s3://physionet-open/eegmmidb/1.0.0/`, **without an AWS account or AWS credentials**. This guide offers an alternative when a local Mac or remote Windows machine has slow access to `physionet.org`.
 
 **Standalone user Notebook:** `NeuroDecode_PhysioNet_S3_Kaggle_Cache_Builder.ipynb` is supplied as a downloadable artifact in the user conversation. The repository also includes the core standalone CLI implementation `scripts/prepare_physionet_s3.py`.
@@ -7,7 +9,7 @@ The full PhysioNet EEG Motor Movement/Imagery recordings can be downloaded from 
 ## Kaggle workflow
 
 1. Open a private Kaggle Notebook, use CPU/None accelerator, and turn **Internet On**.
-2. Install a **Python 3.11** virtual environment with `moabb==1.7.2`, `mne==1.13.2`, `numpy`, `scikit-learn`, `h5py`, `boto3` and `tqdm`. Use the exact scientific preprocessing source commit **`74e511fb9c1ac4f0543b249b571e28e811ec92c3`**, as also used in `run_kaggle.ipynb`.
+2. Install a **Python 3.11** virtual environment with `moabb==1.7.2`, `mne==1.13.2`, `numpy`, `scikit-learn`, `h5py`, `boto3` and `tqdm`. Use the exact scientific preprocessing source commit **`74e511fb9c1ac4f0543b249b571e28e811ec92c3`**, as used in the historical retired study launcher.
 3. First test downloading one EDF using `--probe`; **Kaggle's actual S3 throughput has not yet been measured**.
 4. Process the eligible subjects incrementally into `/kaggle/working/physionet_mi_104subjects.h5`. For each participant, the downloader fetches exactly six default imagery runs (4/6/8/10/12/14), calls the same `src.data.load_physionet_mi`, checks the resulting subject and (64, 400) channel/time shape, then appends to the portable verified HDF5 schema 3. Raw EDFs are deleted **after** an HDF5 subject is committed, reducing peak disk usage.
 5. Make a **Kaggle Notebook output snapshot** before ending the session. If interrupted, attach that earlier saved output via **Add Input** and use `--previous /kaggle/input/.../physionet_mi_104subjects.h5`; the script copies the HDF5 into writable working storage and resumes. It does not rewrite previously committed subjects.
