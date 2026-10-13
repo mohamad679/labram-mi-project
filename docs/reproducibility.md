@@ -1,5 +1,7 @@
 # Reproducibility guide
 
+> **Closed research snapshot (2026-10-13).** The instructions below explain implementation and historical environments, **not a request to retrain, add random seeds, change the subject split or infer the reserved Test subjects**. For actual accepted 2026 execution hashes and limitation of independent checkpoint binary access, see [Final research snapshot](final-research-snapshot.md).
+
 ## Environment
 
 This repository currently uses bounded dependency ranges, **not** an exact tested lockfile. Create a fresh Python 3.10+ environment, install `requirements.txt`, and archive `pip freeze` and hardware/device details for every published run. Avoid interpreting installation success as verified reproducibility.
