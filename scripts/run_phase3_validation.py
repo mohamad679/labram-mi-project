@@ -18,13 +18,13 @@ from pathlib import Path
 
 import numpy as np
 from sklearn.dummy import DummyClassifier
-from sklearn.linear_model import LogisticRegression
 from sklearn.exceptions import ConvergenceWarning
-from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
+from sklearn.preprocessing import StandardScaler
 
 from src.data import subject_wise_split
-from src.portable_eeg import H5SignalSource, inspect_cache, LABELS
+from src.portable_eeg import LABELS, H5SignalSource, inspect_cache
 from src.subject_statistics import subject_cluster_bootstrap
 
 SHA256_PHASE2 = "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a"
@@ -41,9 +41,9 @@ def sha256(path: Path) -> str:
 
 
 def validate_frozen_split(y: np.ndarray, subject_ids: np.ndarray, manifest: dict):
-    if len(y) != 18096 or set(np.unique(subject_ids)) != set(
+    if len(y) != 18096 or set(np.unique(subject_ids)) != {
         i for i in range(1, 110) if i not in (88, 89, 92, 100, 104)
-    ):
+    }:
         raise ValueError("Only the 104-subject Phase-2 cohort is allowed.")
     if manifest["dataset_sha256"] != SHA256_PHASE2 or manifest["split_seed"] != 42:
         raise ValueError("Frozen dataset hash or split seed unexpectedly changed.")
@@ -129,9 +129,9 @@ def _dummy(y, train_idx, val_idx):
 def _deep(source, y, train_idx, val_idx, seed, *, model_name, epochs, patience,
           batch_size, lr, weight_decay, device, checkpoint_path):
     import torch
-    from torch import nn
-    from torch.utils.data import Dataset, DataLoader
     from sklearn.utils.class_weight import compute_class_weight
+    from torch import nn
+    from torch.utils.data import DataLoader, Dataset
 
     class EpochData(Dataset):
         def __init__(self, rows):
@@ -285,7 +285,7 @@ def _dataset_manifest(path, data_sha, args, partitions, y, subjects) -> dict:
         "split_seed": 42,
         "random_seed": args.seed,
         "subjects": {key: sorted(map(int, set(subjects[rows]))) for key, rows in partitions.items()},
-        "epoch_counts": {key: int(len(rows)) for key, rows in partitions.items()},
+        "epoch_counts": {key: len(rows) for key, rows in partitions.items()},
         "class_names": list(LABELS),
         "preprocessing": "PhysioNet EEGMMIDB 1.0.0 / MOABB 1.7.2 / 8-32Hz / 160Hz / uV / first 400 samples",
         "validation_class_counts": np.bincount(y[partitions["validation"]], minlength=5).tolist(),
