@@ -32,9 +32,9 @@ CNNs are trained without AMP (FP32), AdamW LR 0.001, weight decay 1e-4, batch 32
 Run the [20-cell NeuroDecode Phase 5.5 Train-only CV notebook](../notebooks/NeuroDecode_Phase55_TrainOnly_CV_Kaggle.ipynb) with **Kaggle GPU and Internet enabled**. Do not attach the huge old Notebook Output. Its existing-file-first original Amazon S3 preprocessing builder is unchanged from the previous approved HDF5 cache notebook; it builds in an isolated Python 3.11 MOABB environment under `/kaggle/temp` if the original complete file is absent, then fail-closes on the established full SHA-256. Optional one-HDF5 private Dataset publishing is **off by default** to avoid the recently encountered Kaggle 429 rate limit; it may be enabled explicitly after reviewing private visibility.
 
 All Train-only benchmark code is checked out at pinned GitHub source commit
-`b60a19c35bdbdf3c53c14b40d92193e36b557c70` and its Python source SHA-256 values are asserted before any GPU training:
+`29cd4c8cfbb987ad18aa90624b46b92c97ecc766` and its Python source SHA-256 values are asserted before any GPU training:
 - `scripts/run_phase55_trainonly_cv.py` SHA-256: `f2b4388897c5c360d0ad12b6c6d8ab5fcdf5ab6ca6ffdf9c400aa98381c8bec0`.
-- `src/phase55_trainonly.py` SHA-256: `d2470246caf3a7fc1053da81ed2aa3b803b226a908e9c9708ab8c6544e2278ca`.
+- `src/phase55_trainonly.py` SHA-256: `16d14df18c5b02ad85ed46e9fae9d73d15bab0be257c9e852069fa21173bf6f8`.
 
 The notebook creates `NeuroDecode_Phase55_TrainOnly_CV_Results.zip` with only aggregate protocols/reports and four **13,050-row Train-only** OOF NPZs. It excludes all raw EEG, model weights, original 14-subject Validation predictions and original 15-subject Test predictions. Selected checkpoints stay in private Kaggle output. The notebook has been syntax-compiled locally but **not yet executed in Kaggle**, so no scientific claims are derived from its prospective output.
 
