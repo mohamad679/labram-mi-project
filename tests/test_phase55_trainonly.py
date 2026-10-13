@@ -4,8 +4,12 @@ import pytest
 from sklearn.metrics import f1_score
 
 from src.phase55_trainonly import (
-    BANDS, TrainOnlySignalSource, epoch_standardize,
-    make_bandpower_features, make_trainonly_folds, score_five_class,
+    BANDS,
+    TrainOnlySignalSource,
+    epoch_standardize,
+    make_bandpower_features,
+    make_trainonly_folds,
+    score_five_class,
     select_predeclared,
 )
 
@@ -48,7 +52,6 @@ def test_folds_refuse_protocol_changes():
 
 
 def test_signal_source_blocks_heldout_waveform_read():
-    partitions, _ = synthetic_manifest()
     backing = {1: "safe", 160: "forbidden"}
     guard = TrainOnlySignalSource(backing, range(13050))
     assert guard[1] == "safe"
