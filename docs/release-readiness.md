@@ -1,38 +1,23 @@
-# Release readiness and evidence gates
+# Release scope and closure gates
 
-**Status: research prototype, not a versioned validated release.** This file is a transparent acceptance checklist. Checkboxes are not claims of completion.
+**Status: completed research snapshot, not a validated model release.** The project owner explicitly stopped additional model experiments, random seeds, Test inference and Phase 6 on 2026-10-13. This document therefore records *what is available* rather than soliciting an unbounded future research campaign.
 
-## Repository hygiene
+## Verified and versioned
 
-- [x] Basic offline unit tests and GitHub Actions workflow exist.
-- [x] Structured research README, model card and reproducibility notes exist.
-- [x] Archived results remain traceable and explicitly distinguished from verified runs.
-- [ ] A source-code license has been selected and reviewed by the owner.
-- [ ] Full installation instructions have passed on a fresh machine or container using pinned dependencies.
-- [ ] The name, repository description, website/topics and maintainer-facing metadata have been finalized.
-- [ ] An appropriate citation record (with owner-confirmed authorship) has been published.
+- [x] Frozen 104-person EEGMMIDB provenance, 75/14/15 split and accepted HDF5 digest.
+- [x] Genuine pretrained LaBraM / CBraMod checkpoint-loading audits and real public EEG training smoke runs.
+- [x] Real Kaggle owner-executed Phase 3–5.5b development results, with independently recomputed Prediction metrics and small SHA-recorded source reports.
+- [x] Five-class F1, confusion counts, class-collapse warnings, subject-level exploratory intervals and seven real-data vector figures.
+- [x] Fast offline unit-test / static quality GitHub Actions and historical reproducible source references.
+- [x] Clear method limitations, data/reuse-rights boundary, legacy/demo separation, final model selection and no-Test access statement.
 
-## Scientific reproducibility
+## Important **not completed** items — do not imply otherwise
 
-- [x] A pinned LaBraM checkpoint and CPU transfer/forward check were demonstrated.
-- [x] EEG scaling equivalence was confirmed for one real public PhysioNet subject.
-- [ ] Exact environment lock, provenance hashes, preprocessing manifest and all run parameters are archived.
-- [ ] Train/validation/test subjects remain unchanged across compared model initialization seeds.
-- [ ] Full eligible-dataset pretrained and scratch experiments have completed with multiple seeds.
-- [ ] Real per-class predictions, confusion matrices, calibration plots and subject-level intervals are published.
-- [ ] Claimed statistical differences have been evaluated fairly, with no test-set model selection.
-- [ ] Independent held-out replication or external dataset validation has been performed where feasible.
+- [ ] A final, separately untouched 15-subject Test evaluation or external dataset generalization result.
+- [ ] Multiple seed replication and confirmatory effect intervals.
+- [ ] Independent checkpoint binary reload with distributable signed weights.
+- [ ] Clean-room, fully exact dependency lock / reproducible deployment of the Gradio demo.
+- [ ] Owner-approved source-code license and verified permissions to redistribute third-party artifacts.
+- [ ] Owner-confirmed contributor/author listing, formal DOI publication or citation metadata.
 
-## Model distribution and safety
-
-- [ ] Model weights have a verifiable release link, file checksum and provenance metadata.
-- [ ] Distribution respects all applicable upstream model and dataset licenses.
-- [ ] The dashboard was smoke-tested on fresh installation using a distributable compatible checkpoint.
-- [ ] Interpretability/uncertainty claims are limited to methods actually validated.
-- [ ] No clinical, diagnostic or safety-critical use is implied.
-
-## Publication rule
-
-A release candidate must have all critical scientific and environment gates reviewed, not merely green Python unit tests. Code quality, functional integration and scientifically demonstrated effectiveness are separate evidence categories. Version tags and badges should reflect the actual achieved category.
-
-For ongoing work, use [the repository issues](https://github.com/mohamad679/labram-mi-project/issues) and [the reproducibility guide](reproducibility.md).
+A finished documentation/portfolio snapshot is compatible with these unresolved scientific gates. It is **not** a validated benchmark-release artifact, medical device or online EEG prediction service. The exact evidence index is [final-research-snapshot.md](final-research-snapshot.md). Further model experiments and open-Test assessment are explicitly **closed**, rather than tacitly scheduled.
