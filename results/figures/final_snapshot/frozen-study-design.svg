@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 524" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">Subject-disjoint frozen data split and Test embargo</title>
+<desc id="chart-description">104 persons, 18,096 EEG epochs; 75 subjects Train 13,050 epochs; 14 subjects development Validation 2,436 epochs; 15 Test subjects 2,610 epochs never evaluated.</desc>
+<rect x="0" y="0" width="1200" height="524" fill="#f5f8fb"/><text x="48" y="62" font-size="14" fill="#147d82" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">FROZEN SCIENTIFIC CONTRACT</text>
+<text x="48" y="107" font-size="30" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Disjoint by participant, not by epoch</text>
+<text x="48" y="136" font-size="15" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Original 104-subject PhysioNet motor-imagery cohort · 18,096 epochs · 64 EEG channels</text>
+<rect x="45" y="178" width="348" height="210" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<rect x="45" y="178" width="348" height="7" rx="4" fill="#147d82"/>
+<text x="69" y="228" font-size="14" fill="#147d82" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">TRAIN</text>
+<text x="69" y="279" font-size="24" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">75 participants</text>
+<text x="69" y="317" font-size="16" fill="#607186" font-weight="500" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">13,050 epochs</text>
+<rect x="426" y="178" width="348" height="210" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<rect x="426" y="178" width="348" height="7" rx="4" fill="#294f83"/>
+<text x="450" y="228" font-size="14" fill="#294f83" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">DEVELOPMENT VALIDATION</text>
+<text x="450" y="279" font-size="24" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">14 participants</text>
+<text x="450" y="317" font-size="16" fill="#607186" font-weight="500" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">2,436 epochs</text>
+<rect x="808" y="178" width="348" height="210" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<rect x="808" y="178" width="348" height="7" rx="4" fill="#d7a14f"/>
+<text x="832" y="228" font-size="14" fill="#d7a14f" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">FINAL TEST · LOCKED</text>
+<text x="832" y="279" font-size="24" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">15 participants</text>
+<text x="832" y="317" font-size="16" fill="#607186" font-weight="500" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">2,610 epochs</text>
+<text x="65" y="433" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Used for model fitting and Train-only model selection</text>
+<text x="427" y="433" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Used for recorded development comparisons</text>
+<text x="825" y="433" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Never evaluated in this study</text>
+<text x="48" y="491" font-size="15" fill="#147d82" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">NO HELD-OUT TEST SCORE  ·  NO MULTI-SEED CLAIM  ·  NO CLINICAL VALIDATION</text>
+</svg>
