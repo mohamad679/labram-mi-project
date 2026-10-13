@@ -1,137 +1,90 @@
-# NeuroDecode-LaBraM
+<div align="center">
 
-**EEG motor-imagery decoding, model uncertainty and attention-based inspection — with explicit scientific limitations.**
+![NeuroDecode — final EEG research snapshot](assets/figures/neurodecode_hero.svg)
 
-**Explore:** [Documentation](docs/README.md) · [Architecture](docs/architecture.md) · [Verified-figure gallery](docs/visualization-gallery.md) · [Release readiness](docs/release-readiness.md)
+# NeuroDecode
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-research-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Status](https://img.shields.io/badge/status-research%20prototype-697586)](#at-a-glance)
+**A reproducible, evidence-first study of five-class EEG motor imagery**  
+*Classical baselines · CNNs · genuine pretrained EEG foundation models · subject-disjoint evaluation*
 
-> **Transparency note:** The original repository described LaBraM *fine-tuning*, but the archived training source instantiated `InterpolatedLaBraM` without an explicit pretrained-weight load. **The provenance of historical checkpoints is unverified.** Historical scores below are retained for traceability, not represented as confirmed pretrained-model benchmarks. See [Research audit](docs/research-audit.md).
+[**Results & figures**](docs/visualization-gallery.md) · [**Scientific conclusion**](docs/final-research-snapshot.md) · [**Methods & data**](docs/phase2-data-audit.md) · [**Reproducibility**](docs/reproducibility.md) · [**Model card**](docs/model-card.md)
 
-![Pipeline architecture](assets/architecture.svg)
+[![GitHub quality checks](https://github.com/mohamad679/labram-mi-project/actions/workflows/ci.yml/badge.svg)](https://github.com/mohamad679/labram-mi-project/actions/workflows/ci.yml)
+![Status: completed research snapshot](https://img.shields.io/badge/Status-completed%20research%20snapshot-167d77)
+![Evaluation: development Validation](https://img.shields.io/badge/Evaluation-development%20Validation-4475D8)
+![Test: untouched](https://img.shields.io/badge/Test-untouched-536A80)
 
-## At a glance
+</div>
 
-| Component | Implementation | Status |
-| --- | --- | --- |
-| Dataset | PhysioNet Motor Movement/Imagery through MOABB | Existing pipeline |
-| Subject holdout | 75 train / 14 validation / 15 test subjects, reported | Group-disjoint split; offline tests added |
-| Classifier | LaBraM architecture with 5 motor imagery classes | New pretrained 400-sample weight adapter CPU-tested; historical metrics unverified |
-| Uncertainty | MC Dropout, entropy and BALD | Exploratory; post-hoc dropout needs validation |
-| Explainability | Transformer attention rollout | Model inspection, **not** clinical explanation |
-| Interactive demo | Gradio: classify, uncertainty, explain | Requires a compatible local checkpoint |
-| Reproducibility | YAML training, pinned checkpoint verification and held-out subject metadata | Full multi-seed GPU rerun **not yet verified** |
+> [!IMPORTANT]
+> **This research snapshot is closed to further model or random-seed experiments.** The published numbers are independently rechecked **development Validation** or **Train-only cross-validation** results, **not held-out Test scores**. No clinical, diagnostic or deployment claim is made. The 15 original Test subjects were not evaluated in the audited studies.
 
-## Visual overview
+## Research question
 
-| EEG channel inspection | Interactive prediction |
-| --- | --- |
-| ![Attention rollout top channels](results/figures/phase3_attention_rollout/sample_0_top_channels.png) | ![Gradio prediction UI](results/figures/phase4_gradio_demo/gradio_ui_prediction.png) |
+Do *authentically pretrained EEG foundation encoders* outperform compact, EEG-specific approaches on a difficult **subject-independent, five-class** motor-imagery classification task? We studied this using a frozen PhysioNet EEGMMIDB/MOABB cohort, provenance-verified checkpoints and development-only comparisons.
 
-[Watch the recorded Gradio dashboard](results/figures/phase4_gradio_demo/gradio_dashboard_demo.mp4) (video, ~24 MB).
+## What the evidence actually shows
 
-### Historical results (not revalidated after refactor)
+![Macro-F1 on the frozen 14-subject development Validation](assets/figures/validation_model_comparison.svg)
 
-| Archived experiment | Accuracy | Macro-F1 |
-| --- | ---: | ---: |
-| Head-only baseline (representative run) | 0.357 | 0.193 |
-| MC Dropout (archived run) | 0.3065 | 0.1860 |
+| Model / protocol | Development Val. accuracy | **Macro-F1** | Evidence |
+|---|---:|---:|---|
+| **EEGNet, original protocol** | 47.99% | **0.4191** | [Phase 3](results/validation/phase3_validation_rerun_seed42_20261013.json) |
+| EEGNet, standardized per EEG epoch | **48.85%** | **0.4125** | [Phase 5.5b](results/validation/phase55b_one_time_validation_seed42_20261013.json) |
+| Pretrained LaBraM, partial adaptation | 38.59% | 0.2546 | [Phase 4](results/validation/phase4_validation_seed42_20261013.json) |
+| Pretrained LaBraM, full adaptation | 34.85% | 0.2481 | [Phase 4](results/validation/phase4_validation_seed42_20261013.json) |
+| Pretrained CBraMod, frozen probe | 27.79% | 0.2027 | [Phase 5](results/validation/phase5_cbramod_validation_seed42_20261013.json) |
+| Pretrained CBraMod, full adaptation | 48.28% | **0.1302** | [Phase 5: single-class collapse](docs/phase5-foundation-comparator.md) |
 
-These are **different evaluations**, not evidence that dropout improves performance. A five-class chance-level reference is 20% accuracy under uniform guessing; imbalance and subject heterogeneity limit that comparison. [Original full report](docs/legacy-project-report.md) · [Phase 1](results/phase1_baseline.md) · [Phase 2](results/phase2_uncertainty.md) · [Phase 3](results/phase3_attention_rollout.md).
+**Central finding:** The compact EEGNet was the strongest recorded baseline by development-Validation Macro-F1. CBraMod full fine-tuning predicted only `rest` despite its superficially reasonable accuracy; it therefore **failed as a movement classifier**. These are concrete outcomes of these **specific** adapters and budgets, not universal model rankings.
 
-## Kaggle S3-only data preparation
+The separate 75-Train-subject, three-fold candidate screen preferred normalized EEGNet (**0.3912 Train OOF Macro-F1**, versus **0.3212** for raw EEGNet under its matched Train-only protocol). But the subsequently locked, **one-time** historic Validation assessment returned **0.4125 versus the earlier EEGNet reference 0.4191**. The apparent Train-CV gain **did not translate into a better Validation Macro-F1**. See [the honest conclusion](docs/final-research-snapshot.md).
 
-When PhysioNet direct downloading is slow, the [CPU-only Amazon S3 cache builder](docs/kaggle-s3-cache.md) prepares a resumable 104-participant HDF5 cache on Kaggle. Its separate helper CLI is [scripts/prepare_physionet_s3.py](scripts/prepare_physionet_s3.py). The real 104-subject S3 run is **not yet validated**; Kaggle outputs must be saved explicitly and remain private as appropriate.
+## The data contract
 
-## Kaggle full-data experiments
+| Cohort | Signal | Prediction task | Frozen partition |
+|---|---|---|---|
+| **104 participants** | 64 EEG channels × 400 time points, 160 Hz, prefiltered 8–32 Hz, µV | `feet`, `hands`, `left_hand`, `rest`, `right_hand` | **75 Train** / **14 Validation** / **15 Test, untouched** |
 
-**[Open the full Kaggle GPU experiment notebook](run_kaggle.ipynb)** · [Step-by-step Kaggle guide](docs/kaggle-experiment.md)
+The source consists of **18,096** total imagery/rest epochs from [PhysioNet EEGMMIDB](https://physionet.org/content/eegmmidb/1.0.0/). Dataset identity is fixed by HDF5 SHA-256 `f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a`, with participant assignments in [`configs/phase3_locked_split.json`](configs/phase3_locked_split.json). Raw recordings, derived HDF5 and trained checkpoint binaries are **not stored in Git**.
 
-The notebook runs one full-cohort experiment per session: pinned Pretrained or Scratch with a fixed subject split, saved model/seed metadata, real held-out classification metrics and participant-level confidence intervals. The Notebook code has offline syntax checks; **a complete Kaggle GPU training run has not yet been independently validated.**
+## Look inside the final model
 
-## Quick start
+| Five-class errors | Participant heterogeneity |
+|---|---|
+| ![Normalized EEGNet confusion matrix, development Validation only](assets/figures/final_validation_confusion_matrix.svg) | ![Per-subject development Validation macro-F1 for the final normalized EEGNet](assets/figures/final_validation_subject_spread.svg) |
 
-Requires Python 3.10+, an appropriate environment for PyTorch/Braindecode, and permitted access to PhysioNet data.
+The normalized model's subject-cluster bootstrap interval for development-Validation Macro-F1 is **0.349–0.485 (95%, exploratory)**. Scores vary substantially among the 14 held-out development participants; neither the intervals nor a single training seed establish population-level robustness.
+
+**[Explore all seven scientific visualizations →](docs/visualization-gallery.md)**, including per-class F1, checkpoint selection and the Train-only candidate screen. Every chart is linked to a versioned empirical JSON record or the final user-supplied Prediction ZIP hash.
+
+## Reproduce the evidence, not a promised benchmark
+
+This is a **completed, closed research snapshot**, not a new training campaign. The repository retains its source adapters, unit tests, subject-split guards and the Kaggle notebooks used in the documented studies, for inspection of exactly how existing evidence arose. New training, Test inference, automatic reseeding and architecture search are **out of scope**.
 
 ```bash
 git clone https://github.com/mohamad679/labram-mi-project.git
 cd labram-mi-project
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python -m src.train --config configs/baseline.yaml
-```
-
-Windows activation: `.venv\Scripts\activate`. Training can be resource-intensive and may download EEG recordings through MOABB; see [Reproducibility guide](docs/reproducibility.md) before use. Dependency ranges are bounded but **not** a lockfile.
-
-**Crucial:** `configs/baseline.yaml` defaults to `model_init: scratch` to make initialization unambiguous. This configuration does **not** claim pretrained LaBraM results. To attempt *pretrained* fine-tuning, set `model_init: pretrained`, a verified `pretrained_repo_id` and an immutable 40-character `pretrained_revision`. See the [checkpoint audit](docs/reproducibility.md#auditing-pretrained-weights-network-required). The pinned official pretrained backbone and 400-sample temporal-prefix adapter passed an actual CPU tensor identity and synthetic forward-pass audit; **historical scores remain unverified**. See [Phase 3 validation](docs/phase3-validation.md).
-
-After successful training, a checkpoint is written to `checkpoints/labram_head_finetuned.pt` (gitignored), with metadata in a sibling JSON file. A separate `checkpoints/heldout_predictions.npz` artifact supports evidence-backed benchmark figures. Run:
-
-```bash
-python -m src.uncertainty
-python -m src.explain
-python app.py
-```
-
-The latter commands require the trained checkpoint and data cache. The Gradio demo accepts a single `.npy` EEG epoch with shape `(64,400)`, `(1,64,400)`, or `(400,64)`. Model output **must not** be used for patient care, accessibility decisions or clinical advice.
-
-### Reproducible multi-seed campaigns
-
-The [Phase 5 execution guide](docs/phase5-experiment-execution.md) provides a separately pinned pretrained configuration, a real-data CPU training smoke test, a fixed `split_seed`, and a three-seed full-data experiment launcher. **The launcher does not claim that a full training experiment has been run.**
-
-```bash
-python -m scripts.run_multiseed --config configs/pretrained_labram.yaml --seeds 42 123 2025
-```
-
-This command only prepares experiment plans. Full training requires a configured GPU/data environment and an explicit `--execute` flag. Subject-cluster confidence intervals are generated from real held-out predictions with `python -m scripts.subject_confidence --predictions <path/to/heldout_predictions.npz>`.
-
-## Project layout
-
-```text
-app.py                    Gradio proof-of-functionality demo
-configs/baseline.yaml     Authoritative training settings
-src/config.py             YAML validation
-src/data.py               Data access and subject-wise splitting
-src/model.py              LaBraM architecture; optional explicit pretrained source
-src/train.py              Linear-probe training and run metadata
-src/uncertainty.py        Exploratory MC Dropout analysis
-src/explain.py            Attention rollout research inspection
-src/evaluate.py           Accuracy, F1 and calibration helpers
-tests/                    Offline split and configuration checks
-results/                  Archived reports and representative figures
-docs/                     Methodology, research caveats and setup
-run_kaggle.ipynb          Kaggle execution launcher
-```
-
-**Independent research checks:** [Pretrained 400-sample transfer and forward pass](https://github.com/mohamad679/labram-mi-project/actions/runs/38234001055) passed on CPU. [Real EEG preprocessing equivalence](https://github.com/mohamad679/labram-mi-project/actions/runs/38234916355) passed on PhysioNet subject 1 with zero numerical difference after unit conversion. These are **not** model-accuracy benchmarks.
-
-## Quality checks
-
-Run the fast offline tests without downloading EEG data:
-
-```bash
-python -m pip install pytest PyYAML numpy scikit-learn
+python -m pip install "pytest>=8,<9" "numpy>=1.24,<3" "scikit-learn>=1.3,<2" "scipy>=1.14,<2" "h5py>=3.10,<5" "PyYAML>=6,<7"
 python -m pytest -q
+python -m scripts.check_repository_quality
 ```
 
-CI runs the offline tests and Python compilation on proposed changes. These checks do **not** prove the full training and visualization stack works on GPU.
+Offline tests check code contracts, **not** medical usability or a fresh end-to-end GPU run. The [study notebooks](notebooks/) pin real runner/source revisions and the input hash; external libraries and official pretrained weights are credited in the [scientific provenance report](docs/final-research-snapshot.md). The archived [Gradio demonstration](results/phase4_gradio_demo.md) is illustrative and requires a separately provided compatible checkpoint.
 
-## Research integrity
+## Repository guide
 
-- **Data splitting:** subject-disjoint `GroupShuffleSplit`; verify the same patient is not in multiple partitions.
-- **Pretraining:** explicit model source required for new pretrained runs. **Never infer pretrained weights from a class name.**
-- **Uncertainty:** post-hoc dropout changes model behavior; BALD is exploratory until methodologically validated.
-- **Interpretability:** attention is not a causal explanation and attention channel importance is not verified EEG physiology.
-- **Limitations:** weak archived macro-F1 and a small sample of rollout visualizations. No production or clinical readiness.
-- **Licensing:** no license for this repository's original code has yet been selected. The upstream library license is not automatically a license for this project.
+| Start with | What you will find |
+|---|---|
+| [Final research snapshot](docs/final-research-snapshot.md) | Conclusions, limitations, hashes, decisions and closure policy |
+| [Results & visualization gallery](docs/visualization-gallery.md) | Accessible SVG charts made from recorded experimental data |
+| [Docs index](docs/README.md) | Frozen experiment protocols, checkpoint and preprocessing provenance |
+| [Data provenance](docs/phase2-data-audit.md) | The actual 104-participant EEGMMIDB/MOABB data contract |
+| [Model card](docs/model-card.md) | What the models do, what they do **not** establish |
+| [Research integrity audit](docs/research-audit.md) | Why older historical metrics are preserved separately |
 
-[Benchmarking & figures](docs/benchmarking.md) · [Full research audit](docs/research-audit.md) · [Phase 3 validation](docs/phase3-validation.md) · [EEG data provenance](docs/eeg-data-provenance.md) · [Reproducibility](docs/reproducibility.md) · [Model card](docs/model-card.md) · [Contribution guide](CONTRIBUTING.md)
+## Responsible use and credit
 
-## Credit
+This project is **research and educational software only**. Attention rollout and post-hoc MC Dropout are exploratory visual inspection techniques, **not validated cortical attribution, calibrated uncertainty or clinical guidance**. Earlier, unverified historical results are preserved as legacy material and never mixed into the independently audited model comparison.
 
-LaBraM architecture: Jiang et al., *Large Brain Model for Learning Generic Representations with Tremendous EEG Data in BCI* (ICLR 2024). Software ecosystem: [Braindecode](https://braindecode.org/), [MOABB](https://moabb.neurotechx.com/) and [PhysioNet EEGMMIDB](https://physionet.org/content/eegmmidb/1.0.0/).
-
-This project is an independent research-engineering implementation, not an official Braindecode or PhysioNet release.
+Original EEG recordings: [PhysioNet EEGMMIDB](https://physionet.org/content/eegmmidb/1.0.0/) · Research stack: [MOABB](https://moabb.neurotechx.com/), [Braindecode](https://braindecode.org/) and PyTorch. LaBraM/CBraMod weights remain their respective upstream works. **No license for the repository's original code has been chosen by the owner:** public readability does not automatically grant reuse rights. See [SECURITY.md](SECURITY.md).
