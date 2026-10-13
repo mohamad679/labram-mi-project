@@ -1,0 +1,130 @@
+{
+  "phase": "5.5a",
+  "status": "INDEPENDENTLY_AUDITED_TRAIN_ONLY_OOF_COMPLETE",
+  "reviewer_date": "2026-10-13",
+  "archive_sha256": "0729f0cf50c93ade6f35389258667ed9718416629b386cfc53aa118277282fde",
+  "entries": 10,
+  "zip_crc": "PASS",
+  "protocol_sha256": "fac4c68f367f75c976c738f46b0d82fc918c62f4c975ccb39848af91c1e5c819",
+  "sources": {
+    "runner_sha256": "f2b4388897c5c360d0ad12b6c6d8ab5fcdf5ab6ca6ffdf9c400aa98381c8bec0",
+    "feature_sha256": "16d14df18c5b02ad85ed46e9fae9d73d15bab0be257c9e852069fa21173bf6f8",
+    "source_commit": "29cd4c8cfbb987ad18aa90624b46b92c97ecc766"
+  },
+  "dataset": {
+    "hdf5_sha256_attested_in_execution": "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a",
+    "split_manifest_sha256": "d1264ac81e725c9b87b5d2de4f847268f67602743817674b856fd19f44a801c8",
+    "train_subjects": 75,
+    "train_epochs": 13050,
+    "original_validation_subjects_reserved": 14,
+    "original_test_subjects_reserved": 15,
+    "validation_or_test_predictions_in_zip": 0
+  },
+  "checks": {
+    "protocol_sha256_recomputed": true,
+    "all_prob_npz_float32_finite_and_normalized": true,
+    "all_prediction_npz_same_true_labels_subjects_global_row_indices_and_class_order": true,
+    "each_13050_train_rows_once": true,
+    "all_75_train_subjects_match_frozen_train_manifest": true,
+    "three_outer_folds_disjoint_25_subjects_each": true,
+    "inner_fit_42_stop_8_outer_holdout_25_in_each_fold": true,
+    "all_candidate_class_confusions_and_macro_f1_accuracy_balanced_accuracy_recomputed": true,
+    "all_fold_macro_f1_recomputed": true,
+    "all_five_predicted_classes_present_each_candidate": true,
+    "cnn_selected_checkpoints_reloaded_reported_by_kaggle": true,
+    "checkpoint_binaries_not_in_zip": true,
+    "original_validation_waveform_access_reported": false,
+    "original_test_waveform_access_reported": false
+  },
+  "models": {
+    "bandpower": {
+      "accuracy": 0.28697318007662836,
+      "macro_f1": 0.2543576215774507,
+      "balanced_accuracy": 0.273669017529431,
+      "fold_macro_f1": [
+        0.2371621499579048,
+        0.25070831089654755,
+        0.2619652172771164
+      ],
+      "class_collapse": false
+    },
+    "eegnet_raw": {
+      "accuracy": 0.36559386973180075,
+      "macro_f1": 0.3211742663450873,
+      "balanced_accuracy": 0.3429891396570987,
+      "fold_macro_f1": [
+        0.30576431994093467,
+        0.3366491888000649,
+        0.315832814260107
+      ],
+      "class_collapse": false
+    },
+    "eegnet_epoch_standardized": {
+      "accuracy": 0.44613026819923374,
+      "macro_f1": 0.3912236252560224,
+      "balanced_accuracy": 0.41237692677675925,
+      "fold_macro_f1": [
+        0.33918821617196576,
+        0.4253389750572116,
+        0.40626978196662955
+      ],
+      "class_collapse": false,
+      "train_subject_macro_f1_min": 0.15463151422765842,
+      "train_subject_macro_f1_max": 0.6573358925057546
+    },
+    "eegnex_epoch_standardized": {
+      "accuracy": 0.4311877394636015,
+      "macro_f1": 0.36974831696252797,
+      "balanced_accuracy": 0.3906711242076563,
+      "fold_macro_f1": [
+        0.3399510522890734,
+        0.37739809075000325,
+        0.3860768549537468
+      ],
+      "class_collapse": false
+    }
+  },
+  "selection": {
+    "selected": "eegnet_epoch_standardized",
+    "method": "highest_pooled_train_only_oof_macro_f1_if_noncollapsed",
+    "tie_breaker": "balanced_accuracy_then_lexical",
+    "selected_from_only_train_subjects": true
+  },
+  "exploratory_paired_cluster_bootstrap": {
+    "resamples": 3000,
+    "seed": 42,
+    "unit": "Train_subject",
+    "ci_method": "paired_subject_resampled_confusion_matrix_macro_f1_percentile_95",
+    "normalization_minus_raw": {
+      "delta": 0.07004935891093511,
+      "ci95": [
+        0.051605892553580064,
+        0.09008386159266604
+      ]
+    },
+    "normalization_minus_eegnex": {
+      "delta": 0.02147530829349442,
+      "ci95": [
+        0.009639674619104683,
+        0.0338309696285588
+      ]
+    },
+    "normalization_minus_bandpower": {
+      "delta": 0.1368660036785717,
+      "ci95": [
+        0.11737773766805776,
+        0.15825097997302234
+      ]
+    }
+  },
+  "limits": [
+    "Train OOF selection of best candidate on the same CV cohort; all intervals are descriptive/selection optimistic, NOT independent confirmatory CIs",
+    "CNNs train on 42 Train subjects per outer fold plus 8 separate inner early-stop participants, whereas logistic bandpower fits 50; compare complete protocols not isolated architecture",
+    "The 14 historic Validation and 15 embargoed Test subjects were excluded throughout this run; no original Validation/Test score has been obtained",
+    "Only one random seed and one three-fold group partition",
+    "HDF5 and CNN selected checkpoint binaries are not inside results-only ZIP, though source reports hash/reload and frozen HDF5 checksum",
+    "Single-epoch channel standardization modifies amplitude scale and may affect physiological interpretation; evaluate final locked model once on reserved Validation"
+  ],
+  "phase55a_gate": "PASS_FOR_COMPLETED_TRAIN_ONLY_CANDIDATE_SELECTION_WITH_DECLARED_LIMITS",
+  "next_allowed_stage": "predefine final fit on 75 Train subjects using dedicated inner Train early-stop; one-time development evaluation of nominated single model on 14 originally reserved Validation; Test still locked"
+}
