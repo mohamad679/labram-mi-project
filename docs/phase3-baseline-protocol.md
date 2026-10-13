@@ -1,6 +1,6 @@
-# Phase 3 — Locked-split validation benchmark (execution OPEN)
+# Phase 3 — Locked-split development-Validation benchmark (completed, limited)
 
-**Scientific status:** The reproducible **single-seed validation-only baseline gate is PASS WITH LIMITATIONS** after a successful Kaggle rerun and code review. This does not validate held-out test performance or multi-seed model superiority. **Do not claim Phase 3 PASS or proceed to Phase 4** before reviewing executed, provenance-complete Kaggle results.
+**Scientific status:** The reproducible **single-seed validation-only baseline gate is PASS WITH LIMITATIONS** after a successful Kaggle rerun and code review. This does not validate held-out test performance or multi-seed model superiority. The actual Kaggle results were subsequently reviewed and archived; this protocol no longer represents a future execution gate. See the [final research snapshot](final-research-snapshot.md).
 
 ## Experimental question
 
