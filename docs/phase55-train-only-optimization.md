@@ -1,5 +1,7 @@
 # Phase 5.5a — Train-only, subject-grouped candidate optimization
 
+> **Stage 5.5a has finished and the nominated model has already undergone its one-time 5.5b development Validation evaluation.** The final normalized EEGNet **did not improve** on the earlier EEGNet Validation Macro-F1. See [the final snapshot](final-research-snapshot.md). New model/seed tuning, original Test and Phase 6 are now closed.
+
 **Status: PASS for single-seed 75-participant TRAIN-ONLY group cross-validation and candidate nomination, with limits (2026-10-13).** This does not certify improved accuracy on original Validation or final Test, which remain unscored under Phase 5.5a. Phase 6 has not started.
 
 ## Why this change is necessary
