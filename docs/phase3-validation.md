@@ -1,3 +1,5 @@
+> **2026-10-13 archival clarification:** The earlier 14-subject exploratory Validation run **was completed and independently reviewed**: EEGNet Macro-F1 **.4191**, source [audit JSON](../results/validation/phase3_validation_rerun_seed42_20261013.json). The frozen project never evaluated its final Test subjects; no further experiments are planned. [Final findings](final-research-summary.md).
+
 # Phase 3 — Experimental validation gates
 
 ## Evidence status
