@@ -107,9 +107,15 @@ A **second Kaggle execution** used the same frozen cohort/SHA and the same
 predictions on the same **2,436 epochs / 14 subjects**. The submitted ZIP
 SHA-256 is
 `cff52a9cc28148343f70772523de849d083955bf5a459f3c2fab346e79442d8f`.
-The exact executed runner has SHA-256
-`9100671e93ccf3d21c74d123273cbe96e78ea30ebc5791b8e47e8f15e0ddf210`,
-identical to [scripts/run_phase3_validation.py](../scripts/run_phase3_validation.py).
+The **exact executed Kaggle runner source** has SHA-256
+`9100671e93ccf3d21c74d123273cbe96e78ea30ebc5791b8e47e8f15e0ddf210` and
+is preserved in cell 9 of the versioned Kaggle notebook. The extracted
+[project runner](../scripts/run_phase3_validation.py) is semantically the same
+but has **Ruff-only cleanup changes** (import sorting, set comprehension,
+redundant integer cast) with SHA-256
+`be15a7d746828a292dc33f847899dcaaa85ecb45310661dd5de4c3d98456ed19`.
+The project-runner binary was **not used** to generate the attached Kaggle
+predictions; source attribution must use the original embedded code hash.
 The complete [Kaggle runner notebook](../notebooks/NeuroDecode_Phase3_Validation_Rerun_Kaggle.ipynb)
 and [offline negative controls](../tests/test_phase3_validation.py) are archived.
 See [machine-readable independent audit](../results/validation/phase3_validation_rerun_seed42_20261013.json).
@@ -144,9 +150,10 @@ uses Test participants only to assert the fixed subject-level split.
   The weight files are kept in the Kaggle working output tree; **they
   were intentionally excluded from the submitted results-only ZIP**.
   Thus the reviewer did *not* independently reload those binary files.
-- Full executed runner source and its notebook are now archived in this
-  GitHub pull request, with the exact byte hash validated against the
-  submitted Kaggle evidence.
+- The **exact executed runner source**, executable project module and the
+  notebook are now archived in the GitHub pull request. The executed
+  runner's SHA-256 matches the embedded notebook source. Lint-only changes
+  to the separately tracked module are documented explicitly above.
 
 **Exploratory paired participant bootstrap:** With 2,000 cluster samples
 from 14 development/validation participants, EEGNet − LaBraM probe
