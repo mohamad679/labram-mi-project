@@ -42,7 +42,10 @@
       "pyriemann": "0.12",
       "numpy": "2.1.3",
       "sklearn": "1.6.1"
-    }
+    },
+    "executed_runner_source_location": "notebooks/NeuroDecode_Phase3_Validation_Rerun_Kaggle.ipynb (cell 9 runner_source)",
+    "repository_runner_sha256_after_semantics_preserving_ruff_cleanup": "be15a7d746828a292dc33f847899dcaaa85ecb45310661dd5de4c3d98456ed19",
+    "repository_runner_note": "Runnable module in scripts/run_phase3_validation.py differs from original executed source only in import ordering, equivalent set comprehension and redundant int(len) removal. Exact executed 9100... source remains embedded in the tracked notebook. Kaggle results were not produced using the reformatted module."
   },
   "independent_validation_prediction_review": {
     "files": 4,
