@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 807" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">EEGNet standardized five-class confusion matrix</title>
+<desc id="chart-description">Validation confusion matrix: feet [82,64,38,95,40]; both fists [27,140,40,66,38]; left fist [24,57,145,55,43]; rest [164,134,71,714,93]; right fist [27,71,39,60,109].</desc>
+<rect x="0" y="0" width="980" height="807" fill="#f5f8fb"/><text x="42" y="59" font-size="14" fill="#147d82" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">CONFUSION MATRIX</text>
+<text x="42" y="103" font-size="29" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">A closer look at the selected model</text>
+<text x="42" y="130" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">EEGNet with per-epoch channel standardization · 2,436 Validation epochs</text>
+<rect x="30" y="153" width="920" height="588" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<text x="520" y="201" font-size="15" fill="#607186" font-weight="650" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Predicted class</text>
+<text x="53" y="439" font-size="15" fill="#607186" font-weight="650" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif" transform="rotate(-90 53 439)">True class</text>
+<text x="306.5" y="235" font-size="13" fill="#162439" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Feet</text>
+<text x="409.5" y="235" font-size="13" fill="#162439" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Both fists</text>
+<text x="512.5" y="235" font-size="13" fill="#162439" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Left fist</text>
+<text x="615.5" y="235" font-size="13" fill="#162439" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Rest</text>
+<text x="718.5" y="235" font-size="13" fill="#162439" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Right fist</text>
+<text x="235" y="314.59000000000003" font-size="14" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Feet</text>
+<rect x="257" y="262" width="99" height="99" rx="12" fill="#9bc0c6"/>
+<text x="306.5" y="311.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">82</text>
+<text x="306.5" y="337.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">25.7% of row</text>
+<rect x="360" y="262" width="99" height="99" rx="12" fill="#a9c9cf"/>
+<text x="409.5" y="311.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">64</text>
+<text x="409.5" y="337.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">20.1% of row</text>
+<rect x="463" y="262" width="99" height="99" rx="12" fill="#bfd8dd"/>
+<text x="512.5" y="311.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">38</text>
+<text x="512.5" y="337.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">11.9% of row</text>
+<rect x="566" y="262" width="99" height="99" rx="12" fill="#92b9c1"/>
+<text x="615.5" y="311.5" font-size="24" fill="#ffffff" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">95</text>
+<text x="615.5" y="337.25" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">29.8% of row</text>
+<rect x="669" y="262" width="99" height="99" rx="12" fill="#bdd7db"/>
+<text x="718.5" y="311.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">40</text>
+<text x="718.5" y="337.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">12.5% of row</text>
+<text x="235" y="417.59000000000003" font-size="14" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Both fists</text>
+<rect x="257" y="365" width="99" height="99" rx="12" fill="#c8dfe3"/>
+<text x="306.5" y="414.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">27</text>
+<text x="306.5" y="440.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">8.7% of row</text>
+<rect x="360" y="365" width="99" height="99" rx="12" fill="#71a3ac"/>
+<text x="409.5" y="414.5" font-size="24" fill="#ffffff" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">140</text>
+<text x="409.5" y="440.25" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">45.0% of row</text>
+<rect x="463" y="365" width="99" height="99" rx="12" fill="#bcd6db"/>
+<text x="512.5" y="414.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">40</text>
+<text x="512.5" y="440.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">12.9% of row</text>
+<rect x="566" y="365" width="99" height="99" rx="12" fill="#a6c7cd"/>
+<text x="615.5" y="414.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">66</text>
+<text x="615.5" y="440.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">21.2% of row</text>
+<rect x="669" y="365" width="99" height="99" rx="12" fill="#bed7dc"/>
+<text x="718.5" y="414.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">38</text>
+<text x="718.5" y="440.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">12.2% of row</text>
+<text x="235" y="520.59" font-size="14" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Left fist</text>
+<rect x="257" y="468" width="99" height="99" rx="12" fill="#cce1e5"/>
+<text x="306.5" y="517.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">24</text>
+<text x="306.5" y="543.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">7.4% of row</text>
+<rect x="360" y="468" width="99" height="99" rx="12" fill="#afcdd3"/>
+<text x="409.5" y="517.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">57</text>
+<text x="409.5" y="543.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">17.6% of row</text>
+<rect x="463" y="468" width="99" height="99" rx="12" fill="#72a3ac"/>
+<text x="512.5" y="517.5" font-size="24" fill="#ffffff" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">145</text>
+<text x="512.5" y="543.25" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">44.8% of row</text>
+<rect x="566" y="468" width="99" height="99" rx="12" fill="#b1cfd4"/>
+<text x="615.5" y="517.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">55</text>
+<text x="615.5" y="543.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">17.0% of row</text>
+<rect x="669" y="468" width="99" height="99" rx="12" fill="#bbd5da"/>
+<text x="718.5" y="517.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">43</text>
+<text x="718.5" y="543.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">13.3% of row</text>
+<text x="235" y="623.59" font-size="14" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Rest</text>
+<rect x="257" y="571" width="99" height="99" rx="12" fill="#b9d4d9"/>
+<text x="306.5" y="620.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">164</text>
+<text x="306.5" y="646.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">13.9% of row</text>
+<rect x="360" y="571" width="99" height="99" rx="12" fill="#c0d9de"/>
+<text x="409.5" y="620.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">134</text>
+<text x="409.5" y="646.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">11.4% of row</text>
+<rect x="463" y="571" width="99" height="99" rx="12" fill="#d1e4e8"/>
+<text x="512.5" y="620.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">71</text>
+<text x="512.5" y="646.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">6.0% of row</text>
+<rect x="566" y="571" width="99" height="99" rx="12" fill="#538e99"/>
+<text x="615.5" y="620.5" font-size="24" fill="#ffffff" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">714</text>
+<text x="615.5" y="646.25" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">60.7% of row</text>
+<rect x="669" y="571" width="99" height="99" rx="12" fill="#cbe0e4"/>
+<text x="718.5" y="620.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">93</text>
+<text x="718.5" y="646.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">7.9% of row</text>
+<text x="235" y="726.59" font-size="14" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Right fist</text>
+<rect x="257" y="674" width="99" height="99" rx="12" fill="#c8dee2"/>
+<text x="306.5" y="723.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">27</text>
+<text x="306.5" y="749.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">8.8% of row</text>
+<rect x="360" y="674" width="99" height="99" rx="12" fill="#a1c4ca"/>
+<text x="409.5" y="723.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">71</text>
+<text x="409.5" y="749.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">23.2% of row</text>
+<rect x="463" y="674" width="99" height="99" rx="12" fill="#bcd6db"/>
+<text x="512.5" y="723.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">39</text>
+<text x="512.5" y="749.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">12.7% of row</text>
+<rect x="566" y="674" width="99" height="99" rx="12" fill="#aacad0"/>
+<text x="615.5" y="723.5" font-size="24" fill="#0b162c" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">60</text>
+<text x="615.5" y="749.25" font-size="11" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">19.6% of row</text>
+<rect x="669" y="674" width="99" height="99" rx="12" fill="#85b0b8"/>
+<text x="718.5" y="723.5" font-size="24" fill="#ffffff" font-weight="720" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">109</text>
+<text x="718.5" y="749.25" font-size="11" fill="#ffffff" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">35.6% of row</text>
+<text x="255" y="779" font-size="13" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Rows are true labels; shade and percentage use within-class row support. Counts are not normalized.</text>
+</svg>
