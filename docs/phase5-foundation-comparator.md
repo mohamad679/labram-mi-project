@@ -40,7 +40,7 @@ Machine-readable report: [phase5_cbramod_pretrained_smoke_20261013.json](../resu
 
 ## Kaggle notebook prepared for full 104-subject Validation experiments
 
-[NeuroDecode_Phase5_CBraMod_Kaggle.ipynb](../notebooks/NeuroDecode_Phase5_CBraMod_Kaggle.ipynb) contains 12 cells. It checks out the pinned **pre-PR execution source commit**
+[NeuroDecode_Phase5_CBraMod_AutoS3_PrivateDataset_Kaggle.ipynb](../notebooks/NeuroDecode_Phase5_CBraMod_AutoS3_PrivateDataset_Kaggle.ipynb) contains 20 cells, including the public S3 HDF5 reconstruction. It checks out the pinned **pre-PR execution source commit**
 `561870b2604d2f00198168049164337a5b9e1b16`,
 verifies both exact Python source byte digests, loads only the already saved Phase-2 HDF5
 and downloads only the pinned pretrained safetensors. The Kaggle experiment is not the Ruff-reformatted later GitHub source; its exact runner digest is
