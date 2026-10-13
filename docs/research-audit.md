@@ -1,5 +1,7 @@
 # Research integrity and migration audit
 
+> **Historical migration audit:** Some statements below describe the repository *before* the real 2026 Phase 3–5.5b Kaggle results were obtained. The current authoritative empirical summary is [the final research snapshot](final-research-snapshot.md). Original unverified claims remain segregated.
+
 ## Why this document exists
 
 This audit separates archived observations from claims proven by the versioned code. Historical metrics were reported before the October 2026 reproducibility refactor. **No full GPU training or independent rerun has been performed by this migration.**
@@ -20,7 +22,7 @@ Reference: https://braindecode.org/stable/auto_examples/model_building/plot_chan
 2. The former `test_no_subject_leakage` consisted of `pass`. Split disjointness already existed as an assertion in runtime code.
 3. The former Kaggle notebook contained username placeholders and a `--config` argument the training script did not parse.
 4. Packages were unbounded and there were no GitHub Actions workflows, code license file or tagged releases.
-5. The root `gradio_dashboard_demo.mp4` file is a 25-byte text placeholder. The actual video is in `results/figures/phase4_gradio_demo/`.
+5. The original Gradio video was a historical 24-MB demonstration artifact. It was removed from the current tracked tree in the publication cleanup to reduce checkout size; the screenshot and immutable Git history remain.
 6. README claimed generated PNGs were uncommitted although rollout PNGs are present.
 7. Model inference uses a local checkpoint not provided to new users. Training and full demo reproducibility remain unverified.
 
