@@ -1,39 +1,25 @@
-# Evidence-backed benchmark generation
+# Reproducible result charts and retained legacy benchmark tool
 
-This stage **does not claim a new model score**. It provides deterministic artifacts from the probabilities of a completed, subject-held-out test evaluation.
+The study is **closed** and only its confirmed **development** predictions/metrics are presented. No new Test evaluation or training is planned.
 
-## Produce real predictions
+## Evidence-backed final report
 
-```bash
-python -m src.train --config configs/baseline.yaml
-```
+- [Final outcome](final-research-summary.md)
+- [Full visual gallery](visualization-gallery.md)
+- [Independently reviewed real-run JSON summaries](../results/validation/)
+- [Audited model selection and follow-up](phase55-train-only-optimization.md) · [Phase 5.5b protocol](phase55b-one-time-validation-protocol.md)
 
-After training completes, the selected validation checkpoint is used for one final held-out evaluation. The script saves `checkpoints/heldout_predictions.npz` with:
+## Zero-network, no-EEG chart reproduction
 
-- `y_true`: integer labels (N,)
-- `y_prob`: softmax probability array (N,5)
-- `subject_ids`: held-out participant identifiers (N,)
-- `class_names`: the ordered five-class label vocabulary
-
-**Do not fabricate or hand-edit this artifact.** It contains no raw EEG waveform samples, but subject identifiers and prediction labels still deserve privacy-aware handling.
-
-## Generate figures
+The final six figures are deterministic SVG documents, generated **only from committed independently audited JSON results**:
 
 ```bash
-python -m scripts.build_benchmark \
-  --predictions checkpoints/heldout_predictions.npz \
-  --output-dir artifacts/evaluation
+python -m scripts.render_final_figures --check
+python -m scripts.render_final_figures
 ```
 
-Expected products: `metrics.json`, `metrics.csv`, `confusion_matrix.png` and `reliability_diagram.png`. Outputs are local and gitignored. Numerical scores are not committed until a full run is verified.
+This never downloads EEG, trains, alters original predictions, generates Test metrics or fabricates a missing run. Figures in `results/figures/final_snapshot/` are version-controlled to make the scientific conclusions inspectable directly on GitHub.
 
-## Scientific gates before publishing numbers
+## Historical generic benchmark helper (kept, not endorsed for new runs)
 
-1. Resolve and verify the pinned pretrained LaBraM checkpoint; default `model_init: scratch` does **not** satisfy this.
-2. Verify channel ordering, preprocessing and signal units using real PhysioNet/MOABB data.
-3. Re-run with independent seeds and record frozen dependencies, dataset identifiers and checkpoint hashes.
-4. Run the baseline and the model under the same subject-wise evaluation protocol.
-5. Report confidence intervals at the **subject level**: EEG epochs within one subject are not independent observations. Do not describe epoch-level bootstrap intervals as independent-subject intervals.
-6. Keep held-out test subjects untouched throughout model selection.
-
-The results visualization script has offline unit tests, but no end-to-end GPU result has been produced during this repository upgrade.
+The previous `scripts/build_benchmark.py` can generate confusion and reliability plots from a separate compatible real `.npz` file and outputs to local folders. It was part of the older research implementation; **it has not been used to invent or replace any numbers in the frozen 2026 final result charts**. Its documentation/history was retained to preserve provenance. Any reference to running fresh multi-seed, retraining or final Test scoring in old notebooks refers to unexecuted historical plans, not a continuation of this closed study.
