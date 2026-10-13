@@ -6,7 +6,7 @@ The study is **closed** and only its confirmed **development** predictions/metri
 
 - [Final outcome](final-research-summary.md)
 - [Full visual gallery](visualization-gallery.md)
-- [Independently reviewed real-run JSON summaries](../results/validation/)
+- [Independently reviewed real-run JSON summaries](../results/validation/README.md)
 - [Audited model selection and follow-up](phase55-train-only-optimization.md) · [Phase 5.5b protocol](phase55b-one-time-validation-protocol.md)
 
 ## Zero-network, no-EEG chart reproduction
