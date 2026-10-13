@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from scripts.run_phase4_finetune import validation_metrics, run, _safe_atomic_json
+from scripts.run_phase4_finetune import _safe_atomic_json, run, validation_metrics
 
 
 def test_full_five_class_validation_scores():
