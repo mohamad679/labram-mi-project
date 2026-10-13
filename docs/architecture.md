@@ -33,7 +33,7 @@ The subject split remains **the same across recorded experiments**. The historic
 | [`src/phase55b_protocol.py`](../src/phase55b_protocol.py) | Immutable nominated model and 67/8 split | Denies Test waveform access |
 | [`scripts/run_phase55b_validation.py`](../scripts/run_phase55b_validation.py) | One-time nominated EEGNet Validation runner | User-run record completed; no plans to rerun |
 | [`src/model.py`](../src/model.py), [`src/phase5_cbramod.py`](../src/phase5_cbramod.py) | Authentic pretrained adapters | Different input transfer domains; only development benchmarks |
-| [`results/validation/`](../results/validation/) | Machine-readable audited scientific evidence | No HDF5 or checkpoint binaries in Git |
+| [`results/validation/`](../results/validation/README.md) | Machine-readable audited scientific evidence | No HDF5 or checkpoint binaries in Git |
 | [`scripts/render_final_figures.py`](../scripts/render_final_figures.py) | Deterministic SVG visualization **without fitting** | Reads only committed summary JSON |
 | [`src/explain.py`](../src/explain.py), [`src/uncertainty.py`](../src/uncertainty.py), [`app.py`](../app.py) | Historical interpretability, uncertainty and Gradio demo | Not causal, calibrated, distributed-model-ready or clinical |
 
