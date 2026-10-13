@@ -68,7 +68,7 @@ def test_reject_duplicate_train_index():
 
 
 def test_train_source_denies_both_heldouts_before_underlying_read():
-    ids, p = fake_metadata()
+    _, p = fake_metadata()
     backing = {int(p["train"][0]): "valid"}
     guard = PermittedEpochSource(backing, p["train"], "train")
     assert guard[p["train"][0]] == "valid"
@@ -79,7 +79,7 @@ def test_train_source_denies_both_heldouts_before_underlying_read():
 
 
 def test_validation_source_denies_test_and_train():
-    ids, p = fake_metadata()
+    _, p = fake_metadata()
     backing = {int(p["validation"][0]): "allowed"}
     guard = PermittedEpochSource(backing, p["validation"], "validation")
     assert guard[p["validation"][0]] == "allowed"
@@ -91,7 +91,7 @@ def test_validation_source_denies_test_and_train():
 
 @pytest.mark.parametrize("value", [True, False, [2], np.asarray([2])])
 def test_source_refuses_non_scalar_or_boolean_index(value):
-    ids, p = fake_metadata()
+    _, p = fake_metadata()
     guard = PermittedEpochSource({}, p["train"], "train")
     with pytest.raises(PermissionError):
         guard[value]
