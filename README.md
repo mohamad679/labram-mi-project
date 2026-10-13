@@ -70,7 +70,7 @@ python -m pytest -q
 python -m scripts.check_repository_quality
 ```
 
-Offline tests check code contracts, **not** medical usability or a fresh end-to-end GPU run. The [study notebooks](notebooks/) pin real runner/source revisions and the input hash; external libraries and official pretrained weights are credited in the [scientific provenance report](docs/final-research-snapshot.md). The archived [Gradio demonstration](results/phase4_gradio_demo.md) is illustrative and requires a separately provided compatible checkpoint.
+Offline tests check code contracts, **not** medical usability or a fresh end-to-end GPU run. The [study notebooks](notebooks/README.md) pin real runner/source revisions and the input hash; external libraries and official pretrained weights are credited in the [scientific provenance report](docs/final-research-snapshot.md). The archived [Gradio demonstration](results/phase4_gradio_demo.md) is illustrative and requires a separately provided compatible checkpoint.
 
 ## Repository guide
 
