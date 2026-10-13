@@ -15,7 +15,6 @@ from src.phase4_trainability import (
     set_finetuning_train_mode,
 )
 
-
 REVISION = "0563b6c626e7b40d9a36653b763715db94d945d7"
 
 
