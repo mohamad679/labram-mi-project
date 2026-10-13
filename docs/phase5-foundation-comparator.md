@@ -1,6 +1,6 @@
 # Phase 5 — Additional pretrained EEG foundation comparator: selection and gate
 
-**Status: IN PROGRESS / GATE OPEN.** Previous phases 1–4 passed their explicitly limited scientific validation gates. A new pretrained competitor must provide genuine weights, a validated adaptation from the *same* 104-subject input contract, and an independently reviewed real Kaggle run. Do **not** claim benchmark superiority or unlock Test from this proposal alone.
+**Status: single-seed development Validation-only execution PASS WITH DECLARED LIMITATIONS (2026-10-13).** CBraMod failed to outperform the earlier EEGNet or best LaBraM in this experiment; the full-tuning variant suffered complete majority-rest prediction collapse. These are negative results, not decoding success. The locked Test, multi-seed assessment and Phase 6 remain closed.
 
 ## Pretrained competitor feasibility audit
 
@@ -90,14 +90,111 @@ preserved (only its temporary Git clone path is moved for resumability).
 
 Kaggle CLI reference: https://github.com/Kaggle/kaggle-cli/blob/main/docs/datasets.md
 
-## Scientific supervisor gate
+## Real full-cohort CBraMod Kaggle outcome — 2026-10-13
 
-- [x] Offline adapter checks and public pretrained-weight authenticity checks PASS.
-- [x] Real public **Train participant 3** forward/backward and frozen-backbone gradient test PASS in GitHub CI (Test locked).
-- [ ] Kaggle run uses same HDF5 SHA and exact 75/14/15 participant split, with zero Test waveform access.
-- [ ] Both probe/full candidates produce valid 2,436 Prediction rows with correct 5-class order and complete frozen subject metadata.
-- [ ] Selected model checkpoints are SHA-hashed, reloaded and numerical predictions reproduced.
-- [ ] Independent reconstruction of Validation F1/balanced accuracy and model initialization fingerprint; review participant bootstrap with selection-bias caveats.
-- [ ] All code, notebook, provenance, model-card source and CI green on a reviewable PR; merge only after real Kaggle evidence.
+The owner executed the Validation-only CBraMod probe and full-tuning experiment
+with a fixed Phase-2 HDF5 and source-defined 75/14/15 participant split.
+The first attempt using automatic mixed precision hit **nonfinite gradient
+norms**; it was correctly aborted by `error_if_nonfinite=True`.
+A replacement run launched the same immutable runner **without `--amp`**
+(full FP32, as requested in the user-executed replacement cell), without
+weakening the gradient guards. The exported ZIP is SHA-256
+`4dfd594fceb9066b543bd1ffbaec17a0dfe192800a0efa6e65e9b792d8fb63de`.
+The exported reports do **not** contain an explicit `amp_enabled` metadata
+field; the FP32 designation depends on the actual user-executed command,
+not on the ZIP alone.
 
-**No Test inference, no Phase 6, and no PASS yet.**
+The reported source runner digest is
+`ad14418845d5c16c0a3a9904c6edac7d5a55c4eaa9ed3f1b2ffe6c840ce3f69e`,
+and its immutable source revision is
+`561870b2604d2f00198168049164337a5b9e1b16`.
+The reported official CBraMod pretrained safetensors SHA is
+`a939ace9aa1e229f08391ad8bb2d197b507ae2c519a50addf087f0151b2df5c3`.
+Every source input was verified during the run as HDF5 SHA-256
+`f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a`.
+The source preprocessing and 15-person Test embargo remain unchanged.
+
+**Independent evidence audit:** The seven ZIP entries passed archive CRC
+validation. Both Prediction NPZs were read without object deserialization;
+each has exactly 2,436 Validation rows, 14 correctly frozen subject IDs,
+identical truth and sample order, fixed five-class output order, and finite,
+nonnegative probabilities summing to 1.0. Independently recomputed
+accuracy, macro-F1, balanced accuracy and all 5×5 confusion counts exactly
+match Kaggle report JSON. The NPZ sample/subject ordering also matches the
+original Phase-3 EEGNet and Phase-4 LaBraM Prediction archives. **No held-out
+Test participant predictions appear in the new archive.**
+
+| Model / strategy | Validation accuracy | Macro-F1 | Balanced accuracy | Best epoch |
+| --- | ---: | ---: | ---: | ---: |
+| EEGNet (Phase 3, same 14 subjects) | .4799 | **.4191** | **.4418** | 24 |
+| LaBraM pretrained partial (Phase 4) | .3859 | .2546 | .2618 | 7 |
+| LaBraM pretrained full (Phase 4) | .3485 | .2481 | .2615 | 6 |
+| **CBraMod pretrained probe** | .2779 | .2027 | .2091 | 4 |
+| **CBraMod pretrained full** | .4828 | **.1302** | **.2000** | 1 |
+
+**Critical failure mode:** The CBraMod **full-tuning** selected model
+predicted `rest` for **all 2,436 Validation epochs**, with exact predicted
+class counts `[0,0,0,2436,0]` and recall 0.0 for feet, hands, left-hand
+and right-hand imagery. Its superficially higher accuracy .4828 is
+**identical to the majority-class dummy accuracy**, so this is a
+**classification collapse**, not an improvement. Full mode nonetheless
+reported nonzero backbone gradient and a changed backbone tensor digest,
+so the model *was* trained; training did not yield a useful classifier.
+
+The CBraMod **probe** predicted all five labels, with Macro-F1 .2027.
+Its backbone checksum was byte-identical before and after training,
+while both strategies loaded the same initial pretrained backbone.
+For both candidate checkpoints the user-executed Kaggle report says
+`checkpoint_reloaded=true` and
+`max_abs_probability_reload_difference=0.0`.
+Because weights were excluded from the user ZIP, the reviewer has
+**not independently reloaded the checkpoint binaries**.
+
+**Exploratory paired 14-subject cluster-bootstrap**, 2,000 replicated
+resamples of subject IDs with seed 42, using Validation predictions:
+
+| Difference in macro-F1 | Point difference | 95% development interval |
+| --- | ---: | ---: |
+| CBraMod Probe − CBraMod Full | +.0724 | [+.0558,+.0904] |
+| LaBraM Partial − CBraMod Probe | +.0519 | [+.0305,+.0734] |
+| EEGNet − CBraMod Probe | +.2164 | [+.1494,+.2772] |
+
+The same Validation cohort selected the best epoch for each candidate.
+These are **development intervals with selection bias**, not independent
+Test confidence intervals. The approaches also have materially different
+spectral/temporal transforms (CBraMod uses 200-Hz resampling,
+amplitude scaling, and 100 zero-padded samples), so differences are
+a *descriptive practical comparison*, not a strictly controlled model
+architecture ablation. All results are **one model training seed**.
+
+Machine-readable aggregate review:
+[phase5_cbramod_validation_seed42_20261013.json](../results/validation/phase5_cbramod_validation_seed42_20261013.json).
+This document intentionally **does not infer that a private Kaggle
+Dataset was uploaded successfully**: that is separate from training and
+is not evidenced in the submitted benchmark ZIP.
+
+**Scientific conclusion:** We successfully audited a genuinely pretrained
+additional foundation comparator on the exact same subject-disjoint
+development Validation, with no claimed held-out Test inference.
+This phase is a **scientifically valid negative result** under the
+declared preprocessing/training conditions. CBraMod did *not* beat
+EEGNet or the best fine-tuned LaBraM; its full-tuning failure is a
+strong reason to avoid claiming performance success or blindly
+increasing the model benchmark roster.
+
+## Scientific supervisor gate — final disposition
+
+- [x] Public pretrained checkpoint hash and all 211 pretrained backbone tensors strictly loaded in real public Train subject-3 smoke.
+- [x] Offline input adapter regression tests and latest GitHub CI passed.
+- [x] Full frozen 104-subject HDF5 and exact immutable 75/14/15 subject split checked during completed Kaggle execution.
+- [x] Probe/full completed and emitted independently audited same-order Validation-only predictions for 2,436 epochs each; **Test stayed locked**.
+- [x] Reported selected checkpoints SHA-hashed and reloaded in Kaggle; exported probabilities and 5×5 confusion matrices independently recomputed. Binary checkpoints were not supplied.
+- [x] Frozen Probe backbone unchanged, Full Backbone weights and gradient changed; **Full classifier collapse explicitly disclosed**.
+- [x] Same-cohort (same prediction-row order) comparisons to EEGNet and LaBraM reviewed with development/selection caveats.
+- [x] Immutable executed source commit, run SHA, pretrained SHA, input hash and scientific findings archived.
+
+**Gate: PASS WITH DECLARED LIMITATIONS ONLY for the Phase-5 first
+pretrained-competitor feasibility and exploratory development-Validation
+comparison. No pretrained CBraMod model-quality PASS is claimed.**
+No multi-seed, no final independent Test and **Phase 6 requires separate
+user authorization**.
