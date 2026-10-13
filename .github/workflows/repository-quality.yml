@@ -25,3 +25,5 @@ jobs:
           python -m pytest -q tests/test_repository_quality.py
       - name: Audit tracked files and all internal Markdown links
         run: python -m scripts.check_repository_quality --repo-root .
+      - name: Fail closed if final scientific charts disagree with archived real-run JSON
+        run: python -m scripts.render_final_figures --check
