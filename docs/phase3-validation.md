@@ -1,5 +1,7 @@
 # Phase 3 — Experimental validation gates
 
+> **Historical Phase 3 audit record.** The real source-locked 2026 Phase 3 baseline Kaggle run was subsequently completed and independently reviewed; the development results are recorded in [the 2026 Phase 3 JSON](../results/validation/phase3_validation_rerun_seed42_20261013.json). This document retains earlier pre-execution acceptance text as chronology. The [final snapshot](final-research-snapshot.md) is authoritative, and the original Test is still untouched.
+
 ## Evidence status
 
 **Code and unit tests are NOT empirical EEG results.** The offline regression tests use synthetic arrays only. Do not update README benchmark scores or commit generated scientific figures until real held-out runs have completed and their run metadata have been reviewed.
