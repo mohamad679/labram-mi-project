@@ -47,6 +47,49 @@ and downloads only the pinned pretrained safetensors. The Kaggle experiment is n
 `ad14418845d5c16c0a3a9904c6edac7d5a55c4eaa9ed3f1b2ffe6c840ce3f69e`.
 It writes **only Validation metrics and predictions** into a shareable ZIP, excluding raw EEG or checkpoint binaries.
 
+## Kaggle no-Input workaround: original public S3 HDF5 builder and one-file private Dataset
+
+To avoid the old notebook's 13,586-file Output and Kaggle `ListKernelSessionOutput`
+429 rate-limit, a **new** [20-cell Phase-5 Auto-S3 / private-Dataset
+notebook](../notebooks/NeuroDecode_Phase5_CBraMod_AutoS3_PrivateDataset_Kaggle.ipynb)
+does **not use** the Kaggle Notebook-Output API or require old Add Input.
+The base 12-cell Phase-5 pretrained-CBraMod runner and its locked hash are
+preserved (only its temporary Git clone path is moved for resumability).
+
+- If the verified 104-subject HDF5 exists already in Working or as a single
+  mounted input, use it directly. Otherwise run the **literal unchanged** S3
+  downloader embedded from the original user-executed cache-builder notebook
+  (standalone builder SHA-256
+  `a6943fdc0a677777ff429717257d9897d220bea97bc51bec35388e2ec43b9073`).
+- The downloader fetches 624 original imagery EDF runs from official unsigned
+  Amazon S3, processes them under independently isolated **Python 3.11,
+  MOABB 1.7.2 and MNE 1.13.2**, with the original immutable preprocessing
+  Git revision `74e511fb9c1ac4f0543b249b571e28e811ec92c3`. It
+  durably commits one participant at a time; downloaded EDFs are deleted only
+  after an HDF5 append succeeds. Runtime depends on the Kaggle connection;
+  the prior fast build duration is **not guaranteed**.
+- The final cache must match precisely
+  `f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a`
+  or **CBraMod training stops**. Scientific split and Test embargo do not change.
+- To avoid massive Notebook Outputs, raw EDFs, the isolated environment, and
+  Git working copies live under **`/kaggle/temp`**. Only the final HDF5,
+  short logs, and selected experiment artifacts are in `/kaggle/working`.
+- An optional `UPLOAD_PRIVATE_DATASET=True` cell creates
+  **only** a hard-linked `physionet_mi_104subjects.h5` and Kaggle
+  `dataset-metadata.json` in a dedicated folder, then calls
+  `kaggle datasets create` **without `--public`**. The ephemeral
+  hard-link is unlinked afterwards to avoid duplicate Notebook Output files.
+  Kaggle's default is private; users must **confirm visibility in Your
+  Datasets**. Upload is not guaranteed to succeed on Kaggle rate limits,
+  authentication failure, timeout, or an existing Dataset slug; failure
+  does not permit training on a nonmatching HDF5 nor automatically retry.
+  No live dataset publication is claimed from the local syntax test.
+- Model runner content and validation-only code are unchanged relative to
+  the initial Phase-5 notebook. The new notebook passed local syntax and
+  source-identity checks, **not yet a fresh full Kaggle S3+GPU run**.
+
+Kaggle CLI reference: https://github.com/Kaggle/kaggle-cli/blob/main/docs/datasets.md
+
 ## Scientific supervisor gate
 
 - [x] Offline adapter checks and public pretrained-weight authenticity checks PASS.
