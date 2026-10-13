@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 654" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">Train-only screening and one-time historical Validation outcome</title>
+<desc id="chart-description">Three-fold Train-only macro-F1: EEGNet raw .3212, EEGNet standardized .3912, EEGNeX standardized .3697, bandpower .2544. Historical Validation original EEGNet .4191, normalized EEGNet .4125; no overall improvement reproduced.</desc>
+<rect x="0" y="0" width="1200" height="654" fill="#f5f8fb"/><text x="46" y="65" font-size="14" fill="#147d82" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">TRAIN-ONLY OPTIMIZATION</text>
+<text x="46" y="105" font-size="31" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">What changed, and what held up?</text>
+<text x="46" y="135" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">3-fold subject-grouped OOF; 75 original Train subjects · 13,050 predictions per candidate</text>
+<rect x="34" y="153" width="1132" height="278" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<text x="62" y="194" font-size="14" fill="#0b162c" font-weight="650" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">TRAIN-ONLY OOF MACRO-F1</text>
+<text x="62" y="234" font-size="15" fill="#162439" font-weight="520" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Original EEGNet</text>
+<rect x="374" y="216" width="650" height="25" rx="6" fill="#eaf0f5"/>
+<rect x="374" y="216" width="417.5" height="25" rx="6" fill="#607186"/>
+<text x="1090" y="235" font-size="16" fill="#0b162c" font-weight="700" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.3212</text>
+<text x="62" y="282" font-size="15" fill="#162439" font-weight="520" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">EEGNet + epoch z-score</text>
+<rect x="374" y="264" width="650" height="25" rx="6" fill="#eaf0f5"/>
+<rect x="374" y="264" width="508.6" height="25" rx="6" fill="#147d82"/>
+<text x="1090" y="283" font-size="16" fill="#0b162c" font-weight="700" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.3912</text>
+<text x="62" y="330" font-size="15" fill="#162439" font-weight="520" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">EEGNeX + epoch z-score</text>
+<rect x="374" y="312" width="650" height="25" rx="6" fill="#eaf0f5"/>
+<rect x="374" y="312" width="480.7" height="25" rx="6" fill="#294f83"/>
+<text x="1090" y="331" font-size="16" fill="#0b162c" font-weight="700" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.3697</text>
+<text x="62" y="378" font-size="15" fill="#162439" font-weight="520" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Four-band log-power + LR</text>
+<rect x="374" y="360" width="650" height="25" rx="6" fill="#eaf0f5"/>
+<rect x="374" y="360" width="330.7" height="25" rx="6" fill="#d7a14f"/>
+<text x="1090" y="379" font-size="16" fill="#0b162c" font-weight="700" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.2544</text>
+<rect x="34" y="452" width="1132" height="165" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<text x="65" y="495" font-size="14" fill="#0b162c" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">TRANSLATION TO HISTORICAL VALIDATION</text>
+<text x="65" y="533" font-size="23" fill="#294f83" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">EEGNet original:  0.4191</text>
+<text x="624" y="533" font-size="23" fill="#147d82" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">EEGNet standardized:  0.4125</text>
+<text x="65" y="571" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">The Train-only +0.0700 OOF gain did not replicate as higher historical Validation macro-F1.</text>
+<text x="65" y="599" font-size="13" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Different training protocols; not a controlled Validation ablation. No Test results.</text>
+</svg>
