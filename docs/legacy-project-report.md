@@ -1,3 +1,7 @@
+# ARCHIVED LEGACY REPORT — not the validated 2026 benchmark
+
+> This document is preserved to explain the original project and earlier claims, **not** as an up-to-date runbook or confirmed pretrained results. For the final, empirically audited Train-only and development-Validation outcomes, see the [final research snapshot](final-research-snapshot.md). No additional seeds or Test inference will be performed.
+
 # LaBraM Fine-Tuning — Motor Imagery BCI
 
 Fine-tuning and evaluation of LaBraM, an EEG foundation model, on the PhysioNet Motor Imagery dataset.
@@ -259,7 +263,7 @@ The binary `.npz` file and generated PNG plots are not committed to GitHub. The 
 
 A short screen recording of the upgraded three-tab Gradio dashboard is available here:
 
-[Watch the Gradio dashboard demo](../results/figures/phase4_gradio_demo/gradio_dashboard_demo.mp4)
+[See the historical Gradio screenshot](../results/figures/phase4_gradio_demo/gradio_ui_prediction.png) (the obsolete ~24 MB recording has been removed from the current checkout; it remains in Git history).
 
 The dashboard demonstrates:
 
