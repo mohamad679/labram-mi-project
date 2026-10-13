@@ -27,6 +27,17 @@ CNNs are trained without AMP (FP32), AdamW LR 0.001, weight decay 1e-4, batch 32
 
 **Input preprocessing caution:** Original source was already 8–32Hz filtered. Filtering **short 2.5-second epochs again** can introduce edge transients, so this bandpower method is a simple exploratory comparator, not a claim of ideal filtering. The 0–3s source epoch's final 0.5s was already cropped from the immutable cache; optimizing alternate time windows requires a **separate, separately hashed new-data study**, not an unnoticed replacement of the frozen HDF5. EEGNeX and EEGNet are from scratch, **not pretrained foundation models**.
 
+## Executable Kaggle artifact (source-locked)
+
+Run the [20-cell NeuroDecode Phase 5.5 Train-only CV notebook](../notebooks/NeuroDecode_Phase55_TrainOnly_CV_Kaggle.ipynb) with **Kaggle GPU and Internet enabled**. Do not attach the huge old Notebook Output. Its existing-file-first original Amazon S3 preprocessing builder is unchanged from the previous approved HDF5 cache notebook; it builds in an isolated Python 3.11 MOABB environment under `/kaggle/temp` if the original complete file is absent, then fail-closes on the established full SHA-256. Optional one-HDF5 private Dataset publishing is **off by default** to avoid the recently encountered Kaggle 429 rate limit; it may be enabled explicitly after reviewing private visibility.
+
+All Train-only benchmark code is checked out at pinned GitHub source commit
+`b60a19c35bdbdf3c53c14b40d92193e36b557c70` and its Python source SHA-256 values are asserted before any GPU training:
+- `scripts/run_phase55_trainonly_cv.py` SHA-256: `f2b4388897c5c360d0ad12b6c6d8ab5fcdf5ab6ca6ffdf9c400aa98381c8bec0`.
+- `src/phase55_trainonly.py` SHA-256: `d2470246caf3a7fc1053da81ed2aa3b803b226a908e9c9708ab8c6544e2278ca`.
+
+The notebook creates `NeuroDecode_Phase55_TrainOnly_CV_Results.zip` with only aggregate protocols/reports and four **13,050-row Train-only** OOF NPZs. It excludes all raw EEG, model weights, original 14-subject Validation predictions and original 15-subject Test predictions. Selected checkpoints stay in private Kaggle output. The notebook has been syntax-compiled locally but **not yet executed in Kaggle**, so no scientific claims are derived from its prospective output.
+
 ## Model choice and reporting
 
 Every candidate must return all **13,050 Train-only out-of-fold rows** exactly once. Metrics: fixed-class five-way Macro-F1 (primary), balanced accuracy, all five class recalls, class counts, confusion matrices and participant-level Macro-F1. An all-one-class output is explicitly labeled **class collapse** and ineligible for the nominal winner regardless of its apparent overall accuracy. Among noncollapsed models select highest pooled out-of-fold Macro-F1; tie-break balanced accuracy, then alphabetical model name. This is **TRAIN-ONLY SELECTION**, and not a reliable final generalization estimate: the same Train cohort ultimately nominates the candidate. Differences between convex bandpower classifier (50 outer-train subjects) and early-stop CNN training (42+8) are declared, so this is a **practical fixed-protocol comparison**, not a parameter-matched architecture ablation.
