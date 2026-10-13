@@ -1,0 +1,39 @@
+{
+  "phase": 5,
+  "scope": "authentic_public_pretrained_backbone_compatibility_one_step",
+  "status": "PASS_ONLY_FOR_TRAIN_SUBJECT3_SMOKE",
+  "workflow": "https://github.com/mohamad679/labram-mi-project/actions/runs/38366074365",
+  "full_104_subject_validation_completed": false,
+  "executable_result": {
+    "status": "PASS_SINGLE_REAL_TRAIN_EEG_STEP_ONLY",
+    "subject_id": 3,
+    "train_partition_only": true,
+    "six_official_imagery_runs_staged": 6,
+    "signal_shape_after_adapter": [
+      64,
+      600
+    ],
+    "pretraining": {
+      "checkpoint_repo": "braindecode/cbramod-pretrained",
+      "checkpoint_revision": "584cdc415913739a05d84bf0c1cb3db397764507",
+      "checkpoint_sha256": "a939ace9aa1e229f08391ad8bb2d197b507ae2c519a50addf087f0151b2df5c3",
+      "exact_backbone_key_count": 211,
+      "head_initialized_randomly": true,
+      "pretrained_backbone_strict_load": true
+    },
+    "classification_logits_shape": [
+      1,
+      5
+    ],
+    "head_changed_after_optimizer_step": true,
+    "frozen_backbone_gradient_none": true,
+    "heldout_test_touched": false,
+    "not_full_104_subject_training": true
+  },
+  "limitations": [
+    "One real Train partition participant only, no cohort-wide model training",
+    "One SGD head update, not model convergence",
+    "No locked Test waveforms used for training or scoring",
+    "Full pretrained CBraMod fine-tuning must still be validated in a full Kaggle run"
+  ]
+}

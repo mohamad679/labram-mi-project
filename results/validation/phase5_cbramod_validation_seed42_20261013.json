@@ -1,0 +1,241 @@
+{
+  "phase": 5,
+  "report_date": "2026-10-13",
+  "scientific_scope": "single_seed_pretrained_CBraMod_probe_vs_full_finetune_on_locked_development_Validation_only",
+  "evidence_type": "user_executed_Kaggle_FP32_result_archive_independently_reviewed",
+  "user_supplied_zip_sha256": "4dfd594fceb9066b543bd1ffbaec17a0dfe192800a0efa6e65e9b792d8fb63de",
+  "archive_entries": 7,
+  "zip_integrity": "PASS (CRC verified; no corruption)",
+  "source": {
+    "executed_runner_commit": "561870b2604d2f00198168049164337a5b9e1b16",
+    "executed_runner_sha256": "ad14418845d5c16c0a3a9904c6edac7d5a55c4eaa9ed3f1b2ffe6c840ce3f69e",
+    "input_adapter_sha256": "672d0cff16b758b95334e81d1b5910c23e7484297698a5d66b296838e34f0cb9",
+    "notebook": "notebooks/NeuroDecode_Phase5_CBraMod_AutoS3_PrivateDataset_Kaggle.ipynb",
+    "checkpoint_repo": "braindecode/cbramod-pretrained",
+    "pretrained_checkpoint_revision": "584cdc415913739a05d84bf0c1cb3db397764507",
+    "pretrained_checkpoint_sha256": "a939ace9aa1e229f08391ad8bb2d197b507ae2c519a50addf087f0151b2df5c3",
+    "strict_backbone_weight_keys": 211
+  },
+  "dataset": {
+    "hdf5_sha256_reported": "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a",
+    "n_subjects": 104,
+    "n_epochs": 18096,
+    "training_subjects": 75,
+    "validation_subjects": 14,
+    "heldout_test_subjects": 15,
+    "training_epochs": 13050,
+    "validation_epochs": 2436,
+    "heldout_test_epochs": 2610,
+    "identical_phase3_phase4_validation_truth_subject_order": true,
+    "test_waveform_predictions_in_archive": 0,
+    "class_order": [
+      "feet",
+      "hands",
+      "left_hand",
+      "rest",
+      "right_hand"
+    ],
+    "validation_class_counts": [
+      319,
+      311,
+      324,
+      1176,
+      306
+    ]
+  },
+  "setup": {
+    "seed": 42,
+    "device": "cuda",
+    "precision": "FP32 (no --amp in owner-executed replacement training cell; AMP flag not separately recorded in results JSON)",
+    "epochs_limit": 10,
+    "early_stopping_patience": 3,
+    "batch_size": 8,
+    "head_lr": 0.001,
+    "backbone_lr_full": 0.00003,
+    "optimizer": "AdamW",
+    "input_adapter": "64 x 400 uV 160Hz to 64 x 500 200Hz via 5:4 scipy resample; /100uV scale; 100 zero tail samples to 64x600",
+    "effective_signal_seconds": 2.5,
+    "synthetic_padding_seconds": 0.5
+  },
+  "models": {
+    "probe": {
+      "status": "VALIDATION_ONLY_CHECKPOINT_RELOADED",
+      "epochs_ran": 7,
+      "best_epoch": 4,
+      "trainable_parameters": 1405,
+      "total_parameters": 4925405,
+      "accuracy": 0.2779146141215107,
+      "macro_f1": 0.2026545698349048,
+      "balanced_accuracy": 0.20911579610846767,
+      "validation_macro_f1_bootstrap_95": [
+        0.18682842119782428,
+        0.2193936274190805
+      ],
+      "prediction_class_counts": [
+        312,
+        454,
+        226,
+        940,
+        504
+      ],
+      "confusion_matrix": [
+        [
+          43,
+          53,
+          33,
+          114,
+          76
+        ],
+        [
+          38,
+          64,
+          38,
+          111,
+          60
+        ],
+        [
+          40,
+          60,
+          25,
+          122,
+          77
+        ],
+        [
+          155,
+          218,
+          103,
+          477,
+          223
+        ],
+        [
+          36,
+          59,
+          27,
+          116,
+          68
+        ]
+      ],
+      "pretrained_backbone_digest_before": "b5ec6c2c152f33903c67687cbc00b10af139992e8e5012a01d920c78508996b6",
+      "pretrained_backbone_digest_after": "b5ec6c2c152f33903c67687cbc00b10af139992e8e5012a01d920c78508996b6",
+      "checkpoint_sha256_reported": "3063cf8e2f6ae5e6981247f1ff7cbf1da98fbe6b0928ae44d82b223aa913f0ed",
+      "reloaded_probability_max_difference_reported": 0
+    },
+    "full": {
+      "status": "VALIDATION_ONLY_CHECKPOINT_RELOADED",
+      "epochs_ran": 4,
+      "best_epoch": 1,
+      "trainable_parameters": 4925405,
+      "total_parameters": 4925405,
+      "accuracy": 0.4827586206896552,
+      "macro_f1": 0.13023255813953488,
+      "balanced_accuracy": 0.2,
+      "validation_macro_f1_bootstrap_95": [
+        0.13023255813953488,
+        0.13023255813953488
+      ],
+      "prediction_class_counts": [
+        0,
+        0,
+        0,
+        2436,
+        0
+      ],
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          0,
+          319,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          311,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          324,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1176,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          306,
+          0
+        ]
+      ],
+      "pretrained_backbone_digest_before": "b5ec6c2c152f33903c67687cbc00b10af139992e8e5012a01d920c78508996b6",
+      "pretrained_backbone_digest_after": "596cae7a9853717726d6027a0aa648b058adc82c56c5610ce1c654df301a8624",
+      "full_backbone_gradient_observed": true,
+      "class_collapse_to_rest": true,
+      "checkpoint_sha256_reported": "254c932837131a37928b955385b9016fdb960066d1e3567257c5708ebc6929f4",
+      "reloaded_probability_max_difference_reported": 0
+    }
+  },
+  "independent_recalculation": {
+    "crc_and_npz_load": true,
+    "prediction_files": 2,
+    "same_label_order_and_subject_order": true,
+    "all_14_validation_subjects_frozen": true,
+    "all_probabilities_finite_nonnegative_normalized": true,
+    "metrics_and_confusions_match_exactly": true,
+    "cross_phase_comparison_recomputed_from_original_phase3_phase4_npz": true,
+    "no_test_subject_predictions": true
+  },
+  "cross_phase_reference_validation_macro_f1": {
+    "EEGNet_phase3": 0.4190536187148316,
+    "LaBraM_partial_phase4": 0.25457438015660155,
+    "LaBraM_full_phase4": 0.24808179855572804,
+    "CBraMod_probe_phase5": 0.2026545698349048,
+    "CBraMod_full_phase5": 0.13023255813953488
+  },
+  "exploratory_paired_14_subject_cluster_bootstrap": {
+    "repetitions": 2000,
+    "seed": 42,
+    "CBraMod_probe_minus_full": {
+      "delta": 0.07242201169536991,
+      "ci95": [
+        0.05580364461687268,
+        0.09035131545290068
+      ]
+    },
+    "LaBraM_partial_minus_CBraMod_probe": {
+      "delta": 0.05191981032169676,
+      "ci95": [
+        0.03047186662557856,
+        0.07338045840699131
+      ]
+    },
+    "EEGNet_minus_CBraMod_probe": {
+      "delta": 0.2163990488799268,
+      "ci95": [
+        0.14937674485268346,
+        0.2771537101065792
+      ]
+    }
+  },
+  "caveats": [
+    "Initial AMP/FP16 training failed on nonfinite gradient norm; completed rerun used user supplied command with --amp disabled. Results JSON does not independently record AMP status. No gradient safety guard was weakened.",
+    "Observed full fine-tuning predicts rest for all 2436 validation epochs. Accuracy 48.28% is precisely majority-prior baseline, not motor-decoding success.",
+    "CBraMod requires a materially different preprocessing adapter with 200-Hz resampling, 100 microvolt scaling and trailing synthetic zero patch; direct architecture comparisons are descriptive, not strict control.",
+    "Validation selected the best epochs; paired subject-bootstrap intervals are exploratory and likely optimistically selected, not independent confirmatory generalization estimates.",
+    "Only one training seed 42; no cross-seed robustness, external validation or heldout test inference.",
+    "Raw HDF5 and selected checkpoint binaries are not in shared results ZIP; original execution attests dataset hash and reload, independent review checks derived prediction arrays and logs.",
+    "No private Kaggle Dataset creation success is inferred from this ZIP, which contains model output only."
+  ],
+  "scientific_gate": "PASS only for completing provenance-verified single-seed development Validation comparison and documenting negative/degenerate results; NOT a PASS of model performance",
+  "phase6_authorized": false
+}
