@@ -263,9 +263,9 @@ def run(args):
     manifest = json.loads(Path(args.split_manifest).read_text())
     indices=validate_frozen_split(y,subjects,manifest)
     print("TEST LOCKED: no waveform inference on 15 test subjects",flush=True)
-    from huggingface_hub import __version__ as hf_version
     import braindecode
     import torch
+    from huggingface_hub import __version__ as hf_version
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("No CUDA GPU; do not silently fall back to CPU")
     checkpoint=load_checkpoint_from_hf()
