@@ -1,44 +1,41 @@
-# Documentation hub
+# Evidence-first documentation
 
-**NeuroDecode-LaBraM** is a research-engineering prototype for five-class motor-imagery EEG, with a LaBraM-based classifier, exploratory uncertainty estimates and transformer attention inspection. This documentation distinguishes code quality, real weight/data integration checks, and scientifically validated model performance.
+**Research status:** Closed development snapshot, 2026-10-13. **No further model or seed training; the original 15-subject Test cohort was not evaluated.** Results and limitations are recorded, not automatically extended into future benchmark claims.
 
-## Start here
+[← Read the visual project overview](../README.md) · [Open all results figures](visualization-gallery.md)
 
-**Want to run the full dataset on Kaggle?** First [download a resumable single HDF5 EEG cache on your computer](local-cache-and-kaggle.md), then [follow the Kaggle GPU instructions](kaggle-experiment.md) and [open the Notebook](../run_kaggle.ipynb). The original model checkpoint and test accuracy are not claimed as independently verified.
+## The essential three documents
 
+| Guide | What it establishes |
+|---|---|
+| [Final scientific snapshot](final-research-snapshot.md) | All audited outcomes, negative findings, evidence limitations and final research freeze |
+| [Visualization gallery](visualization-gallery.md) | Seven real-data SVG figures, each traced to versioned experimental records |
+| [Model card](model-card.md) | Which models were trained, data boundaries, out-of-scope medical use |
 
-| Goal | Document |
-| --- | --- |
-| Understand the architecture and boundaries | [System architecture](architecture.md) |
-| Inspect existing visual outputs without overstating claims | [Visualization gallery](visualization-gallery.md) |
-| Install and reproduce the pipeline | [Reproducibility guide](reproducibility.md) |
-| Build a Kaggle-only S3 EEG cache | [S3 resumable cache builder](kaggle-s3-cache.md) |
-| Understand EEG channel order and voltage conversion | [EEG data provenance](eeg-data-provenance.md) |
-| Check pretrained adaptation evidence | [Phase 3 experimental gates](phase3-validation.md) |
-| Generate metrics and plots from real predictions | [Benchmarking](benchmarking.md) |
-| Identify known scientific weaknesses | [Research integrity audit](research-audit.md) |
-| Read model limitations and intended use | [Model card](model-card.md) |
-| See release acceptance requirements | [Release readiness](release-readiness.md) |
-| Inspect original, unverified historical results | [Archived project report](legacy-project-report.md) |
+## Reconstruct the finished sequence
 
-## Evidence labels
+| Completed stage | Method/evidence |
+|---|---|
+| Phase 1 | [Real EEG and official pretrained adapter acceptance](phase1-scientific-acceptance.md) |
+| Phase 2 | [Full 104-subject PhysioNet/MOABB data provenance](phase2-data-audit.md) |
+| Phase 3 | [Development-Validation baselines and frozen split](phase3-baseline-protocol.md) · [machine record](../results/validation/phase3_validation_rerun_seed42_20261013.json) |
+| Phase 4 | [Pretrained LaBraM probe/partial/full](phase4-finetuning-protocol.md) · [machine record](../results/validation/phase4_validation_seed42_20261013.json) |
+| Phase 5 | [Real pretrained CBraMod and class-collapse finding](phase5-foundation-comparator.md) · [machine record](../results/validation/phase5_cbramod_validation_seed42_20261013.json) |
+| Phase 5.5a | [75-subject Train-only candidate screen](phase55-train-only-optimization.md) · [machine record](../results/validation/phase55_trainonly_oof_audit_20261013.json) |
+| Phase 5.5b | [One-time final development Validation](phase55b-one-time-validation-protocol.md) · [machine record](../results/validation/phase55b_one_time_validation_seed42_20261013.json) |
 
-**Verified offline:** deterministic unit tests, syntactic compilation, lint, and local Markdown links; these do not prove real-data model validity.
+## Research implementation reference
 
-**Verified integration:** the [pinned CPU pretrained weight audit](https://github.com/mohamad679/labram-mi-project/actions/runs/38234001055) exercised the 400-sample adaptation, while the [public PhysioNet preprocessing audit](https://github.com/mohamad679/labram-mi-project/actions/runs/38234916355) compared two MOABB output paths for one subject.
+- [Data integrity, EEG units and channels](eeg-data-provenance.md)
+- [Model/data processing architecture](architecture.md)
+- [Static reproducibility / environment guidance](reproducibility.md)
+- [Repository release boundaries and ownership decisions](release-readiness.md)
+- [Scientific legacy and unverified archived claims](research-audit.md) · [Original archived report](legacy-project-report.md)
+- [Original public Amazon S3 HDF5 reconstruction](kaggle-s3-cache.md)
+- [Security and data privacy](../SECURITY.md)
 
-**Not yet scientifically verified:** a full independent pretrained-versus-scratch benchmark over the eligible dataset, across multiple random model seeds and a fixed held-out subject split. No claimed clinical readiness.
+The version-controlled notebooks in [`notebooks/`](../notebooks/) are retained for **historical run traceability**, not invitations to tune the Validation set or open the Test cohort. Source and checkpoint hashes are recorded by the corresponding phase evidence. See the [research snapshot](final-research-snapshot.md) for what was and was not independently reproduced.
 
-## Useful commands
+## Legal and scientific scope
 
-```bash
-python -m pytest -q
-python -m scripts.check_repository_quality
-python -m src.train --config configs/baseline.yaml
-```
-
-Running full training may download public EEG and require substantial GPU resources. The default baseline initializes from scratch. Refer to the reproducibility guide for checkpoint and dataset assumptions. The current repository name is `labram-mi-project`; the documentation uses the proposed project identity **NeuroDecode-LaBraM**.
-
-## Responsible sharing
-
-The public repository does not currently contain an explicitly selected license for its own source code. The licenses of PhysioNet recordings, Braindecode, external pretrained weights, and this project's original implementation must be assessed independently before redistributing artifacts. Avoid uploading raw EEG recordings or subject-level dataset caches to Git.
+The repository has **no owner-selected source license**, no independent Test study, and no independently downloadable final model weights. It is not a medical or accessibility-grade classifier. Public visibility is not a grant of reuse rights. Existing upstream software, models and PhysioNet data have their own terms and attribution requirements.
