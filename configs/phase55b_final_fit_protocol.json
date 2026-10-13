@@ -1,0 +1,60 @@
+{
+  "phase": "5.5b",
+  "status": "PRESPECIFIED_BEFORE_HISTORICAL_VALIDATION_EVALUATION",
+  "selected_model": "eegnet_epoch_standardized",
+  "selection_evidence_path": "results/validation/phase55_trainonly_oof_audit_20261013.json",
+  "immutable_input_sha256": "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a",
+  "original_train_subjects": 75,
+  "inner_split": {
+    "method": "GroupShuffleSplit on 75 sorted frozen Train subject IDs",
+    "random_state": 142,
+    "train_fit_subjects": 67,
+    "inner_early_stop_subjects": [
+      9,
+      25,
+      56,
+      61,
+      70,
+      81,
+      83,
+      90
+    ]
+  },
+  "model": {
+    "architecture": "braindecode==1.5.1 EEGNet",
+    "n_chans": 64,
+    "n_times": 400,
+    "sfreq_hz": 160,
+    "n_classes": 5,
+    "input_normalization": "per-epoch per-channel z-score, same as Phase5.5a",
+    "model_seed": 42,
+    "optimizer": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "max_epochs": 25,
+    "patience": 5,
+    "loss": "CrossEntropyLoss balanced weights from only 67 fit subject labels",
+    "precision": "FP32",
+    "gradient_max_l2": 1.0
+  },
+  "checkpoint_selection": "maximize 5-class macro-F1 on 8 Train-only early-stop subjects",
+  "historical_validation_policy": {
+    "subjects": 14,
+    "epochs": 2436,
+    "evaluation_count": 1,
+    "allowed_after_checkpoint_reloaded": true,
+    "not_for_model_selection": true
+  },
+  "test_policy": {
+    "subjects": 15,
+    "waveform_reads": 0,
+    "inference": 0
+  },
+  "uncertainty": {
+    "unit": "Validation subject",
+    "bootstrap_replicates": 2000,
+    "seed": 42
+  },
+  "no_test_before_further_authorization": true
+}
