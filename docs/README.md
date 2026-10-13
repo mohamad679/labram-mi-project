@@ -34,7 +34,7 @@
 - [Original public Amazon S3 HDF5 reconstruction](kaggle-s3-cache.md)
 - [Security and data privacy](../SECURITY.md)
 
-The version-controlled notebooks in [`notebooks/`](../notebooks/) are retained for **historical run traceability**, not invitations to tune the Validation set or open the Test cohort. Source and checkpoint hashes are recorded by the corresponding phase evidence. See the [research snapshot](final-research-snapshot.md) for what was and was not independently reproduced.
+The version-controlled notebooks in [`notebooks/`](../notebooks/README.md) are retained for **historical run traceability**, not invitations to tune the Validation set or open the Test cohort. Source and checkpoint hashes are recorded by the corresponding phase evidence. See the [research snapshot](final-research-snapshot.md) for what was and was not independently reproduced.
 
 ## Legal and scientific scope
 
