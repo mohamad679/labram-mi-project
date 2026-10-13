@@ -1,0 +1,154 @@
+{
+  "phase": 3,
+  "review_date": "2026-10-13",
+  "scientific_scope": "exploratory_subject_disjoint_development_validation",
+  "validation_only": true,
+  "test_evaluations": 0,
+  "archive": {
+    "filename": "NeuroDecode_Phase3_Validation_Rerun.zip",
+    "sha256": "cff52a9cc28148343f70772523de849d083955bf5a459f3c2fab346e79442d8f",
+    "note": "User-supplied results-only ZIP; model weight files not included"
+  },
+  "reproducibility": {
+    "executed_runner_sha256": "9100671e93ccf3d21c74d123273cbe96e78ea30ebc5791b8e47e8f15e0ddf210",
+    "repository_runner": "scripts/run_phase3_validation.py",
+    "source_commit_used_during_execution": "b3af6247d027cd1a3dd33915368bad03f9bf220c",
+    "dataset_sha256": "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a",
+    "locked_split_seed": 42,
+    "model_seed": 42,
+    "participants": {
+      "train": 75,
+      "validation": 14,
+      "test_untouched": 15
+    },
+    "epoch_counts": {
+      "train": 13050,
+      "validation": 2436,
+      "test_untouched": 2610
+    },
+    "validated_class_names": [
+      "feet",
+      "hands",
+      "left_hand",
+      "rest",
+      "right_hand"
+    ],
+    "environment": {
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128",
+      "braindecode": "1.5.1",
+      "moabb": "1.7.2",
+      "mne": "1.13.2",
+      "pyriemann": "0.12",
+      "numpy": "2.1.3",
+      "sklearn": "1.6.1"
+    },
+    "executed_runner_source_location": "notebooks/NeuroDecode_Phase3_Validation_Rerun_Kaggle.ipynb (cell 9 runner_source)",
+    "repository_runner_sha256_after_semantics_preserving_ruff_cleanup": "be15a7d746828a292dc33f847899dcaaa85ecb45310661dd5de4c3d98456ed19",
+    "repository_runner_note": "Runnable module in scripts/run_phase3_validation.py differs from original executed source only in import ordering, equivalent set comprehension and redundant int(len) removal. Exact executed 9100... source remains embedded in the tracked notebook. Kaggle results were not produced using the reformatted module."
+  },
+  "independent_validation_prediction_review": {
+    "files": 4,
+    "shape_each": [
+      2436,
+      5
+    ],
+    "all_same_labels_and_order": true,
+    "all_same_14_validation_subjects": true,
+    "all_test_subjects_excluded": true,
+    "all_probs_nonnegative_finite_normalized": true,
+    "confusion_matrices_recomputed_equal_to_reports": true,
+    "accuracy_macro_f1_balanced_accuracy_recomputed_equal_to_reports": true,
+    "embedded_notebook_runner_sha256_matches_report": true
+  },
+  "methods": {
+    "dummy": {
+      "accuracy": 0.4827586206896552,
+      "macro_f1": 0.13023255813953488,
+      "balanced_accuracy": 0.2,
+      "macro_f1_subject_bootstrap95": [
+        0.13023255813953488,
+        0.13023255813953488
+      ]
+    },
+    "riemann": {
+      "accuracy": 0.2766830870279146,
+      "macro_f1": 0.2568466555641105,
+      "balanced_accuracy": 0.28215315726352963,
+      "macro_f1_subject_bootstrap95": [
+        0.21260655392292327,
+        0.28881616529535514
+      ],
+      "riemann_solver": "lbfgs",
+      "solver_max_iterations": 3000,
+      "actual_solver_iterations": 317,
+      "solver_converged": true,
+      "scaler_training_only": true,
+      "tangent_reference_training_only": true
+    },
+    "eegnet": {
+      "accuracy": 0.47988505747126436,
+      "macro_f1": 0.4190536187148316,
+      "balanced_accuracy": 0.4418042087767889,
+      "macro_f1_subject_bootstrap95": [
+        0.3529284069099076,
+        0.4728957431607095
+      ],
+      "best_epoch": 24,
+      "checkpoint_sha256_reported": "921a35a20c722ab34e75ba7f1a5b30a6a186368a6b5cae7006e60951faff3f77",
+      "best_checkpoint_saved_and_reloaded_in_kaggle_log": true,
+      "weight_file_not_present_in_shared_zip": true
+    },
+    "labram_pretrained_probe": {
+      "accuracy": 0.3817733990147783,
+      "macro_f1": 0.1860972124038156,
+      "balanced_accuracy": 0.20156268792938564,
+      "macro_f1_subject_bootstrap95": [
+        0.16759305192108645,
+        0.19972055168210842
+      ],
+      "best_epoch": 1,
+      "checkpoint_sha256_reported": "eaa084dd6063eb934f985ea325bcfc6f0c8bb166c4a893401d270bb44d04255d",
+      "best_checkpoint_saved_and_reloaded_in_kaggle_log": true,
+      "weight_file_not_present_in_shared_zip": true,
+      "pretrained_revision": "0563b6c626e7b40d9a36653b763715db94d945d7"
+    }
+  },
+  "exploratory_development_bootstrap": {
+    "seed": 42,
+    "n_validation_subjects": 14,
+    "n_bootstraps": 2000,
+    "paired_method": "subject_cluster_resample_with_replacement",
+    "eegnet_minus_labram_probe": {
+      "macro_f1_difference": 0.232956406311016,
+      "ci95": [
+        0.18053562212657584,
+        0.2859932284920656
+      ]
+    },
+    "eegnet_minus_riemann": {
+      "macro_f1_difference": 0.16220696315072108,
+      "ci95": [
+        0.10927863969516009,
+        0.22406523203890547
+      ]
+    },
+    "warning": "Validation used for selecting best network epoch. Intervals are exploratory and cannot be treated as confirmatory held-out generalization."
+  },
+  "supervisor_conditions": {
+    "full_hdf5_sha_and_subject_split_checked": true,
+    "validation_only_predictions_and_rerun_metrics_verified": true,
+    "riemann_convergence_established": true,
+    "checkpoints_saved_reload_compared": "reported by executed Kaggle runner; exact model weight bytes not in submitted ZIP",
+    "exact_runner_archived_in_repository": true,
+    "offline_unit_tests_verified": true,
+    "heldout_test_remains_embargoed": true
+  },
+  "phase3_gate": "PASS_FOR_SINGLE_SEED_EXPLORATORY_VALIDATION_BASELINES_WITH_DECLARED_LIMITATIONS",
+  "remaining_for_future_phases": [
+    "Independent heldout evaluation only after freezing model selection and receiving user approval",
+    "Multiple training seeds and robust uncertainty assessment planned for later scientific-validation phases",
+    "Checkpoint binary files must be preserved separately for literal weight-level independent re-verification",
+    "Baseline results do not establish that EEGNet is universally better than fine-tuned LaBraM"
+  ]
+}
