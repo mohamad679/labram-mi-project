@@ -27,6 +27,16 @@ The [Phase 5.5b Kaggle notebook](../notebooks/NeuroDecode_Phase55b_OneTime_Valid
 
 The *real* 104-person GPU execution is **not supplied yet**. CI can establish code/test and one-step public-Train EEG feasibility only. Saved checkpoint binaries remain private in Kaggle and are **not independently reloaded from the results-only ZIP**. Reported Kaggle checkpoint reload must be distinguished from independent evidence review.
 
+## Exact user-executable source pin and reproducible notebook
+
+The 20-cell [Kaggle execution notebook](../notebooks/NeuroDecode_Phase55b_OneTime_Validation_Kaggle.ipynb) pins the **pre-notebook executable source commit** `e160e10cc195ac627f9afbd1b155d07eda71a4c5`, and independently SHA-checks:
+
+- Runner `scripts/run_phase55b_validation.py`: `116bb70a8a988400b29ba120d79bad4ef39d3a42cc1a86a1e762570b57b0b13d`.
+- Locked partition/nomination guards `src/phase55b_protocol.py`: `806fa50527801e54f8df83e59c607f91a093b00193484e519a064a737ba33205`.
+- Original selected per-epoch normalizer `src/phase55_trainonly.py`: `16d14df18c5b02ad85ed46e9fae9d73d15bab0be257c9e852069fa21173bf6f8`.
+
+All three pull-request GitHub CI workflows passed on notebook commit `2b4461d9134c5b53c0a286ed24909bfa91b6ba80`: Ruff + 134 unit tests (2 skipped), documentation integrity, and authentic public Train-S003 normalized-EEGNet gradient smoke. These are **prerequisite engineering gates**, not evidence of final 104-person training or held-out Validation performance. The PR must remain Draft until the user's actual Kaggle results ZIP has been independently audited.
+
 ## Acceptance gate
 
 - [ ] GitHub CI lint/test/docs and genuine public Train EEG smoke all pass at final head.
