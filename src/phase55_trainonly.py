@@ -5,7 +5,6 @@ The frozen cohort is checked by Phase 3 before constructing these train-only fol
 """
 from __future__ import annotations
 
-
 import numpy as np
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 from sklearn.model_selection import GroupKFold, GroupShuffleSplit
@@ -160,7 +159,7 @@ def score_five_class(y: np.ndarray, probs: np.ndarray, subject_ids: np.ndarray) 
         "true_class_counts": np.bincount(y, minlength=N_CLASSES).tolist(),
         "predicted_class_counts": counts.tolist(),
         "confusion_matrix": confusion_matrix(y, pred, labels=np.arange(N_CLASSES)).tolist(),
-        "n_subjects": int(len(np.unique(subject_ids))),
+        "n_subjects": len(np.unique(subject_ids)),
         "per_subject_macro_f1": by_subject,
         "single_class_collapse": fully_collapsed,
     }
@@ -173,9 +172,9 @@ def select_predeclared(candidates: dict) -> dict:
     eligible = {k: v for k, v in candidates.items() if not v["single_class_collapse"]}
     if not eligible:
         return {"selected": None, "status": "NO_NONCOLLAPSED_CANDIDATE"}
-    chosen = sorted(eligible, key=lambda k: (
+    chosen = min(eligible, key=lambda k: (
         -eligible[k]["macro_f1"],
         -eligible[k]["balanced_accuracy"], k,
-    ))[0]
+    ))
     return {"selected": chosen, "status": "TRAIN_ONLY_OOF_SELECTION", "metric": "macro_f1",
             "tie_breaker": "balanced_accuracy_then_lexicographic_name"}
