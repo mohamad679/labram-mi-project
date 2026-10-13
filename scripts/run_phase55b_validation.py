@@ -6,7 +6,6 @@ frozen and independently reloaded. All original 15 Test subjects remain locked.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import platform
 import random
@@ -32,7 +31,7 @@ from src.phase55b_protocol import (
     make_frozen_final_split,
     verify_train_only_nomination,
 )
-from src.portable_eeg import H5SignalSource, LABELS, inspect_cache
+from src.portable_eeg import LABELS, H5SignalSource, inspect_cache
 from src.subject_statistics import subject_cluster_bootstrap
 
 
@@ -203,8 +202,8 @@ def run(args):
                    "original_train_subjects": 75, "actual_fit_subjects": final_split["fit_subjects"],
                    "actual_early_stop_subjects": final_split["early_subjects"],
                    "fit_subject_count": 67, "early_subject_count": 8,
-                   "fit_epoch_count": int(len(fit_ids)), "early_epoch_count": int(len(early_ids)),
-                   "heldout_validation_subjects": 14, "validation_epoch_count": int(len(val_ids)),
+                   "fit_epoch_count": len(fit_ids), "early_epoch_count": len(early_ids),
+                   "heldout_validation_subjects": 14, "validation_epoch_count": len(val_ids),
                    "heldout_test_subjects": 15, "test_waveform_inference": False,
                    "validation_evaluations": 1,
                    "validation_used_for_early_stopping": False,
