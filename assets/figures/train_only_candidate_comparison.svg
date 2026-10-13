@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="850.752pt" height="425.693pt" viewBox="0 0 850.752 425.693" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-13T12:52:50.435457</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 425.693 
+L 850.752 425.693 
+L 850.752 0 
+L 0 0 
+z
+" style="fill: #0b1424"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 294.048 365.459688 
+L 837.792 365.459688 
+L 837.792 93.299688 
+L 294.048 93.299688 
+z
+" style="fill: #111f33"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 294.048 365.459688 
+L 294.048 93.299688 
+" clip-path="url(#p22c840f7b2)" style="fill: none; stroke: #263953; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #a8bad0" x="294.048" y="378.077813" transform="rotate(-0 294.048 378.077813)">0.0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 412.253217 365.459688 
+L 412.253217 93.299688 
+" clip-path="url(#p22c840f7b2)" style="fill: none; stroke: #263953; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #a8bad0" x="412.253217" y="378.077813" transform="rotate(-0 412.253217 378.077813)">0.1</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 530.458435 365.459688 
+L 530.458435 93.299688 
+" clip-path="url(#p22c840f7b2)" style="fill: none; stroke: #263953; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #a8bad0" x="530.458435" y="378.077813" transform="rotate(-0 530.458435 378.077813)">0.2</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 648.663652 365.459688 
+L 648.663652 93.299688 
+" clip-path="url(#p22c840f7b2)" style="fill: none; stroke: #263953; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_4">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #a8bad0" x="648.663652" y="378.077813" transform="rotate(-0 648.663652 378.077813)">0.3</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 766.86887 365.459688 
+L 766.86887 93.299688 
+" clip-path="url(#p22c840f7b2)" style="fill: none; stroke: #263953; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_5">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #a8bad0" x="766.86887" y="378.077813" transform="rotate(-0 766.86887 378.077813)">0.4</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #a8bad0" x="565.92" y="401.691563" transform="rotate(-0 565.92 401.691563)">Train-only pooled OOF Macro-F1</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_11"/>
+     <g id="text_7">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #a8bad0" x="282.048" y="131.417404" transform="rotate(-0 282.048 131.417404)">EEGNet · standardized</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_12"/>
+     <g id="text_8">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #a8bad0" x="282.048" y="199.764968" transform="rotate(-0 282.048 199.764968)">EEGNeX · standardized</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_13"/>
+     <g id="text_9">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #a8bad0" x="282.048" y="268.112532" transform="rotate(-0 282.048 268.112532)">EEGNet · raw</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_14"/>
+     <g id="text_10">
+      <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #a8bad0" x="282.048" y="336.460096" transform="rotate(-0 282.048 336.460096)">Filter-bank log-power + LR</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 294.048 105.670597 
+L 756.494737 105.670597 
+L 756.494737 148.046086 
+L 294.048 148.046086 
+z
+" clip-path="url(#p22c840f7b2)" style="fill: #32dcc0"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 294.048 174.018161 
+L 731.109802 174.018161 
+L 731.109802 216.39365 
+L 294.048 216.39365 
+z
+" clip-path="url(#p22c840f7b2)" style="fill: #64adff"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 294.048 242.365725 
+L 673.69274 242.365725 
+L 673.69274 284.741214 
+L 294.048 284.741214 
+z
+" clip-path="url(#p22c840f7b2)" style="fill: #58738d"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 294.048 310.713289 
+L 594.71198 310.713289 
+L 594.71198 353.088778 
+L 294.048 353.088778 
+z
+" clip-path="url(#p22c840f7b2)" style="fill: #58738d"/>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #f2f7fc" x="767.133206" y="130.721466" transform="rotate(-0 767.133206 130.721466)">0.391</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #f2f7fc" x="741.748271" y="199.06903" transform="rotate(-0 741.748271 199.06903)">0.370</text>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #f2f7fc" x="684.331209" y="267.416595" transform="rotate(-0 684.331209 267.416595)">0.321</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #f2f7fc" x="605.350449" y="335.764159" transform="rotate(-0 605.350449 335.764159)">0.254</text>
+   </g>
+  </g>
+  <g id="text_15">
+   <text style="font-weight: 700; font-size: 23px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #f2f7fc" x="12.96" y="30.436406" transform="rotate(-0 12.96 30.436406)">Train-only screening  /  fixed candidate set</text>
+  </g>
+  <g id="text_16">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a8bad0" x="12.96" y="50.837031" transform="rotate(-0 12.96 50.837031)">75 Train subjects · 3 subject-grouped outer folds · 13,050 OOF predictions per method</text>
+  </g>
+  <g id="text_17">
+   <text style="font-size: 9.2px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #a8bad0" x="12.96" y="410.819688" transform="rotate(-0 12.96 410.819688)">Model selected by Train-only OOF metric   •   These scores are NOT historical Validation / Test scores</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p22c840f7b2">
+   <rect x="294.048" y="93.299688" width="543.744" height="272.16"/>
+  </clipPath>
+ </defs>
+</svg>
