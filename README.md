@@ -82,6 +82,8 @@ Offline tests check code contracts, **not** medical usability or a fresh end-to-
 | [Data provenance](docs/phase2-data-audit.md) | The actual 104-participant EEGMMIDB/MOABB data contract |
 | [Model card](docs/model-card.md) | What the models do, what they do **not** establish |
 | [Research integrity audit](docs/research-audit.md) | Why older historical metrics are preserved separately |
+| [Repository audit](docs/repository-audit.md) | Final cleanup decisions, retained evidence and release boundaries |
+| [Changelog](CHANGELOG.md) | Study milestones and research closure |
 
 ## Responsible use and credit
 
