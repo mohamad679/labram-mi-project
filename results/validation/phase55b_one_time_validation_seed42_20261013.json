@@ -1,0 +1,170 @@
+{
+  "phase": "5.5b",
+  "status": "COMPLETED_ONE_TIME_DEVELOPMENT_VALIDATION_NO_TEST",
+  "date": "2026-10-13",
+  "archive": {
+    "name": "NeuroDecode_Phase55b_OneTime_Validation_Results.zip",
+    "sha256": "8e88e4463d1fa96856cb127f57e4a706042ff441095ccb1c1ad5d9109f635391",
+    "zip_crc": "PASS",
+    "entries": [
+      "report.json",
+      "validation_predictions.npz"
+    ]
+  },
+  "source": {
+    "runner_sha256": "116bb70a8a988400b29ba120d79bad4ef39d3a42cc1a86a1e762570b57b0b13d",
+    "protocol_sha256": "806fa50527801e54f8df83e59c607f91a093b00193484e519a064a737ba33205",
+    "normalizer_sha256": "16d14df18c5b02ad85ed46e9fae9d73d15bab0be257c9e852069fa21173bf6f8",
+    "HDF5_sha256": "f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a",
+    "subject_split_manifest_sha256": "d1264ac81e725c9b87b5d2de4f847268f67602743817674b856fd19f44a801c8",
+    "code_commit": "e160e10cc195ac627f9afbd1b155d07eda71a4c5"
+  },
+  "design": {
+    "nominated_model": "eegnet_epoch_standardized",
+    "selection_source": "prior 75 Train subject OOF, never reselected on historic Validation",
+    "fit_subjects": 67,
+    "fit_epochs": 11658,
+    "early_stop_subjects": [
+      9,
+      25,
+      56,
+      61,
+      70,
+      81,
+      83,
+      90
+    ],
+    "early_stop_epochs": 1392,
+    "validation_subjects": 14,
+    "validation_epochs": 2436,
+    "test_subjects_locked": 15,
+    "test_waveform_inference": false,
+    "original_validation_used_for_early_stopping": false,
+    "validation_evaluations_reported": 1,
+    "model_seed": 42,
+    "inner_split_seed": 142,
+    "epochs_executed": 12,
+    "selected_epoch": 7,
+    "precision": "FP32_no_autocast",
+    "weight_decay": 0.0001,
+    "learning_rate": 0.001,
+    "batch_size": 32,
+    "max_epochs": 25,
+    "patience": 5,
+    "gradient_finite_guard_enabled": true,
+    "checkpoint_reloaded_in_Kaggle": true,
+    "checkpoint_sha256_reported": "3aa4753297517ea4b13d0de2106114b8e349f53effd3de3892fc1073ba5d6c0a",
+    "checkpoint_binary_not_in_shared_ZIP": true
+  },
+  "independent_numpy_recalculation": {
+    "all_2436_validation_rows_unique": true,
+    "all_14_reserved_validation_subjects_exact_match": true,
+    "all_5_classes_present_in_truth": true,
+    "all_5_classes_predicted": true,
+    "probabilities_finite_nonnegative_normalized": true,
+    "raw_npz_loaded_without_pickle": true,
+    "accuracy_matches_json": true,
+    "macro_f1_matches_json": true,
+    "balanced_accuracy_matches_json": true,
+    "confusion_matrix_matches_json": true,
+    "no_Test_subject_ids_in_npz": true,
+    "raw_EEG_and_checkpoint_not_in_zip": true
+  },
+  "results": {
+    "accuracy": 0.4885057471264368,
+    "macro_f1": 0.4125353503019446,
+    "balanced_accuracy": 0.4236193869814831,
+    "macro_f1_subject_cluster_95": [
+      0.3486249641208521,
+      0.4847277385926946
+    ],
+    "class_names": [
+      "feet",
+      "hands",
+      "left_hand",
+      "rest",
+      "right_hand"
+    ],
+    "class_f1": [
+      0.25505443234836706,
+      0.36036036036036034,
+      0.441400304414003,
+      0.6592797783933518,
+      0.3465818759936407
+    ],
+    "confusion_matrix": [
+      [
+        82,
+        64,
+        38,
+        95,
+        40
+      ],
+      [
+        27,
+        140,
+        40,
+        66,
+        38
+      ],
+      [
+        24,
+        57,
+        145,
+        55,
+        43
+      ],
+      [
+        164,
+        134,
+        71,
+        714,
+        93
+      ],
+      [
+        27,
+        71,
+        39,
+        60,
+        109
+      ]
+    ],
+    "true_class_counts": [
+      319,
+      311,
+      324,
+      1176,
+      306
+    ],
+    "predicted_class_counts": [
+      324,
+      466,
+      333,
+      990,
+      323
+    ],
+    "per_subject_macro_f1": {
+      "2": 0.4455512236454645,
+      "6": 0.3910036832117521,
+      "13": 0.2995070139332434,
+      "15": 0.7036208113030604,
+      "22": 0.5537820151078638,
+      "26": 0.36601809133189633,
+      "36": 0.32065096174882773,
+      "39": 0.3153570118276,
+      "50": 0.34604450682022847,
+      "52": 0.47660592847226624,
+      "58": 0.21807135015851756,
+      "62": 0.5660009325128674,
+      "75": 0.3180869293708558,
+      "98": 0.306947560042106
+    }
+  },
+  "historical_reference": {
+    "eegnet_phase3_validation_macro_f1": 0.4190536187148316,
+    "delta_normalized_minus_historical": -0.006518268412886996,
+    "warning": "Descriptive comparison; different training/early-stop protocol, not a paired controlled ablation; historical baseline per-epoch predictions were not contained in submitted Phase5.5b ZIP"
+  },
+  "scientific_judgement": "The Train-only CV normalization gain did not reproduce as higher macro-F1 on original development Validation. Training produced a valid five-class classifier, but quality remains heterogeneous and below a publication-strength generalization claim; no further seed/search/heldout-test inference is authorized by user.",
+  "scope": "This is the final development evaluation for a stopped, archived research snapshot, not a final Test-verified benchmark."
+}
