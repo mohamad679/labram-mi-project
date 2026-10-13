@@ -27,7 +27,7 @@ def run(mne_root: Path, output: Path) -> dict:
         if edf_path(mne_root, 3, run).stat().st_size != size:
             raise RuntimeError("EDF source size differs from fetched bytes")
         sizes.append(size)
-    x, y, metadata = load_physionet_mi(subjects=[3])
+    x, y, _metadata = load_physionet_mi(subjects=[3])
     if x.shape[1:] != (64, 400) or not len(y):
         raise RuntimeError(f"Invalid training EEG samples {x.shape}")
     signal = adapt_cbramod_input(np.asarray(x[0]))
