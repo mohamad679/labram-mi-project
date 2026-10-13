@@ -85,7 +85,7 @@ def overview(p3,p4,p5,oof,final):
        txt(1042,211,'0',32,TEAL,750),txt(1042,237,'Test inferences',13,MUTED),
        panel(46,291,1188,402),txt(75,340,'Development Validation',24,NAVY,750),
        txt(75,365,'Macro-F1  ·  one recorded training seed  ·  higher is better',14,MUTED)]
-    origin=385; scale=810/0.5
+    scale=810/0.5
     for i,(label,val,color) in enumerate(rows):
         y=406+i*44
         p.extend([txt(78,y+18,label,15,INK,580),tag('rect',x=397,y=y,width=800,height=26,rx=6,fill='#eaf0f5'),
@@ -110,7 +110,6 @@ def confusion(final):
         p.append(txt(235,y+unit*.53,l,14,INK,600,anchor='end'))
         for j,v in enumerate(row):
             r=v/true[i]; t=(r**.75)
-            import colorsys
             # interpolate bright pale-blue to deep midnight cyan
             base=(236,247,249); deep=(13,94,109)
             color='#'+''.join(f'{round(b*(1-t)+d*t):02x}' for b,d in zip(base,deep))
