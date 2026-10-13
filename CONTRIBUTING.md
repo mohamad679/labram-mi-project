@@ -1,23 +1,13 @@
-# Contributing
+# Repository maintenance policy — frozen research snapshot
 
-This repository is a research prototype. Changes should improve scientific validity, transparency or the ability to reproduce a run.
+The owner closed new model training, random-seed campaigns, Validation-based architecture search, Test evaluation and Phase 6 after the completed 2026-10-13 evidence audit. This is a research *record*, not an invitation to tune reported performance figures.
 
-## Before contributing
+Corrective contributions should be limited to obvious source/provenance defects, documentation and accessibility improvements, or security fixes that **do not change the frozen experimental outcomes**. Before proposing a maintenance change:
 
-- Keep raw subject-level EEG data, generated checkpoints and secret tokens out of Git.
-- Discuss model or dataset license issues before distributing third-party artifacts.
-- Never treat historical results as verified pretrained benchmarks without supporting provenance.
-- Use a feature branch and submit a pull request; do not rewrite archived reports without leaving a traceable explanation.
-- Run `python -m pytest -q` and `python -m scripts.check_repository_quality` before submitting. Tests are offline; full GPU reproducibility is a separate review step.
-- For a change to results, specify dataset revision, subject split, random seed, hyperparameters, software versions, metrics and checkpoint source.
-- For Gradio updates, test with both valid and malformed example inputs. Label synthetic examples as synthetic.
+- Preserve frozen subject partitions, existing checksums, runner commits, and provenance of all reported scores. Never rewrite history to make a disappointing model appear successful.
+- Never add raw EEG, HDF5, patient signal samples, model checkpoint binaries or API credentials to this public repository.
+- Distinguish verified Kaggle-run metric recomputation from unsupplied checkpoint weight-level re-execution and from a true independent Test study.
+- Use `python -m pytest -q` and `python -m scripts.check_repository_quality` for offline maintenance checks. They are not model-quality benchmarks.
+- Do not submit a new model/seed Test result to the final dashboard: it would require an explicitly new study and cannot be silently pooled with this closed research snapshot.
 
-## Pull request requirements
-
-Describe what changed, why it matters, what commands were run, whether a full GPU test was performed, and any scientific limitations. Avoid adding badges or diagrams that imply unverified performance.
-
-**License pending:** This repository does not yet publish an explicit license for its own source code. Until a license is selected, public visibility does not grant general permission to reuse or redistribute code. Contributors should obtain appropriate authorization before using it.
-
-## Reference guides
-
-See the [documentation hub](docs/README.md) for architecture and evidence levels, the [release gate checklist](docs/release-readiness.md) for publication criteria, and [SECURITY.md](SECURITY.md) for private reporting of sensitive vulnerabilities. Use the issue templates when reporting scientific reproducibility issues.
+**Licensing:** There is no owner-selected license for original source code; GitHub visibility alone does not authorize redistribution. Upstream pretrained weights, software and PhysioNet EEG recordings retain their own terms. See [README.md](README.md), [SECURITY.md](SECURITY.md), and [the scientific closure record](docs/final-research-snapshot.md).
