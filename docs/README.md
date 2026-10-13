@@ -11,6 +11,8 @@
 | [Final scientific snapshot](final-research-snapshot.md) | All audited outcomes, negative findings, evidence limitations and final research freeze |
 | [Visualization gallery](visualization-gallery.md) | Seven real-data SVG figures, each traced to versioned experimental records |
 | [Model card](model-card.md) | Which models were trained, data boundaries, out-of-scope medical use |
+| [Repository audit](repository-audit.md) | Tracked tree curation and unresolved scientific/release constraints |
+| [Changelog](../CHANGELOG.md) | Actual experiment milestones and study closure |
 
 ## Reconstruct the finished sequence
 
