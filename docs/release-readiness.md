@@ -1,38 +1,34 @@
-# Release readiness and evidence gates
+# Archival research snapshot: completed work and unresolved gates
 
-**Status: research prototype, not a versioned validated release.** This file is a transparent acceptance checklist. Checkboxes are not claims of completion.
+**State: frozen development record (2026-10-13).** This is a consciously closed research project, **not** a claim that all model-validation or commercial-release gates passed. The owner has stopped new experiments and does not plan further seeds, architecture searches or a Test evaluation in this snapshot.
 
-## Repository hygiene
+## Evidence-backed accomplishments
 
-- [x] Basic offline unit tests and GitHub Actions workflow exist.
-- [x] Structured research README, model card and reproducibility notes exist.
-- [x] Archived results remain traceable and explicitly distinguished from verified runs.
-- [ ] A source-code license has been selected and reviewed by the owner.
-- [ ] Full installation instructions have passed on a fresh machine or container using pinned dependencies.
-- [ ] The name, repository description, website/topics and maintainer-facing metadata have been finalized.
-- [ ] An appropriate citation record (with owner-confirmed authorship) has been published.
+- [x] Exactly 104 included PhysioNet participants with immutable 18,096-epoch HDF5 SHA-256 and verified preprocessing.
+- [x] Immutable subject split: 75 Train, 14 development Validation, 15 original Test **unused**.
+- [x] Authentic pretrained LaBraM/CBraMod checkpoints audited against exact revisions and tensor digests.
+- [x] Real participant-disjoint development results and five-class confusion counts independently reconciled for Phases 3–5.
+- [x] Phase 5.5a compared four predetermined models using Train-only 3-fold subject-grouped OOF; standardization nominated objectively.
+- [x] Phase 5.5b ran the nominated EEGNet with 67 Train-fit + 8 Train early-stop and exactly one 14-subject development Validation prediction pass.
+- [x] All five class recalls and participant heterogeneity documented, including failure of CBraMod Full to predict any class except Rest.
+- [x] Six chart SVGs generated from the committed actual metric/evidence JSON; no synthetic benchmarking results.
+- [x] Basic CI, Python compilation, non-training unit tests and internal-document link audits preserved.
+- [x] No private EEG waveform files or model checkpoint binaries committed to the public Git repository.
 
-## Scientific reproducibility
+## Deliberately unresolved — do not silently label as passed
 
-- [x] A pinned LaBraM checkpoint and CPU transfer/forward check were demonstrated.
-- [x] EEG scaling equivalence was confirmed for one real public PhysioNet subject.
-- [ ] Exact environment lock, provenance hashes, preprocessing manifest and all run parameters are archived.
-- [ ] Train/validation/test subjects remain unchanged across compared model initialization seeds.
-- [ ] Full eligible-dataset pretrained and scratch experiments have completed with multiple seeds.
-- [ ] Real per-class predictions, confusion matrices, calibration plots and subject-level intervals are published.
-- [ ] Claimed statistical differences have been evaluated fairly, with no test-set model selection.
-- [ ] Independent held-out replication or external dataset validation has been performed where feasible.
+- [ ] **A final held-out Test score**: Test remained untouched by explicit decision.
+- [ ] Multi-seed robustness, prospective external-site reproducibility or independent dataset generalization.
+- [ ] Fully independently reconstructed complete training checkpoint binaries for every candidate.
+- [ ] Fully pinned dependency lock with fresh machine end-to-end reproduction of every Kaggle run.
+- [ ] A source-code **LICENSE explicitly selected by the owner**, plus review of upstream dataset/model distribution rights.
+- [ ] Author-approved citation metadata and any journal publication or model-card release.
+- [ ] Medical/assistive device safety, calibrated uncertainty and validated neurophysiological attributions.
 
-## Model distribution and safety
+Passing CI is **not** evidence of predictive performance. The final development Macro-F1 is **.4125 for the nominated normalized EEGNet**, compared descriptively to **.4191** on the earlier original EEGNet run; a model-quality improvement on the original Validation was **not shown**. See [the complete report](final-research-summary.md).
 
-- [ ] Model weights have a verifiable release link, file checksum and provenance metadata.
-- [ ] Distribution respects all applicable upstream model and dataset licenses.
-- [ ] The dashboard was smoke-tested on fresh installation using a distributable compatible checkpoint.
-- [ ] Interpretability/uncertainty claims are limited to methods actually validated.
-- [ ] No clinical, diagnostic or safety-critical use is implied.
+## Repository preservation policy
 
-## Publication rule
+Keep source code, immutable split/config manifests, Kaggle provenance notebooks, audited JSON reports, key demos and tests so the archived conclusions can be checked. Remove **only** redundant empty markers and clearly superfluous files that do not contribute provenance or working functionality. Preserve the Git history rather than rewriting experiments to imply better findings.
 
-A release candidate must have all critical scientific and environment gates reviewed, not merely green Python unit tests. Code quality, functional integration and scientifically demonstrated effectiveness are separate evidence categories. Version tags and badges should reflect the actual achieved category.
-
-For ongoing work, use [the repository issues](https://github.com/mohamad679/labram-mi-project/issues) and [the reproducibility guide](reproducibility.md).
+The GitHub repository may be made **read-only** using *Settings → General → Danger Zone → Archive this repository* after this documentation/figure cleanup has been merged. Archiving is a GitHub administrative action, not part of the scientific acceptance gate. This repository currently has **no owner-selected code license**; public access alone does not grant downstream redistribution rights.
