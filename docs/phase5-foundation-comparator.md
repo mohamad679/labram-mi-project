@@ -27,10 +27,30 @@ Training seed 42, microbatch 8 (to cap T4 GPU use), up to 10 epochs and patience
 
 **Technical note:** The CBraMod Hub config does not encode pretrained signal geometry (`n_chans`/`n_times`/`sfreq` are null). We construct an explicitly dimensioned encoder, verify every safetensors key and shape and load it **strictly**; if this fails under Braindecode 1.5.1, the stage **must stop** and the discrepancy must be audited. A random fallback is prohibited.
 
+## Verified public pretrained-weight feasibility smoke — 2026-10-13
+
+The [public GitHub Actions run](https://github.com/mohamad679/labram-mi-project/actions/runs/38366074365) succeeded using **participant 3, which belongs to frozen Train**. All six original imagery EDF runs were staged from PhysioNet S3. CBraMod weights at pinned revision
+`584cdc415913739a05d84bf0c1cb3db397764507` matched the official safetensors
+SHA-256 `a939ace9aa1e229f08391ad8bb2d197b507ae2c519a50addf087f0151b2df5c3`,
+and **all 211 original pretrained backbone tensors were strictly loaded** without dropping keys. An actual (64,600) transformed Train epoch produced five-class logits; the frozen backbone received no gradient, and the newly initialized classifier was updated by SGD.
+
+Machine-readable report: [phase5_cbramod_pretrained_smoke_20261013.json](../results/validation/phase5_cbramod_pretrained_smoke_20261013.json).
+
+**Not yet established:** that either CBraMod probe or fine-tuning has a useful full-cohort 14-participant Validation Macro-F1; the above single-epoch/single-step smoke cannot establish convergence, performance or superiority.
+
+## Kaggle notebook prepared for full 104-subject Validation experiments
+
+[NeuroDecode_Phase5_CBraMod_Kaggle.ipynb](../notebooks/NeuroDecode_Phase5_CBraMod_Kaggle.ipynb) contains 12 cells. It checks out the pinned **pre-PR execution source commit**
+`561870b2604d2f00198168049164337a5b9e1b16`,
+verifies both exact Python source byte digests, loads only the already saved Phase-2 HDF5
+and downloads only the pinned pretrained safetensors. The Kaggle experiment is not the Ruff-reformatted later GitHub source; its exact runner digest is
+`ad14418845d5c16c0a3a9904c6edac7d5a55c4eaa9ed3f1b2ffe6c840ce3f69e`.
+It writes **only Validation metrics and predictions** into a shareable ZIP, excluding raw EEG or checkpoint binaries.
+
 ## Scientific supervisor gate
 
-- [ ] Offline adapter checks and public pretrained-weight authenticity checks PASS.
-- [ ] Real public **Train participant 3** forward/backward and frozen-backbone gradient test PASS in GitHub CI (do not touch held-out Test participant 1 for this smoke).
+- [x] Offline adapter checks and public pretrained-weight authenticity checks PASS.
+- [x] Real public **Train participant 3** forward/backward and frozen-backbone gradient test PASS in GitHub CI (Test locked).
 - [ ] Kaggle run uses same HDF5 SHA and exact 75/14/15 participant split, with zero Test waveform access.
 - [ ] Both probe/full candidates produce valid 2,436 Prediction rows with correct 5-class order and complete frozen subject metadata.
 - [ ] Selected model checkpoints are SHA-hashed, reloaded and numerical predictions reproduced.
