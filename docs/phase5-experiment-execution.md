@@ -1,3 +1,5 @@
+> **Historical planning note (2026-10-13):** This earlier multi-seed launcher and preliminary smoke workflow are retained for engineering provenance, **not** for future execution. Research stopped after completed Phase 5.5b without multi-seed or Test inference. [Final conclusions](final-research-summary.md).
+
 # Phase 5 — Real EEG execution and subject-level evidence
 
 ## What is verified versus pending
