@@ -10,7 +10,10 @@ import numpy as np
 
 from src.data import load_physionet_mi
 from src.model import load_labram_model
-from src.phase4_trainability import configure_labram_finetuning, set_finetuning_train_mode
+from src.phase4_trainability import (
+    configure_labram_finetuning,
+    set_finetuning_train_mode,
+)
 
 
 REVISION = "0563b6c626e7b40d9a36653b763715db94d945d7"
