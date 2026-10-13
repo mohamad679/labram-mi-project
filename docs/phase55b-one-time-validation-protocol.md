@@ -1,6 +1,6 @@
 # Phase 5.5b — single nominated normalized EEGNet, one-time development Validation
 
-**Status: prepared and awaiting the first real full-cohort Kaggle execution. No Phase-5.5b performance claim yet.** Phase 6 and all 15 held-out Test participants remain closed.
+**Status: COMPLETED, independently audited, and scientifically closed (2026-10-13).** Validation macro-F1 **0.4125** did **not** improve on the historical EEGNet macro-F1 **0.4191**; this is a valid neutral/negative development result, not evidence of model superiority. The owner stopped further model/seed experiments. The 15-subject Test remains untouched and Phase 6 will not run.
 
 ## Why this run is scientifically bounded
 
@@ -25,7 +25,7 @@ The exact recorded settings appear in [the frozen configuration](../configs/phas
 
 The [Phase 5.5b Kaggle notebook](../notebooks/NeuroDecode_Phase55b_OneTime_Validation_Kaggle.ipynb) uses the proven official public Amazon S3 -> six imagery EDFs per participant -> source-locked MOABB 1.7.2/MNE 1.13.2 HDF5 cache builder *only if* the original verified HDF5 is missing. It avoids the old Notebook Output attachments and the rate-limited `kaggle kernels output` endpoint. The notebook performs strict Git commit and runner/protocol/preprocessing SHA-256 checks, runs one GPU training job, and publishes one results-only ZIP `NeuroDecode_Phase55b_OneTime_Validation_Results.zip`. Kaggle GPU and Internet must be enabled. Optional single-HDF5 private Dataset publishing is disabled by default; Kaggle 429 rate limits must not trigger uncontrolled retries.
 
-The *real* 104-person GPU execution is **not supplied yet**. CI can establish code/test and one-step public-Train EEG feasibility only. Saved checkpoint binaries remain private in Kaggle and are **not independently reloaded from the results-only ZIP**. Reported Kaggle checkpoint reload must be distinguished from independent evidence review.
+The completed real 104-person GPU execution and small results-only ZIP were supplied by the owner on 2026-10-13. CI independently establishes code/test and one-step public-Train EEG feasibility. Saved checkpoint binaries remain private in Kaggle and are **not independently reloaded from the results-only ZIP**. Reported Kaggle checkpoint reload must be distinguished from independent evidence review.
 
 ## Exact user-executable source pin and reproducible notebook
 
@@ -35,15 +35,58 @@ The 20-cell [Kaggle execution notebook](../notebooks/NeuroDecode_Phase55b_OneTim
 - Locked partition/nomination guards `src/phase55b_protocol.py`: `806fa50527801e54f8df83e59c607f91a093b00193484e519a064a737ba33205`.
 - Original selected per-epoch normalizer `src/phase55_trainonly.py`: `16d14df18c5b02ad85ed46e9fae9d73d15bab0be257c9e852069fa21173bf6f8`.
 
-All three pull-request GitHub CI workflows passed on notebook commit `2b4461d9134c5b53c0a286ed24909bfa91b6ba80`: Ruff + 134 unit tests (2 skipped), documentation integrity, and authentic public Train-S003 normalized-EEGNet gradient smoke. These are **prerequisite engineering gates**, not evidence of final 104-person training or held-out Validation performance. The PR must remain Draft until the user's actual Kaggle results ZIP has been independently audited.
+All three pull-request GitHub CI workflows passed on notebook commit `2b4461d9134c5b53c0a286ed24909bfa91b6ba80`: Ruff + 134 unit tests (2 skipped), documentation integrity, and authentic public Train-S003 normalized-EEGNet gradient smoke. These are **prerequisite engineering gates**, not evidence of final 104-person training or held-out Validation performance. The actual Kaggle result ZIP has now been independently audited; the acceptance gate is complete with explicit limitations.
 
+## Actual Kaggle run — independently verified final development outcome
+
+The supplied ZIP `NeuroDecode_Phase55b_OneTime_Validation_Results.zip` has
+SHA-256 `8e88e4463d1fa96856cb127f57e4a706042ff441095ccb1c1ad5d9109f635391`
+and passed its ZIP CRC checks. The embedded `report.json` records the locked
+source hashes, the exact **67 parameter-fit / 8 Train-only early-stopping**
+participants, FP32 finite-gradient updates, 12 completed epochs and best
+inner-selected checkpoint **epoch 7**. The checkpoint was saved and reloaded
+in Kaggle with a reported zero probability discrepancy on inner Train.
+The checkpoint binary was not in the shareable ZIP and has not been
+independently reloaded by the reviewer.
+
+The `validation_predictions.npz` (loaded without pickle) contains exactly
+2,436 unique frozen-Validation row identifiers, exactly 14 reserved subject
+IDs (174 epochs each), no Test subject IDs, five finite normalized class
+probabilities per row, and all five classes represented in predictions.
+Independently calculated metrics and confusion matrix match the Kaggle report:
+
+| Model and cohort | Accuracy | Macro-F1 (primary) | Balanced accuracy |
+|---|---:|---:|---:|
+| Original EEGNet historical Validation reference | .4799 | **.4191** | see Phase 3 evidence |
+| **Nominated normalized EEGNet** on the same 14-subject Validation | **.4885** | **.4125** | **.4236** |
+
+Per-class F1 for `feet / hands / left_hand / rest / right_hand`:
+`.2551 / .3604 / .4414 / .6593 / .3466`.
+Its original 14-subject cluster bootstrap 95% interval for macro-F1 is
+`[.3486,.4847]`, exploratory and not multi-seed.
+The model does not collapse onto one class, but performance varies
+substantially across subjects (subject 58: .2181; subject 15: .7036).
+
+**Conclusion:** The Train-only model-selection experiment found a positive
+normalized-versus-raw EEGNet OOF difference in the **75 original Train**
+subjects; **the nominated normalized variant did not beat the historical
+raw EEGNet on the already-exposed original 14-subject Validation**.
+The difference is **−0.00652 Macro-F1** (normalized minus historic);
+as checkpoints/training protocols differ, this should **not** be sold as a
+strictly isolated effect of normalization. The 15 original Test participants
+were **not evaluated**. The owner chose to stop, preserve all negative
+evidence, and close further optimization and multi-seed work. Do not
+fabricate a final Test score or advertise confirmed cross-subject
+generalization.
+
+See the [machine-readable independent evidence](../results/validation/phase55b_one_time_validation_seed42_20261013.json).
 ## Acceptance gate
 
-- [ ] GitHub CI lint/test/docs and genuine public Train EEG smoke all pass at final head.
-- [ ] HDF5 SHA-256, source SHAs, nominated candidate, exact 67/8 inner subject allocation, and original 14/15 heldouts confirmed in real GPU run.
-- [ ] Training finishes in FP32, finite gradients, one inner-Train-selected checkpoint SHA and **numerically reproduced early-stop predictions**.
-- [ ] Exactly 2,436 same-order original Validation predictions, finite normalized probabilities, five-class metrics and confusion matrix independently recomputed, subject-level uncertainty reported.
-- [ ] No historical Validation-based model selection and no Test inference. Original Validation is a development set, not final confirmatory Test.
-- [ ] Archive scientific results and limitations on PR before authorizing merge; **Phase 6 starts only after independent review and separate approval**.
+- [x] GitHub CI lint/test/docs and genuine public Train EEG smoke all pass at final head.
+- [x] HDF5 SHA-256, source SHAs, nominated candidate, exact 67/8 inner subject allocation, and original 14/15 heldouts confirmed in real GPU run.
+- [x] Training finishes in FP32, finite gradients, one inner-Train-selected checkpoint SHA and **numerically reproduced early-stop predictions**.
+- [x] Exactly 2,436 same-order original Validation predictions, finite normalized probabilities, five-class metrics and confusion matrix independently recomputed, subject-level uncertainty reported.
+- [x] No historical Validation-based model selection and no Test inference. Original Validation is a development set, not final confirmatory Test.
+- [x] Archive scientific results and limitations on PR before authorizing merge; **Phase 6 starts only after independent review and separate approval**.
 
-**Gate: OPEN.**
+**Gate: PASS WITH EXPLICIT LIMITATIONS for faithful one-time development Validation execution and independent prediction-metric verification; NO model-superiority PASS and NO final Test-verified conclusion. Additional seeds, architectures and Test evaluation are CLOSED by owner instruction.**
