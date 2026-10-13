@@ -51,7 +51,7 @@ def main():
         raise ValueError("Invalid bandpower feature smoke")
     report = {"status": "PASS_REAL_TRAIN_SUBJECT_3_ONLY", "subject": 3,
               "test_eeg_touched": False, "validation_eeg_touched": False,
-              "six_source_imagery_runs": fetched, "source_samples": int(len(eeg)),
+              "six_source_imagery_runs": fetched, "source_samples": len(eeg),
               "models": {}}
     for name, model, x in (
         ("eegnet_raw", EEGNet(n_chans=64, n_times=400, n_outputs=5, sfreq=160.), samples),
