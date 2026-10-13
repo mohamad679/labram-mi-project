@@ -1,0 +1,48 @@
+{
+  "gate": "PASS_FOR_SINGLE_SGD_STEP_GRADIENT_FLOW_ONLY",
+  "data": "Genuine public PhysioNet EEGMMIDB 1.0.0 participant 1 epochs",
+  "checkpoint": "braindecode/labram-pretrained@0563b6c626e7b40d9a36653b763715db94d945d7",
+  "workflow": "https://github.com/mohamad679/labram-mi-project/actions/runs/38326809165",
+  "workflow_job": "https://github.com/mohamad679/labram-mi-project/actions/runs/38326809165/job/115067262966",
+  "phase4_full_gpu_experiment_run": false,
+  "phase4_supervisor_gate": "OPEN_WAITING_FOR_FULL_COHORT_VALIDATION",
+  "test_partition_touched": false,
+  "one_optimizer_step_evidence": {
+    "status": "PASS",
+    "experiments": [
+      {
+        "strategy": "probe",
+        "loss": 1.6093239784240723,
+        "trainable_parameters": 1005,
+        "transformer_blocks": 12,
+        "changed_parameter_tensors": 2,
+        "head_gradient_norm": 24.964868545532227,
+        "first_block_gradient_norm": null,
+        "real_public_eeg_subject": 1,
+        "one_sgd_step_not_training_convergence": true
+      },
+      {
+        "strategy": "partial",
+        "loss": 1.6093239784240723,
+        "trainable_parameters": 966365,
+        "transformer_blocks": 12,
+        "changed_parameter_tensors": 36,
+        "head_gradient_norm": 24.964868545532227,
+        "first_block_gradient_norm": null,
+        "real_public_eeg_subject": 1,
+        "one_sgd_step_not_training_convergence": true
+      },
+      {
+        "strategy": "full",
+        "loss": 1.6093239784240723,
+        "trainable_parameters": 5818341,
+        "transformer_blocks": 12,
+        "changed_parameter_tensors": 211,
+        "head_gradient_norm": 24.964868545532227,
+        "first_block_gradient_norm": 0.015720047056674957,
+        "real_public_eeg_subject": 1,
+        "one_sgd_step_not_training_convergence": true
+      }
+    ]
+  }
+}
