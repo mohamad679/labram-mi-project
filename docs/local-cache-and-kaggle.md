@@ -1,3 +1,5 @@
+> **Legacy data transfer guide:** The 104-subject HDF5 was subsequently built successfully through official public S3 and hash-verified. The experiment has stopped; this page is retained only to explain historical local/Kaggle paths. [Final scientific summary](final-research-summary.md).
+
 # Download PhysioNet once on your computer; reuse one HDF5 file on Kaggle
 
 This solves two separate bottlenecks: (1) downloading every public EEG recording again after a Kaggle reset, and (2) loading the full 104-subject EEG matrix into Kaggle RAM, which can crash the session. The portable file stores EEG epochs on disk and is read lazily, one sample at a time.

@@ -1,3 +1,5 @@
+> **Frozen-project context (2026-10-13):** This document preserves older reproducibility instructions for research provenance. Experiments are **closed**; no further training, seed search or Test evaluation is planned. The completed 104-subject data hash, model comparisons and outstanding reproduction caveats are in the [final scientific summary](final-research-summary.md).
+
 # Reproducibility guide
 
 ## Environment

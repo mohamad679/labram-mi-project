@@ -1,47 +1,44 @@
-# System architecture and data flow
+# Final architecture and scientific data-flow boundaries
 
-The pipeline separates public EEG ingestion, subject-disjoint evaluation, model initialization, training, and post-hoc visual inspection. The workflow is a research prototype, **not** a clinical BCI.
+**This is a frozen development research snapshot.** The diagram describes **what was actually completed**, including Train-only selection and one-time development Validation. The 15 original Test participants were never evaluated.
 
 ```mermaid
-flowchart LR
-    A[PhysioNet EEGMMIDB] --> B[MOABB / MNE preprocessing]
-    B --> C[EEG montage, units and cache validation]
-    C --> D[Subject-disjoint Train / Val / Test split]
-    E[Verified pinned LaBraM checkpoint] --> F[400-sample temporal-prefix adapter]
-    D --> G[Head-only classifier training]
-    F --> G
-    G --> H[Validation checkpoint selection]
-    H --> I[Untouched test subjects]
-    I --> J[Held-out probabilities and labels]
-    J --> K[Accuracy, Macro-F1 and calibration]
-    J --> L[Confusion matrix and reliability diagram]
-    J --> M[Subject-cluster uncertainty intervals]
-    H --> N[Exploratory attention and uncertainty analysis]
-    N --> O[Gradio demo]
+flowchart TD
+    A[PhysioNet EEGMMIDB 104 subjects] --> B[Immutable MOABB / MNE 8–32 Hz, 160 Hz, 64×400 HDF5]
+    B --> C[SHA-256 verified provenance and fixed subject manifest]
+    C --> D[Train: 75 people / 13,050 epochs]
+    C --> E[Development Validation: 14 people / 2,436 epochs]
+    C --> F[Final Test: 15 people / 2,610 epochs — LOCKED]
+    D --> G[Phase 3 EEGNet and Riemannian; Phase 4 LaBraM; Phase 5 CBraMod]
+    G --> H[Exploratory development comparisons]
+    D --> I[Phase 5.5a: 3-fold Train-only group CV]
+    I --> J[Nominate EEGNet + epoch standardization]
+    J --> K[Phase 5.5b: 67 fit / 8 Train-only early stop]
+    K --> L[Freeze checkpoint before Validation inference]
+    E --> M[One-time nominated model evaluation]
+    L --> M
+    M --> N[Real 2,436×5 predictions and archived JSON]
+    N --> O[Deterministic, source-backed SVG charts]
+    F --> P[No inference; no Test score]
 ```
 
-## Module ownership
+The subject split remains **the same across recorded experiments**. The historical exploratory Phase 3–5 candidate comparisons used original development Validation during their own checkpoint selection, and are **not independent Test estimators**. Phase 5.5a addressed repeated candidate selection by screening four fixed candidate settings only on Train subjects. Phase 5.5b fit **one** Train-selected model, chose its epoch on a separate eight-person Train subset, then produced the final recorded development Validation evaluation. No further runs are authorized.
 
-| Module | Responsibility | Important limitation |
-| --- | --- | --- |
-| `src/data.py` | Load epochs, verify channels and sampling, convert units, crop to patch size | Reproduction depends on MOABB/MNE versions and verified cache schema |
-| `src/channels.py` | Contract for exact 64-channel axis and 160-Hz sampling | Doesn't independently validate all sensor positions |
-| `src/model.py` | Build interpolated LaBraM and optionally load pinned pretrained weights | 400-sample transfer was tested for weight identity and forward shape, not benchmark accuracy |
-| `src/config.py` | Validate YAML training parameters | Wrong experimental choices can still be scientifically invalid |
-| `src/train.py` | Subject holdout, head optimization, validation selection and held-out outputs | Complete full-data training has not been independently repeated after refactor |
-| `scripts/audit_pretrained.py` | Check the immutable Hub artifact and loaded backbone | Does not establish transfer-learning effectiveness |
-| `scripts/audit_moabb_equivalence.py` | Compare standard MOABB arrays with epoch conversion | Existing real-data evidence is for one public subject |
-| `scripts/build_benchmark.py` | Generate deterministic scientific figures from saved real probabilities | Without a genuine prediction artifact no new figures can be claimed |
-| `src/uncertainty.py` | MC Dropout and uncertainty statistics | Post-hoc dropout lacks validated Bayesian interpretation |
-| `src/explain.py` | Transformer attention rollout | Attention cannot be treated as causal EEG physiology |
-| `app.py` | Gradio visualization | Requires compatible checkpoint and data; not clinical software |
+## Code and evidence map
 
-## Important separation of concerns
+| Component | Responsibility | Limit |
+| :-- | :-- | :-- |
+| [`src/data.py`](../src/data.py), [`src/portable_eeg.py`](../src/portable_eeg.py) | Source epochs, 64-channel order, portable HDF5 schema | Exact upstream MOABB/MNE version and recorded hash required |
+| [`src/phase55_trainonly.py`](../src/phase55_trainonly.py) | Subject-group CV and per-epoch normalization | Train-only selection; not a Test estimate |
+| [`src/phase55b_protocol.py`](../src/phase55b_protocol.py) | Immutable nominated model and 67/8 split | Denies Test waveform access |
+| [`scripts/run_phase55b_validation.py`](../scripts/run_phase55b_validation.py) | One-time nominated EEGNet Validation runner | User-run record completed; no plans to rerun |
+| [`src/model.py`](../src/model.py), [`src/phase5_cbramod.py`](../src/phase5_cbramod.py) | Authentic pretrained adapters | Different input transfer domains; only development benchmarks |
+| [`results/validation/`](../results/validation/README.md) | Machine-readable audited scientific evidence | No HDF5 or checkpoint binaries in Git |
+| [`scripts/render_final_figures.py`](../scripts/render_final_figures.py) | Deterministic SVG visualization **without fitting** | Reads only committed summary JSON |
+| [`src/explain.py`](../src/explain.py), [`src/uncertainty.py`](../src/uncertainty.py), [`app.py`](../app.py) | Historical interpretability, uncertainty and Gradio demo | Not causal, calibrated, distributed-model-ready or clinical |
 
-**Training and verification:** training should not determine what examples end up in the test split. Test subjects must remain untouched during model selection, with the exact split and run metadata archived.
+## Security, ethics and distribution
 
-**Data and source control:** checkpoint weights, dataset caches and raw EEG are local outputs and must not enter the repository. Generated figures are published only when traceable to a complete run.
+No clinical claims. The original HDF5 and pretrained/fine-tuned weight files are not source-controlled; patient/participant-associated epoch records remain governed by their own source access terms. **Source-code license selection remains outstanding.** The project is an archival research implementation, not a device, service or production inference API.
 
-**Visuals versus validity:** a polished confusion matrix or dashboard does not prove the trained model generalizes. Historical figures and metrics are identified as historical until a documented independent reproduction is available.
-
-See the [research audit](research-audit.md) and [release checklist](release-readiness.md).
+[Final scientific conclusions](final-research-summary.md) · [Reproducible figures](visualization-gallery.md) · [Archive status](release-readiness.md)

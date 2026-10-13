@@ -1,3 +1,5 @@
+> **Final-state clarification (2026-10-13):** Earlier text below describes the builder before the first complete user-executed run. The user later completed the **104-subject HDF5** with SHA-256 `f6d2c7824f6aaa522286ea8ee5253b0220602117fc69d7b49c3af6e6a1324f7a` ([provenance record](../results/validation/phase2_full_cohort_kaggle_20261013.json)). Successful private Kaggle Dataset publication was **not** established by the results. No new data-build runs are planned; the instructions below are preserved as a historical recovery guide.
+
 # Kaggle-only PhysioNet cache builder via public Amazon S3
 
 The full PhysioNet EEG Motor Movement/Imagery recordings can be downloaded from the official public mirror, `s3://physionet-open/eegmmidb/1.0.0/`, **without an AWS account or AWS credentials**. This guide offers an alternative when a local Mac or remote Windows machine has slow access to `physionet.org`.

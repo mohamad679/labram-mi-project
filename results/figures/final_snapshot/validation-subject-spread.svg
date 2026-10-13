@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 811" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">Per-subject variability across 14 unseen development Validation participants</title>
+<desc id="chart-description">Per-subject macro-F1 ranges from 0.218 (participant 58) to 0.704 (participant 15).</desc>
+<rect x="0" y="0" width="1200" height="811" fill="#f5f8fb"/><text x="48" y="64" font-size="14" fill="#147d82" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">SUBJECT HETEROGENEITY</text>
+<text x="48" y="110" font-size="31" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">The average conceals the spread</text>
+<text x="48" y="139" font-size="15" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Per-subject five-class Macro-F1  ·  same selected checkpoint  ·  fixed 14 held-out Validation participants</text>
+<rect x="34" y="160" width="1130" height="585" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<text x="195" y="208" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S058</text>
+<line x1="232" y1="202" x2="1060" y2="202" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="202" x2="457.70384741406565" y2="202" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="457.70384741406565" cy="202" r="7" fill="#147d82"/>
+<text x="472.70384741406565" y="207" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.218</text>
+<text x="195" y="242" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S013</text>
+<line x1="232" y1="236" x2="1060" y2="236" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="236" x2="541.9897594209069" y2="236" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="541.9897594209069" cy="236" r="7" fill="#147d82"/>
+<text x="556.9897594209069" y="241" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.300</text>
+<text x="195" y="276" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S098</text>
+<line x1="232" y1="270" x2="1060" y2="270" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="270" x2="549.6907246435796" y2="270" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="549.6907246435796" cy="270" r="7" fill="#147d82"/>
+<text x="564.6907246435796" y="275" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.307</text>
+<text x="195" y="310" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S039</text>
+<line x1="232" y1="304" x2="1060" y2="304" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="304" x2="558.3945072415661" y2="304" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="558.3945072415661" cy="304" r="7" fill="#147d82"/>
+<text x="573.3945072415661" y="309" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.315</text>
+<text x="195" y="344" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S075</text>
+<line x1="232" y1="338" x2="1060" y2="338" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="338" x2="561.2199718988358" y2="338" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="561.2199718988358" cy="338" r="7" fill="#147d82"/>
+<text x="576.2199718988358" y="343" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.318</text>
+<text x="195" y="378" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S036</text>
+<line x1="232" y1="372" x2="1060" y2="372" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="372" x2="563.8737454100367" y2="372" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="563.8737454100367" cy="372" r="7" fill="#147d82"/>
+<text x="578.8737454100367" y="377" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.321</text>
+<text x="195" y="412" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S050</text>
+<line x1="232" y1="406" x2="1060" y2="406" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="406" x2="590.1560645589365" y2="406" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="590.1560645589365" cy="406" r="7" fill="#147d82"/>
+<text x="605.1560645589365" y="411" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.346</text>
+<text x="195" y="446" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S026</text>
+<line x1="232" y1="440" x2="1060" y2="440" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="440" x2="610.8287245285127" y2="440" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="610.8287245285127" cy="440" r="7" fill="#147d82"/>
+<text x="625.8287245285127" y="445" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.366</text>
+<text x="195" y="480" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S006</text>
+<line x1="232" y1="474" x2="1060" y2="474" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="474" x2="636.6888121241634" y2="474" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="636.6888121241634" cy="474" r="7" fill="#147d82"/>
+<text x="651.6888121241634" y="479" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.391</text>
+<text x="195" y="514" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S002</text>
+<line x1="232" y1="508" x2="1060" y2="508" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="508" x2="693.1455164730557" y2="508" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="693.1455164730557" cy="508" r="7" fill="#147d82"/>
+<text x="708.1455164730557" y="513" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.446</text>
+<text x="195" y="548" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S052</text>
+<line x1="232" y1="542" x2="1060" y2="542" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="542" x2="725.2871359687956" y2="542" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="725.2871359687956" cy="542" r="7" fill="#147d82"/>
+<text x="740.2871359687956" y="547" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.477</text>
+<text x="195" y="582" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S022</text>
+<line x1="232" y1="576" x2="1060" y2="576" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="576" x2="805.164385636639" y2="576" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="805.164385636639" cy="576" r="7" fill="#147d82"/>
+<text x="820.164385636639" y="581" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.554</text>
+<text x="195" y="616" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S062</text>
+<line x1="232" y1="610" x2="1060" y2="610" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="610" x2="817.8109651508178" y2="610" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="817.8109651508178" cy="610" r="7" fill="#147d82"/>
+<text x="832.8109651508178" y="615" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.566</text>
+<text x="195" y="650" font-size="15" fill="#162439" font-weight="600" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">S015</text>
+<line x1="232" y1="644" x2="1060" y2="644" stroke="#ebf0f4" stroke-width="1"/>
+<line x1="232" y1="644" x2="960.2475396986675" y2="644" stroke="#74d1c4" stroke-width="7" stroke-linecap="round"/>
+<circle cx="960.2475396986675" cy="644" r="7" fill="#147d82"/>
+<text x="975.2475396986675" y="649" font-size="13" fill="#0b162c" font-weight="600" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.704</text>
+<text x="232.0" y="706" font-size="13" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.0</text>
+<text x="439.0" y="706" font-size="13" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.2</text>
+<text x="646.0" y="706" font-size="13" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.4</text>
+<text x="853.0" y="706" font-size="13" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.6</text>
+<text x="1060.0" y="706" font-size="13" fill="#607186" font-weight="500" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.8</text>
+<text x="48" y="779" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Participant-level scores are descriptive; these 14 subjects are not an independent multi-seed replication.</text>
+</svg>

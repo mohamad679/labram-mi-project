@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 578" role="img" aria-labelledby="chart-title chart-description">
+<title id="chart-title">Classwise F1 of normalized EEGNet on real Validation</title>
+<desc id="chart-description">Feet 0.255, both fists 0.360, left hand 0.441, rest 0.659, right hand 0.347. Rest comprises 1,176 of 2,436 trials.</desc>
+<rect x="0" y="0" width="1160" height="578" fill="#f5f8fb"/><text x="44" y="62" font-size="14" fill="#147d82" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">CLASS-LEVEL DIAGNOSTICS</text>
+<text x="44" y="105" font-size="31" fill="#0b162c" font-weight="750" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Performance is not uniform</text>
+<text x="44" y="134" font-size="15" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Five-class F1 on the fixed 14-subject Validation cohort</text>
+<rect x="33" y="159" width="1095" height="350" fill="#ffffff" stroke="#dbe5ec" stroke-width="1" rx="18"/>
+<text x="67" y="214" font-size="17" fill="#162439" font-weight="620" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Feet</text>
+<rect x="280" y="196" width="678" height="28" rx="7" fill="#eaf0f5"/>
+<rect x="280" y="196" width="172.9" height="28" rx="7" fill="#147d82"/>
+<text x="978" y="216" font-size="18" fill="#0b162c" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.255</text>
+<text x="1096" y="216" font-size="13" fill="#607186" font-weight="400" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">n=319</text>
+<text x="67" y="274" font-size="17" fill="#162439" font-weight="620" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Both fists</text>
+<rect x="280" y="256" width="678" height="28" rx="7" fill="#eaf0f5"/>
+<rect x="280" y="256" width="244.3" height="28" rx="7" fill="#147d82"/>
+<text x="978" y="276" font-size="18" fill="#0b162c" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.360</text>
+<text x="1096" y="276" font-size="13" fill="#607186" font-weight="400" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">n=311</text>
+<text x="67" y="334" font-size="17" fill="#162439" font-weight="620" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Left fist</text>
+<rect x="280" y="316" width="678" height="28" rx="7" fill="#eaf0f5"/>
+<rect x="280" y="316" width="299.3" height="28" rx="7" fill="#147d82"/>
+<text x="978" y="336" font-size="18" fill="#0b162c" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.441</text>
+<text x="1096" y="336" font-size="13" fill="#607186" font-weight="400" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">n=324</text>
+<text x="67" y="394" font-size="17" fill="#162439" font-weight="620" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Rest</text>
+<rect x="280" y="376" width="678" height="28" rx="7" fill="#eaf0f5"/>
+<rect x="280" y="376" width="447.0" height="28" rx="7" fill="#294f83"/>
+<text x="978" y="396" font-size="18" fill="#0b162c" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.659</text>
+<text x="1096" y="396" font-size="13" fill="#607186" font-weight="400" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">n=1176</text>
+<text x="67" y="454" font-size="17" fill="#162439" font-weight="620" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">Right fist</text>
+<rect x="280" y="436" width="678" height="28" rx="7" fill="#eaf0f5"/>
+<rect x="280" y="436" width="235.0" height="28" rx="7" fill="#147d82"/>
+<text x="978" y="456" font-size="18" fill="#0b162c" font-weight="700" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">0.347</text>
+<text x="1096" y="456" font-size="13" fill="#607186" font-weight="400" text-anchor="end" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">n=306</text>
+<text x="46" y="548" font-size="14" fill="#607186" font-weight="400" text-anchor="start" font-family="Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif">The rest class has 48.3% of Validation epochs. Class-wise F1 is essential alongside accuracy.</text>
+</svg>

@@ -1,3 +1,5 @@
+> **Historical execution notebook — not the current project state.** The 2026 development experiments have completed and the owner stopped new runs. This page documents the older generic launcher only; do **not** infer a final Test estimate or planned seed campaign. See [final results](final-research-summary.md).
+
 # Kaggle full-data experimental execution
 
 > [Download or open the complete Kaggle Notebook](../run_kaggle.ipynb).

@@ -1,21 +1,34 @@
-# Model card — research prototype
+# Model card · final NeuroDecode research snapshot
 
-**Model:** NeuroDecode-LaBraM Motor Imagery Baseline
+**Status:** Development-only, research discontinued as of 2026-10-13. **Not** a released, production, clinical or Test-validated classifier.
 
-**Task:** Offline five-class EEG motor imagery classification.
+## Task and dataset
 
-**Architecture:** `InterpolatedLaBraM` via Braindecode, 64 input channels, 160 Hz, 400 time points, five class logits.
+Five-class imagined movement from PhysioNet EEG Motor Movement/Imagery using 64 EEG channels and the frozen 2.5 s / 160 Hz preprocessed epochs. The evaluated cohort comprises **104 subjects**: 75 Train, 14 development Validation and **15 Test participants never evaluated**. Signal preprocessing, dataset hash and class vocabulary are recorded in the [final scientific report](final-research-summary.md).
 
-**Training dataset:** PhysioNet EEG Motor Movement/Imagery via MOABB. Historical reports describe a subject-disjoint 75/14/15 split.
+## Models and recorded results
 
-**Initialization provenance:** Historical checkpoint provenance is **unverified**; default refactored code explicitly uses scratch initialization. Loading pretrained weights requires an explicit model source. No officially verified weights are redistributed here.
+- **Original EEGNet:** development Validation Macro-F1 **0.4191**, Accuracy **0.4799**. Highest recorded Macro-F1 in this development snapshot, but checkpoint/epoch selection used the development Validation protocol of Phase 3.
+- **EEGNet + per-epoch channel normalization:** selected by **3-fold group-held-out Train-only** screening (OOF Macro-F1 **0.3912** vs original Train-only raw EEGNet **0.3212**). The subsequent single historical Validation evaluation achieved Macro-F1 **0.4125**, Accuracy **0.4885**. This **did not demonstrate** a gain over the earlier EEGNet Validation Macro-F1.
+- **LaBraM pretrained partial:** Macro-F1 **0.2546** on recorded Validation.
+- **CBraMod pretrained probe/full:** Macro-F1 **0.2027** / **0.1302** on recorded Validation. Full mode collapsed to predicting **Rest** for every Validation trial.
 
-**Historical evaluation:** Representative archived head-only accuracy 0.357, macro-F1 0.193. Values have not been reproduced after this refactor and must not be presented as a validated pretrained foundation-model benchmark.
+Official pretrained checkpoint revisions were explicitly audited; the older historical LaBraM model-demo checkpoint from before the scientific audit remains **unverified** and must not be conflated with authenticated Phase 4 weights. No model weights are included in this Git repository.
 
-**Intended use:** Research, code review, educational demonstrations and nonclinical benchmarking.
+## Intended and excluded uses
 
-**Out-of-scope uses:** Medical diagnosis, patient triage, clinical decisions, safety-critical assistive technology, or claims about a subject's neurological state.
+**Intended:** understanding motor-imagery preprocessing and experiment integrity, code review, controlled retrospective research-method comparison, educational illustration of model limitations.
 
-**Known limitations:** Low macro-F1, variable class performance, unverified weights and preprocessing provenance, limited compute/seed coverage, and exploratory uncertainty and attention-based interpretation.
+**Excluded:** diagnosis, medical decisions, patient screening, clinical claims, accessibility or safety-critical BCI, calibrated uncertainty, neural causal explanation, real-time production decoding, or citing these numbers as definitive Test performance.
 
-**Transparency:** Model cards, calibration checks, complete benchmark artifacts, dependency lock and independent validations are planned but not all complete. See [research audit](research-audit.md) and [reproducibility guide](reproducibility.md).
+## Essential limitations
+
+- **No Test predictions or independent Test performance estimate**; 15 subjects remain embargoed.
+- One recorded model seed and substantial cross-participant heterogeneity, final normalized EEGNet Validation Macro-F1 **.218–.704** by participant and overall **.4125**.
+- Strong class imbalance, especially Rest (~48% of Validation); Macro-F1 and classwise confusion are more informative than Accuracy alone.
+- Different training and preprocessing adapters across families prevent strict architecture-only comparisons.
+- Subject-cluster intervals are exploratory, not independently prevalidated confidence intervals.
+- The archived Gradio dashboard and attention/MC-dropout visualizations depend on historical, unshipped checkpoints and lack clinical/causal validation.
+- Source license and some upstream redistribution permissions are not resolved.
+
+[Evidence](../results/validation/README.md) · [Final report](final-research-summary.md) · [Figures](visualization-gallery.md) · [Archive status](release-readiness.md)
