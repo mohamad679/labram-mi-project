@@ -1,6 +1,6 @@
 # Phase 3 — Locked-split validation benchmark (execution OPEN)
 
-**Scientific status:** PARTIAL PASS on a real 104-subject validation-only run; acceptance blocked by Riemannian nonconvergence and missing selected-model checkpoints. **Do not claim Phase 3 PASS or proceed to Phase 4** before reviewing executed, provenance-complete Kaggle results.
+**Scientific status:** The reproducible **single-seed validation-only baseline gate is PASS WITH LIMITATIONS** after a successful Kaggle rerun and code review. This does not validate held-out test performance or multi-seed model superiority. **Do not claim Phase 3 PASS or proceed to Phase 4** before reviewing executed, provenance-complete Kaggle results.
 
 ## Experimental question
 
@@ -90,8 +90,7 @@ intervals, NOT independent confirmatory confidence intervals**.
 4. **Single seed / selection bias:** no multi-seed generalization evidence
    is available; model changes must not be selected using Test.
 
-**Supervisor verdict: PARTIAL PASS / BLOCKED from final scientific Phase-3
-acceptance.** A revised Kaggle notebook has been supplied separately to
+**Historical supervisor verdict on the FIRST run: PARTIAL PASS / BLOCKED.** A revised Kaggle notebook has been supplied separately to
 require L-BFGS convergence after train-only scaling, save checkpoint
 weights and SHA-256, reload/check the 2,436 selected Validation
 predictions, and preserve the original Test embargo. That new runner
@@ -101,20 +100,88 @@ is no completed real EEG rerun yet**. Any revised hyperparameter/scaling
 protocol is a new versioned candidate; historical preliminary figures
 must not be silently overwritten.
 
+## Corrected full-cohort real-data rerun — 2026-10-13
+
+A **second Kaggle execution** used the same frozen cohort/SHA and the same
+75/14/15 subject partition; all four models produced validation-only
+predictions on the same **2,436 epochs / 14 subjects**. The submitted ZIP
+SHA-256 is
+`cff52a9cc28148343f70772523de849d083955bf5a459f3c2fab346e79442d8f`.
+The exact executed runner has SHA-256
+`9100671e93ccf3d21c74d123273cbe96e78ea30ebc5791b8e47e8f15e0ddf210`,
+identical to [scripts/run_phase3_validation.py](../scripts/run_phase3_validation.py).
+The complete [Kaggle runner notebook](../notebooks/NeuroDecode_Phase3_Validation_Rerun_Kaggle.ipynb)
+and [offline negative controls](../tests/test_phase3_validation.py) are archived.
+See [machine-readable independent audit](../results/validation/phase3_validation_rerun_seed42_20261013.json).
+
+| Validation model | Accuracy | Macro-F1 | Balanced accuracy | 95% validation participant-bootstrap Macro-F1 |
+| --- | ---: | ---: | ---: | ---: |
+| Dummy, train-only prior | .4828 | .1302 | .2000 | [.1302,.1302] |
+| **Riemannian**, converged OAS/TangentSpace/StandardScaler/LR | .2767 | .2568 | .2822 | [.2126,.2888] |
+| **EEGNet**, epoch 24 | .4799 | **.4191** | **.4418** | [.3529,.4729] |
+| **LaBraM pretrained linear probe**, epoch 1 | .3818 | .1861 | .2016 | [.1676,.1997] |
+
+**All reported metrics and 5×5 confusion matrices were independently
+recomputed from the four safe-to-share validation-only NPZ files.**
+Every file uses the same ordered labels/participant IDs, normalized finite
+probabilities, and exactly the published 14 validation participants. The
+submitted ZIP contains no locked-Test predictions. The runner's code also
+uses Test participants only to assert the fixed subject-level split.
+
+**Resolved deficiencies from the first run:**
+
+- Riemannian fits OAS covariances, Riemannian tangent reference and
+  StandardScaler on the designated **training** epochs only. L-BFGS
+  converged at iteration **317/3000** without the earlier warning.
+  This standardization is a *protocol change*, so its score is not an
+  identical-setting retry of the first run.
+- EEGNet selected epoch **24**, saved 19,755-byte model state SHA-256
+  `921a35a20c722ab34e75ba7f1a5b30a6a186368a6b5cae7006e60951faff3f77`.
+  LaBraM selected epoch **1**, saved 23,336,634-byte model state SHA-256
+  `eaa084dd6063eb934f985ea325bcfc6f0c8bb166c4a893401d270bb44d04255d`.
+  Kaggle-run reports explicitly confirm both selected states were
+  **reloaded and produced numerically matching validation predictions**.
+  The weight files are kept in the Kaggle working output tree; **they
+  were intentionally excluded from the submitted results-only ZIP**.
+  Thus the reviewer did *not* independently reload those binary files.
+- Full executed runner source and its notebook are now archived in this
+  GitHub pull request, with the exact byte hash validated against the
+  submitted Kaggle evidence.
+
+**Exploratory paired participant bootstrap:** With 2,000 cluster samples
+from 14 development/validation participants, EEGNet − LaBraM probe
+Macro-F1 difference was **+.2330** with 95% percentile interval
+**[+.1805, +.2860]**; EEGNet − converged Riemannian was **+.1622**
+with interval **[+.1093, +.2241]**. These numbers reuse the very same
+validation group chosen for network early stopping, so they are
+**exploratory and subject to model-selection bias**, not confirmatory
+evidence of superiority on unseen held-out Test participants.
+
+**Scientific acceptance:** Phase 3's defined goal — generate a transparent,
+numerically verifiable, single-seed **validation-only** baseline comparison
+on the fixed Phase-2 EEG cohort — is met. The scientific conclusion is
+limited to **EEGNet > LaBraM frozen-backbone linear probe on this development
+validation run**. This does **not** cover LaBraM full fine-tuning, repeated
+random seeds, test generalization, or publication-standard final inference.
+Those claims require future phases and must not be inferred from this gate.
+
 ## Current execution status and reproducibility
 
-- Self-contained user-executable Kaggle notebook: **NeuroDecode_Phase3_Baselines_Kaggle.ipynb**, supplied in this conversation. It pins the audited main commit `b3af6247d027cd1a3dd33915368bad03f9bf220c`, verifies the HDF5 file hash, materializes the validation-only runner and fixed split, and runs controlled benchmarks. Because this code is not yet merged into `main`, the notebook explicitly fingerprints its full runner source SHA-256 in the output archive.
-- This draft PR freezes the split and scientific protocol. **The full experimental runner is currently in the self-contained notebook artifact, not in the repository branch yet.** Its computational correctness must be validated by a full Kaggle run before promoting it to accepted project code.
-- Do not commit metrics inferred from historic test data or synthetic smoke tests.
+- Both owner-executed Kaggle runs and the **corrected, accepted validation rerun** are archived by reproducible per-file source SHA-256 and the submitted results-only ZIP checksum. The exact executable runner and source-only notebook are now tracked in this PR.
+- The original benchmark used pinned Phase-2 code commit `b3af6247d027cd1a3dd33915368bad03f9bf220c` plus the separately archived runner. To reproduce the *accepted* result in a new Kaggle session, use [the corrected notebook](../notebooks/NeuroDecode_Phase3_Validation_Rerun_Kaggle.ipynb) and attach the same immutable Phase-2 HDF5 file.
+- The corrected model checkpoint binaries were **not in the submitted ZIP**. Preserve a private Kaggle output version if exact binary checkpoint reloading needs independent re-execution. All reported metrics are still verifiable without weights from the NPZ files.
+- The single-seed evaluation and resulting validation-only intervals **must not** be advertised as held-out Test performance or replicated evidence.
 
-## Supervisor gate: conditions for PASS
+## Supervisor gate: final evidence disposition
 
-- [x] Kaggle logs show completed real-cache SHA validation and exact 75/14/15 participant IDs.
-- [x] Dummy, Riemannian, EEGNet and pretrained LaBraM all produce valid **validation-only** probabilities on the same 2,436 epochs (Riemannian still needs converged rerun).
-- [ ] No signal transformations or learned covariance/tangent statistics are fitted on validation/test.
-- [ ] Execution artifacts and versioned source fingerprints allow code/results reconciliation; ambiguous failures must be resolved and rerun.
-- [x] Per-class scores, confusion matrices, subject uncertainty and a reasoned **exploratory** scientific comparison are reviewed.
-- [ ] Full executable source and tests are incorporated into a reviewed GitHub PR; CI and any real-data smoke checks pass.
-- [x] Test remains locked; Phase 4 requires the user's approval after Phase 3 gate PASS.
+- [x] Kaggle logs and code verified the complete HDF5 SHA and 75/14/15 frozen subject split.
+- [x] All four methods have valid, independently recomputed validation probabilities on exactly the same 2,436 epochs.
+- [x] Covariance/tangent/scaling fits and learned model updates use training epochs only; validation is reserved for evaluation/early stopping.
+- [x] Previous Riemannian convergence and deep checkpoint persistence deficiencies resolved in the corrected real Kaggle rerun.
+- [x] Exact runner source + notebook + split lock + regression tests archived in GitHub; repository PR CI passed.
+- [x] Confusion matrices, per-class scores, subject-cluster uncertainty and transparently limited scientific comparison reviewed.
+- [x] Fifteen-subject held-out Test partition remains locked; **no Phase 4 work begins without separate authorization**.
 
-**No model-quality improvement is claimed until the above conditions hold.**
+**Supervisor scientific gate: PASS FOR SINGLE-SEED, VALIDATION-ONLY BASELINE
+EXECUTION WITH DECLARED LIMITATIONS.** Independent test and multi-seed claims
+remain blocked until their respective later scientific-validation stages.
